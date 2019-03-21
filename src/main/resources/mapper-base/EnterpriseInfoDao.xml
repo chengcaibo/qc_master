@@ -1,0 +1,678 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qichong.dao.EnterpriseInfoDao">
+
+	<!-- 根据行业查询企业信息 -->
+	<select id="industryByEnterprise" parameterType="java.lang.String"  resultType="EnterpriseInfo">
+		SELECT
+				ei.id,
+				users.id as 'user.id',
+				users.username as 'user.username',
+				users.type_id as 'user.type_id',
+				users.longitude as 'user.longitude',
+				users.latitude as 'user.latitude',
+				users.last_update_time as 'user.last_update_time',
+				ei.enterprise_name,
+				ei.person_name,
+				ei.telephone,
+				ei.fixed_telephone,
+				ei.email,
+				ei.business_scope,
+				ei.introduce,
+				ei.logo,
+				ei.business_license,
+				ei.website,
+				ei.balance,
+				ei.industry_details,
+				reg.region_code as 'region.region_code',
+				reg.region_name as 'region.region_name',
+				ei.address,
+				it.industry_code as 'industry.industryCode',
+				it.industry_name as 'industry.industryName',
+				ei.address_all
+	FROM
+		enterprise_info AS ei 
+		INNER JOIN users ON (users.id = ei.user_id)
+		LEFT JOIN industry_type AS it ON (it.industry_code = ei.industry_code)
+		LEFT JOIN regions AS reg ON (reg.region_code = ei.region_code)
+	WHERE
+		ei.industry_details LIKE '%${industryDetails}%'
+	</select>
+
+	<!-- 查询所有的企业信息，并筛选 -->
+	<select id="selectAllByFilter" parameterType="com.qichong.model.Filters" resultType="EnterpriseInfo" >
+		SELECT * FROM (
+			SELECT
+				ei.id,
+				users.id as 'user.id',
+				users.username as 'user.username',
+				users.type_id as 'user.type_id',
+				users.wx_open_id as 'user.wx_open_id',
+				users.longitude as 'user.longitude',
+				users.latitude as 'user.latitude',
+				users.last_update_time as 'user.last_update_time',
+				users.create_time as 'user.create_time',
+				ei.enterprise_name,
+				ei.person_name,
+				ei.telephone,
+				ei.fixed_telephone,
+				ei.email,
+				ei.business_scope,
+				ei.introduce,
+				ei.logo,
+				ei.business_license,
+				ei.website,
+				ei.balance,
+				ei.industry_details,
+				reg.region_code as 'region.region_code',
+				reg.region_name as 'region.region_name',
+				it.industry_code as 'industry.industryCode',
+				it.industry_name as 'industry.industryName',
+				ei.latitude,
+				ei.longitude,
+				ei.address,
+				ei.address_name,
+				ei.address_all,
+				ce.state_id as 'certificationEnterprise.state.id',
+				ei.business_title,
+				ei.business_content,
+				ei.business_tags,
+				ei.banner1, ei.banner2, ei.banner3,
+				ei.qr_code_picture,
+				ei.qr_code_name,
+				ei.picture0, ei.picture1, ei.picture2, ei.picture3, ei.picture4, 
+				ei.picture5, ei.picture6, ei.picture7, ei.picture8, ei.picture9,
+				ei.honorContent,
+				ei.advantageContent,
+				ei.idea,
+				ei.philosophy,
+				ei.profile,
+				ei.advantage,
+				ei.honor
+				<!-- 如果筛选了经纬度，则计算距离 -->
+				<if test="latitude != null &amp;&amp; longitude!=null">
+					<![CDATA[,
+	 				ROUND(
+				        6378.138 * 2 * ASIN(
+				            SQRT(
+				                POW(
+				                    SIN(
+				                        (
+				                            #{latitude} * PI() / 180 - ei.latitude * PI() / 180
+				                        ) / 2
+				                    ),
+				                    2
+				                ) + COS(#{latitude} * PI() / 180) * COS(ei.latitude * PI() / 180) * POW(
+				                    SIN(
+				                        (
+				                            #{longitude} * PI() / 180 - ei.longitude * PI() / 180
+				                        ) / 2
+				                    ),
+				                    2
+				                )
+				            )
+				        ) * 1000
+					) AS 'distance_number'
+					]]>
+				</if>
+			FROM enterprise_info AS ei
+			INNER JOIN users ON (users.id = ei.user_id)
+			LEFT JOIN industry_type AS it ON (it.industry_code = ei.industry_code)
+			LEFT JOIN regions AS reg ON (reg.region_code = ei.region_code)
+			LEFT JOIN certification_enterprise AS ce ON(ce.user_id = ei.user_id)
+			<where>
+				<!-- 如果筛选了经纬度，则没有经纬度的需求将不会被搜索到 -->
+				<if test="latitude != null">AND ei.latitude IS NOT NULL</if>
+				<if test="longitude!=null">AND ei.longitude IS NOT NULL</if>
+				<!-- 根据Id查询 -->
+				<if test="userId != null">AND users.id = #{userId}</if>
+				<!-- 关键字模糊搜索，搜索范围：企业名称、业务范围、企业介绍、拼接行业详情、地址、拼接地址、地区名称、行业名称 -->
+				<if test="keyword != null">
+					<![CDATA[AND (
+						ei.enterprise_name LIKE '%${keyword}%' OR
+						ei.business_scope LIKE '%${keyword}%' OR
+						ei.introduce LIKE '%${keyword}%' OR
+						ei.industry_details LIKE '%${keyword}%' OR
+						ei.address LIKE '%${keyword}%' OR
+						ei.address_all LIKE '%${keyword}%' OR
+						reg.region_name LIKE '%${keyword}%' OR
+						it.industry_name LIKE '%${keyword}%'
+					)]]>
+				</if>
+				<!-- 筛选行业Code -->
+				<if test="industryCode != null">AND it.industry_code = #{industryCode}</if>
+				<!-- 筛选多个行业Code -->
+				<if test="industryCodes != null">AND it.industry_code IN (${industryCodes})</if>
+				<!-- 筛选地区Code -->
+				<if test="regionCode != null">AND reg.region_code = #{regionCode}</if>
+				<!-- 筛选多个地区Code -->
+				<if test="regionCodes != null">AND reg.region_code IN (${regionCodes})</if>
+				<!-- 查询审核id -->
+				<if test="auditStateIds != null">AND ce.state_id IN (${auditStateIds})</if>
+			</where>
+			<trim prefix="ORDER BY" suffixOverrides=",">
+					<if test="orderCreateTime != null">users.create_time ${orderCreateTime},</if>
+			</trim>
+ 		) AS s
+		<where>
+			<if test="distance != null"><![CDATA[s.distance_number < #{distance}]]></if>
+		</where>
+		<trim prefix="ORDER BY" suffixOverrides=",">
+			<if test="orderDistance != null">s.distance_number ${orderDistance},</if>
+		</trim>
+		<if test="pageNum!=null">LIMIT #{limit},#{offset}</if> 
+	</select>
+	
+	<!-- 查询最后注册的三个企业的信息-->
+	<select id="enterprisePreferred" resultType="com.qichong.model.EnterpriseTopOneModel">
+		SELECT
+			ei.id as 'ei.id',
+			ei.user_id as 'ei.user.id',
+			ei.enterprise_name as 'ei.enterprise_name',
+			ei.person_name as 'ei.person_name',
+			ei.fixed_telephone as 'ei.fixed_telephone',
+			ei.telephone as 'ei.telephone',
+			ei.email as 'ei.email',
+			ei.logo as 'ei.logo',
+			ei.business_license as 'ei.business_license',
+			ei.website as 'ei.website',
+			it.industry_name as 'industryType.industry_name',
+			ei.balance as 'ei.balance',
+			reg.region_code as 'ei.region.region_code',
+			reg.region_name as 'ei.region.region_name',
+			ei.address as 'ei.address',
+			ei.introduce as 'ei.introduce',
+			ce.state_id
+		FROM
+			enterprise_info AS ei
+		INNER JOIN industry_type AS it ON (it.industry_code=ei.industry_code)
+		INNER JOIN regions AS reg ON (reg.region_code = ei.region_code)
+		INNER JOIN certification_enterprise AS ce ON(ce.user_id = ei.user_id)
+		WHERE ce.state_id = 5
+		ORDER BY ei.id DESC LIMIT 3
+	</select>
+	<!--查询13条最新发布的企业信息  -->
+	<select id="enterPriseThirteen" resultType="com.qichong.model.EnterpriseTopOneModel">
+		SELECT
+			ei.id as 'ei.id',
+			ei.user_id as 'ei.user.id',
+			ei.enterprise_name as 'ei.enterprise_name',
+			ei.person_name as 'ei.person_name',
+			ei.fixed_telephone as 'ei.fixed_telephone',
+			ei.telephone as 'ei.telephone',
+			ei.email as 'ei.email',
+			ei.logo as 'ei.logo',
+			ei.introduce as 'ei.introduce',
+			ei.business_license as 'ei.business_license',
+			ei.website as 'ei.website',
+			it.industry_name as 'industryType.industry_name',
+			ei.balance as 'ei.balance',
+			reg.region_code as 'ei.region.region_code',
+			reg.region_name as 'ei.region.region_name',
+			ei.address as 'ei.address',
+			ei.introduce as 'ei.introduce',
+			ce.state_id
+		FROM
+			enterprise_info AS ei
+		INNER JOIN industry_type AS it ON (it.industry_code=ei.industry_code)
+		INNER JOIN regions AS reg ON (reg.region_code = ei.region_code)
+		INNER JOIN certification_enterprise AS ce ON(ce.user_id = ei.user_id)
+		WHERE ce.state_id =5 AND ei.address LIKE '%${city}%'
+		ORDER BY ei.id DESC LIMIT 0,10
+	</select>
+	
+	<!-- 查询全部企业，注册时间降序，可筛选 -->
+	<select id="selectAll" parameterType="com.qichong.model.Filters" resultType="EnterpriseInfo">
+		SELECT
+			ei.id,
+			u.id AS 'user.id',
+			u.username AS 'user.username',
+			u.create_time AS 'user.create_time',
+			u.wx_open_id AS 'user.wx_open_id',
+			u.type_id AS 'user.type_id',
+			ei.enterprise_name,
+			ei.person_name,
+			ei.fixed_telephone,
+			ei.telephone,
+			ei.email,
+			ei.introduce,
+			ei.logo,
+			ei.business_license,
+			ei.website,
+			ei.balance,
+			reg.region_code AS 'region.region_code',
+			reg.region_name AS 'region.region_name',
+			ei.address,
+			ei.industry_details,
+			it.industry_code AS 'industry.industry_code',
+			it.industry_name AS 'industry.industry_name',
+			it.parent_code AS 'industry.parent_code',
+			ei.address_all,
+			ei.business_scope
+		FROM enterprise_info AS ei
+		INNER JOIN users AS u ON (u.id = ei.user_id)
+		LEFT JOIN regions AS reg ON (reg.region_code = ei.region_code)
+		LEFT JOIN industry_type AS it ON (it.industry_code = ei.industry_code)
+		LEFT JOIN certification_enterprise AS ce ON(ce.user_id = ei.user_id)
+		LEFT JOIN state ON (state.id = ce.state_id)
+		<where>
+			<if test="name != null">AND ei.enterprise_name = #{name}</if>
+			<!-- 审核ID -->
+			<if test="auditStateId != null">AND ce.state_id = #{auditStateId}</if>
+			<if test="regionCode != null">AND ei.region_code = #{regionCode}</if>
+			<if test="industryCode != null">AND it.industry_code = #{industryCode}</if>
+			<if test="searchKeyword != null">
+				AND (
+					ei.enterprise_name LIKE '%${searchKeyword}%' OR
+					ei.industry_details LIKE '%${searchKeyword}%' OR
+					it.industry_name LIKE '%${searchKeyword}%' OR
+					ei.address LIKE '%${searchKeyword}%' OR 
+					ei.address_all LIKE '%${searchKeyword}%' OR
+					reg.region_name LIKE '%${searchKeyword}%'
+				)
+			</if>
+		</where>
+		ORDER BY u.create_time DESC
+		<if test="pageNum != null">LIMIT #{limit},#{offset}</if>
+	</select>
+	
+	<select id="queryEnterpriseInfo" parameterType="com.qichong.model.Filters" resultType="EnterpriseInfo">
+		SELECT
+			ei.id,
+			u.id AS 'user.id',
+			u.username AS 'user.username',
+			u.create_time AS 'user.create_time',
+			u.wx_open_id AS 'user.wx_open_id',
+			u.type_id AS 'user.type_id',
+			ei.enterprise_name,
+			ei.person_name,
+			ei.fixed_telephone,
+			ei.telephone,
+			ei.email,
+			ei.introduce,
+			ei.logo,
+			ei.business_license,
+			ei.website,
+			ei.balance,
+			reg.region_code AS 'region.region_code',
+			reg.region_name AS 'region.region_name',
+			ei.address,
+			ei.industry_details,
+			it.industry_code AS 'industry.industry_code',
+			it.industry_name AS 'industry.industry_name',
+			it.parent_code AS 'industry.parent_code',
+			ei.address_all,
+			ei.business_scope
+		FROM enterprise_info AS ei
+		INNER JOIN users AS u ON (u.id = ei.user_id)
+		LEFT JOIN regions AS reg ON (reg.region_code = ei.region_code)
+		LEFT JOIN industry_type AS it ON (it.industry_code = ei.industry_code)
+		LEFT JOIN certification_enterprise AS ce ON(ce.user_id = ei.user_id)
+		LEFT JOIN state ON (state.id = ce.state_id)
+		<where>
+			<!-- 审核ID -->
+			<if test="searchKeyword != null">
+				AND (
+					ei.enterprise_name LIKE '%${searchKeyword}%' OR
+					ei.industry_details LIKE '%${searchKeyword}%' OR
+					it.industry_name LIKE '%${searchKeyword}%' OR
+					ei.address LIKE '%${searchKeyword}%' OR 
+					ei.address_all LIKE '%${searchKeyword}%' OR
+					reg.region_name LIKE '%${searchKeyword}%'
+				)
+			</if>
+		</where>
+		ORDER BY u.create_time DESC
+	</select>
+	
+	<!-- 查询全部企业，注册时间降序，可筛选 -->
+	<select id="selectAllTotal" parameterType="com.qichong.model.Filters" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM enterprise_info AS ei
+		INNER JOIN users AS u ON (u.id = ei.user_id)
+		LEFT JOIN regions AS reg ON (reg.region_code = ei.region_code)
+		LEFT JOIN industry_type AS it ON (it.industry_code = ei.industry_code)
+		LEFT JOIN certification_enterprise AS ce ON(ce.user_id = ei.user_id)
+		LEFT JOIN state ON (state.id = ce.state_id)
+		<where>
+			<if test="name != null">AND ei.enterprise_name = #{name}</if>
+			<!-- 审核ID -->
+			<if test="auditStateId != null">AND ce.state_id = #{auditStateId}</if>
+			<if test="regionCode != null">AND ei.region_code = #{regionCode}</if>
+			<if test="industryCode != null">AND it.industry_code = #{industryCode}</if>
+			<if test="searchKeyword != null">
+				AND (
+					ei.enterprise_name LIKE '%${searchKeyword}%' OR
+					ei.industry_details LIKE '%${searchKeyword}%' OR
+					it.industry_name LIKE '%${searchKeyword}%' OR
+					ei.address LIKE '%${searchKeyword}%' OR 
+					ei.address_all LIKE '%${searchKeyword}%' OR
+					reg.region_name LIKE '%${searchKeyword}%'
+				)
+			</if>
+		</where>
+	</select>
+	
+	<!-- 查询所有的企业，并筛选 -->
+	<select id='selectAllAndFilter' resultType="com.qichong.model.EnterpriseInfoModel">
+		SELECT
+			ei.id AS 'entInfo.id',
+			ei.user_id AS 'entInfo.user.id',
+			ei.enterprise_name AS 'entInfo.enterprise_name',
+			ei.person_name AS 'entInfo.person_name',
+			ei.fixed_telephone AS 'enInfo.fixed_telephone', 
+			ei.telephone AS 'entInfo.telephone',
+			ei.email AS 'entInfo.email',
+			ei.introduce AS 'entInfo.introduce',
+			ei.logo AS 'entInfo.logo',
+			ei.business_license AS 'entInfo.business_license',
+			ei.website AS 'entInfo.website',
+			ei.balance AS 'entInfo.balance',
+			regions.region_code AS 'entInfo.region.region_code',
+			regions.region_name AS 'entInfo.region.region_name',
+			ei.address AS 'entInfo.address',
+			industry_type.industry_code AS 'indNexus.industryType.industry_code',
+			industry_type.industry_name AS 'indNexus.industryType.industry_name',
+			ce.state_id
+		FROM enterprise_info AS ei
+		INNER JOIN regions ON (regions.region_code = ei.region_code)
+		INNER JOIN industry_type ON (industry_type.industry_code = ei.industry_code)
+		INNER JOIN certification_enterprise AS ce ON(ce.user_id = ei.user_id)
+		<where>
+			<if test="filters.regionCode != null">
+				AND ei.region_code = #{filters.regionCode}
+			</if>
+			<if test="filters.regionCode == null">
+				AND ei.address LIKE '%${city}%'
+			</if>
+			<if test="filters.name != null">
+				AND ei.enterprise_name = #{filters.name}
+			</if>
+			<if test="filters.industryCode != null">
+				AND industry_type.industry_code = #{filters.industryCode}
+			</if>
+			<if test="filters.searchKeyword != null">
+				AND (
+					ei.industry_details LIKE '%${filters.searchKeyword}%' OR
+					ei.address LIKE '%${filters.searchKeyword}%' OR 
+					regions.region_name LIKE '%${filters.searchKeyword}%'
+				)
+			</if>
+			AND ce.state_id = 5
+		</where>
+		LIMIT #{filters.limit},#{filters.pageSize}
+	</select>
+	
+	<!-- 查询所有的企业，并筛选  total -->
+	<select id='enterpriseInfoFilters_total' resultType="java.lang.Integer">
+		SELECT count(1) FROM enterprise_info AS ei
+		INNER JOIN regions ON (
+			regions.region_code = ei.region_code
+		)
+		INNER JOIN industry_type ON (
+			industry_type.industry_code = ei.industry_code
+		)
+		INNER JOIN certification_enterprise AS ce ON(ce.user_id = ei.user_id)
+		<where>
+			<if test="filters.regionCode != null">
+				AND ei.region_code = #{filters.regionCode}
+			</if>
+			<if test="filters.regionCode == null">
+				AND ei.address LIKE '%${city}%'
+			</if>
+			<if test="filters.name != null">
+				AND ei.enterprise_name = #{filters.name}
+			</if>
+			<if test="filters.industryCode != null">
+				AND industry_type.industry_code = #{filters.industryCode}
+			</if>
+			<if test="filters.stateId !=null">
+				AND(
+					ce.state_id = 5
+				)
+			</if>
+		</where>
+	</select>
+
+	<!-- 新增企业信息 -->
+	<insert id="insertOne" parameterType="EnterpriseInfo" >
+		INSERT INTO enterprise_info ( 
+			user_id, 
+			enterprise_name,
+			person_name,
+			fixed_telephone,
+			telephone, 
+			email, 
+			business_scope，
+			logo, 
+			business_license,
+			website, 
+			balance, 
+			region_code, 
+			industry_code,
+			address,
+			industry_details
+		) VALUES (
+			#{userId}, 
+			#{enterpriseName}, 
+			#{person_name},
+			#{fixedTelephone},
+			#{telephone},
+			#{email}, 
+			#{logo},
+			#{businessScope},
+			#{businessLicense},
+			#{website},
+			#{balance},
+			#{region.regionCode},
+			#{industry.industryCode},
+			#{address},
+			#{industryDetails}
+		)
+	</insert>
+	
+	<!-- 插入一条 企业 信息，这条sql语句用于初次注册 -->
+	<insert id="inserOnSignup" parameterType="EnterpriseInfo">
+		INSERT INTO enterprise_info (
+			user_id, 
+			enterprise_name, 
+			person_name,
+			telephone, 
+			fixed_telephone,
+			email, 
+			introduce,
+			logo, 
+			business_license, 
+			website,
+			balance,
+			region_code, 
+			address
+		) VALUES (
+			#{user.id}, #{enterpriseName}, #{personName},
+			#{telephone},#{fixedTelephone}, '', '暂时没有介绍',
+			#{logo},#{businessLicense},'#', 0.0, '0', ''
+		)
+	</insert>
+	
+	<!-- 根据行业进行模糊查询企业信息 -->
+	<select id="queryLikeByTypeName" resultType="com.qichong.model.EnterpriseTopOneModel" parameterType="java.lang.String">
+		SELECT
+			ei.id as 'ei.id',
+			ei.user_id as 'ei.user.id',
+			ei.enterprise_name as 'ei.enterprise_name',
+			ei.person_name as 'ei.person_name',
+			ei.fixed_telephone as 'ei.fixed_telephone',
+			ei.telephone as 'ei.telephone',
+			ei.email as 'ei.email',
+			ei.logo as 'ei.logo',
+			ei.business_license as 'ei.business_license',
+			ei.website as 'ei.website',
+			it.industry_name as 'industryType.industry_name',
+			ei.balance as 'ei.balance',
+			reg.region_code as 'ei.region.region_code',
+			reg.region_name as 'ei.region.region_name',
+			ei.address as 'ei.address',
+			ei.industry_details as 'ei.industryDetails',
+			ei.address_all as 'ei.addressAll',
+			ce.state_id
+		FROM enterprise_info AS ei
+		INNER JOIN industry_type AS it ON (it.industry_code=ei.industry_code)
+		INNER JOIN regions AS reg ON (reg.region_code = ei.region_code)
+		INNER JOIN certification_enterprise AS ce ON(ce.user_id = ei.user_id)
+		WHERE ei.industry_details LIKE '%${industryName}%' AND ce.state_id = 5
+	</select>
+	
+	<!-- 修改企业信息 -->
+	<update id="updateOne" parameterType="EnterpriseInfo">
+		UPDATE `enterprise_info`
+		<set>
+			<if test="enterpriseName != null">enterprise_name = #{enterpriseName},</if>
+			<if test="personName != null">person_name = #{personName},</if>
+			<if test="introduce != null">introduce = #{introduce},</if>
+			<if test="fixedTelephone != null">fixed_telephone = #{fixedTelephone},</if>
+			<if test="telephone != null">telephone = #{telephone},</if>
+			<if test="email != null">email = #{email},</if>
+			<if test="logo.name != null">logo = #{logo},</if>
+			<if test="businessLicense.name != null">business_license = #{businessLicense},</if>
+			<if test="website != null">website = #{website},</if>
+			<if test="balance != null">balance = #{balance},</if>
+			<if test="(region != null)&amp;&amp;(region.regionCode != null)">region_code = #{region.regionCode},</if>
+			<if test="(industry != null)&amp;&amp;(industry.industryCode != null)">industry_code = #{industry.industryCode},</if>
+			<if test="latitude != null">latitude = #{latitude},</if>
+			<if test="longitude != null">longitude = #{longitude},</if>
+			<if test="address != null">address = #{address},</if>
+			<if test="addressName != null">address_name = #{addressName},</if>
+			<if test="address != null">address_all = #{addressAll},</if>
+			<if test="businessScope != null">business_scope = #{businessScope},</if>
+			<if test="industryDetails != null">industry_details = #{industryDetails},</if>
+			<!-- 详情页信息 -->
+			<if test="businessTitle!= null">business_title = #{businessTitle},</if>
+			<if test="businessContent!= null">business_content = #{businessContent},</if>
+			<if test="businessTags!= null">business_tags = #{businessTags},</if>
+			<if test="banner1.name!=null">banner1 = #{banner1},</if>
+			<if test="banner2.name!=null">banner2 = #{banner2},</if>
+			<if test="banner3.name!=null">banner3 = #{banner3},</if>
+			<if test="qrCodePicture.name!=null">qr_code_picture = #{qrCodePicture},</if>
+			<if test="qrCodeName!= null">qr_code_name = #{qrCodeName},</if>
+			<!-- 用户自上传图片 -->
+			<if test="picture0.name!=null">picture0 = #{picture0},</if>
+			<if test="picture1.name!=null">picture1 = #{picture1},</if>
+			<if test="picture2.name!=null">picture2 = #{picture2},</if>
+			<if test="picture3.name!=null">picture3 = #{picture3},</if>
+			<if test="picture4.name!=null">picture4 = #{picture4},</if>
+			<if test="picture5.name!=null">picture5 = #{picture5},</if>
+			<if test="picture6.name!=null">picture6 = #{picture6},</if>
+			<if test="picture7.name!=null">picture7 = #{picture7},</if>
+			<if test="picture8.name!=null">picture8 = #{picture8},</if>
+			<if test="picture9.name!=null">picture9 = #{picture9},</if>
+			<if test="philosophy.name!=null">philosophy = #{philosophy},</if>
+			<if test="profile.name!=null">profile = #{profile},</if>
+			<if test="advantage.name!=null">advantage = #{advantage},</if>
+			<if test="honor.name!=null">honor = #{honor},</if>
+			<if test="honorContent!=null">honorContent = #{honorContent},</if>
+			<if test="advantageContent!=null">advantageContent = #{advantageContent},</if>
+			<if test="idea!=null">idea = #{idea},</if>
+		</set>
+		WHERE user_id = #{user.id}
+	</update>
+	
+	<!-- 修改企业Banner图片 -->
+	<update id="updateBanner">
+		UPDATE enterprise_info SET banner${num} = #{url} WHERE user_id = #{userId}
+	</update>
+
+	<!--更新企业信息，这里主要是更新企业的理念，简介，优势以及企业获得的荣誉-->
+	<update id="updateEnterpriseInfo">
+		UPDATE  `enterprise_info`
+		<set>
+			<if test="philosophy!=null">philosophy = #{philosophy},</if>
+			<if test="profile!=null">profile = #{profile},</if>
+			<if test="advantage!=null">advantage = #{advantage},</if>
+			<if test="honor!=null">honor = #{honor},</if>
+			<if test="honorContent!=null">honorContent = #{honorContent},</if>
+			<if test="advantageContent!=null">advantageContent = #{advantageContent},</if>
+			<if test="idea!=null">idea = #{idea},</if>
+			<if test="introduce!=null">introduce = #{introduce},</if>
+		</set>
+		WHERE user_id = #{userId}
+	</update>
+
+	<!-- 修改企业资质图片 -->
+	<update id="updatePicture">
+		UPDATE enterprise_info SET picture${num} = #{url} WHERE user_id = #{userId}
+	</update>
+	
+	<!-- 查询Id最大的五条 -->
+	<select id="oderByEnterpriseMaxFive" resultType="com.qichong.model.EnterpriseTopOneModel">
+		SELECT
+			ei.id as 'ei.id',
+			ei.user_id as 'ei.user.id',
+			ei.enterprise_name as 'ei.enterprise_name',
+			ei.person_name as 'ei.person_name',
+			ei.fixed_telephone as 'ei.fixed_telephone',
+			ei.telephone as 'ei.telephone',
+			ei.email as 'ei.email',
+			ei.logo as 'ei.logo',
+			ei.business_license as 'ei.business_license',
+			ei.website as 'ei.website',
+			ei.balance as 'ei.balance',
+			reg.region_code as 'ei.region.region_code',
+			reg.region_name as 'ei.region.region_name',
+			ei.address as 'ei.address',
+			ce.state_id
+		FROM
+			enterprise_info AS ei
+		INNER JOIN regions AS reg ON (reg.region_code = ei.region_code)
+		INNER JOIN certification_enterprise AS ce ON(ce.user_id = ei.user_id)
+		WHERE ce.state_id = 5
+		ORDER BY ei.id DESC
+		LIMIT 0,5
+	</select>
+	
+	<!-- 删除企业信息 -->
+	<delete id="deleteEnterprise"></delete>
+	
+	<!-- 根据查询某个字段，必须等于传入 的值 -->
+	<select id="selectEqualsKey" resultType="EnterpriseInfo">
+		SELECT * FROM enterprise_info
+		WHERE `${key}` = #{value}
+	</select>
+	
+	<!-- 根据查询某个字段，必须包含传入 的值 -->
+	<select id="selectLikeKey" resultType="EnterpriseInfo">
+		SELECT * FROM enterprise_info
+		WHERE `${key}` = '%${value}%'
+	</select>
+	
+	<select id = "byIdEnterprise" resultType="EnterpriseInfo">
+		SELECT
+			ei.id, 
+			ei.user_id, 
+			ei.enterprise_name, 
+			ei.person_name,
+			ei.introduce,
+			ei.fixed_telephone,
+			ei.telephone, 
+			ei.email, 
+			ei.logo,
+			ei.business_license, 
+			ei.website,
+			ei.balance, 
+			reg.region_code as 'region.regionCode',
+			reg.region_name as 'region.regionName',
+			it.industry_code as 'industry.industryCode',
+			it.industry_name as 'industry.industryName',
+			ei.address,
+			ei.address_all,
+			ei.business_scope,
+			ce.state_id
+		FROM enterprise_info AS ei
+		LEFT JOIN regions AS reg ON ( reg.region_code = ei.region_code )
+		LEFT JOIN industry_type AS it ON (it.industry_code = ei.industry_code)
+		INNER JOIN certification_enterprise AS ce ON(ce.user_id = ei.user_id)
+		WHERE ei.id =#{id} AND ce.state_id = 5
+	</select>
+	
+</mapper>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html lang="zh-cn">
+<head>
+    <style>
+        .parent{
+            /* 以下属性垂直居中 */
+            position: absolute;
+            width: 100%;
+            background-color: white;
+            background-image: url("./img/background.png");
+            background-size: cover;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            left: 0;
+            top:0;
+            bottom: 0;
+        }
+        .child{
+            width: 100%;
+            position: absolute;
+            bottom: 3%;
+
+        }
+        .download_img{
+            outline: none;
+        }
+        .location{
+            text-align: center;
+            outline: none;
+
+        }
+        /*点击图片的时候不会出现阴影*/
+        a {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="parent">
+        <!--<img src="./img/background.png" height="100%" width="100%" />-->
+        <view class="child">
+            <div class="location"  >
+                <a  href="https://qc1318.com/path/download"><img class="download_img" src="./img/first.png"></a>
+            </div>
+            <div   class="location">
+                <a href="https://itunes.apple.com/cn/app/id1448066625"><img class="download_img" src="./img/second.png"></a>
+            </div>
+        </view>
+    </div>
+</body>
+
+
+
+</html>

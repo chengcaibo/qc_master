@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qichong.dao.JobInfoDao">
+
+	<!-- 模糊查询职业 -->
+	<select id="selectLikeJob" resultType="com.qichong.model.ChildParentModel">
+		SELECT
+			job_code AS 'code',
+			job_name AS 'child',
+			(
+				SELECT job_name FROM job_info
+				WHERE job_code = job.parent_code
+			) AS 'parent'
+		FROM job_info AS job
+		WHERE job.job_name LIKE '%${name}%'
+		<if test="pageSize != null &amp;&amp; pageNum != null">
+			LIMIT #{limit},#{offset}
+		</if>
+	</select>
+
+	<!-- 查询单个职业 -->
+	<select id="selectOne" resultType="JobInfo">
+		SELECT * FROM job_info
+		WHERE job_code = #{jobCode}
+	</select>
+	
+	<!-- 根据父行政区代码查询出全部的子地区 -->
+	<select id="selectChildByParentId" resultType="JobInfo">
+		SELECT * FROM job_info
+		<where>
+			<if test="parentCodes==null">parent_code = #{parentCode}</if>
+			<if test="parentCodes!=null">
+				<trim prefix="parent_code IN ( " suffix=")" suffixOverrides="," >
+					<foreach collection="parentCodes" item="code">${code},</foreach>
+				</trim>
+			</if>
+		</where>
+	</select>
+
+</mapper>

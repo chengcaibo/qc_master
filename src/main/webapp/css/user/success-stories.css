@@ -1,0 +1,391 @@
+/*成功案例*/
+.personal-page .success-stories {
+	width: 100%;
+	display: none;
+	margin-bottom: 30px;
+	margin-top: -45px;
+	min-height: 850px;
+	position: relative;
+}
+
+/*美化虫*/
+.success-stories .beautify-three img {
+	width: 500px;
+}
+
+.success-stories h1 {
+	margin: 0 38px;
+	height: 42px;
+	font-size: 27px;
+	border-bottom: 1px solid #ccc;
+	color: #404040;
+}
+
+.success-stories .case {
+	width: 100%;
+	padding-top: 30px;
+	overflow: hidden;
+}
+
+.case .according-to {
+	height: auto;
+	width: auto;
+	background: #fff;
+	overflow: hidden;
+	padding-left: 38px;
+	border-bottom: 1px solid #ccc;
+}
+
+.case .case-img {
+	width: 100px;
+	height: 100px;
+	margin: 0 37px 37px 0;
+	float: left;
+	background: #d6d6d6;
+}
+
+.case .case-content {
+	float: left;
+	width: 550px;
+	position: relative;
+}
+
+.case-content .case-content-headings {
+	height: 50px;
+}
+
+.case-content-headings p:first-child {
+	float: left;
+	width:100%;
+	font-size: 21px;
+	color: #6f6f6f;
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.case-content-headings p:last-child {
+	float: right;
+	font-size: 16px;
+	color: #6f6f6f;
+}
+
+.case-content .case-content-content {
+	width: 100%;
+	font-size: 15px;
+	line-height: 26px;
+	/* margin-bottom: 30px; */
+	/* height: 110px; */
+	color: #6f6f6f;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.case-introduced .inputting {
+	height: 140px;
+	width: 100%;
+	padding: 10px;
+	resize: none;
+	background: #fff;
+	border: 1px solid #ccc;
+}
+
+.case-content  .case-content-edit {
+	position: absolute;
+	right: 0;
+	bottom: -40px;
+}
+
+.case-content  .case-content-edit span {
+	padding: 0 5px;
+}
+
+.case-content  .case-content-edit button {
+	background: #fff;
+	font-size: 15px;
+	color: #6b6b6b;
+}
+
+.success-stories .case-add {
+	width: 100%;
+	padding: 55px 80px;
+	background: #f5f5f5;
+	display: none;
+}
+
+.case-add .case-add-fill {
+	height: auto;
+	width: 100%;
+	overflow: hidden;
+}
+
+.case-add-fill li {
+	height: 69px;
+	width: 295px;
+	overflow: hidden;
+	float: left;
+	margin-right: 30px;
+	position: relative;
+}
+
+.case-add-fill li:nth-child(2n) {
+	margin-right: 0;
+	position: relative;
+}
+
+.case-add-fill li p {
+	float: left;
+	font-size: 17px;
+	line-height: 25px;
+	padding-right: 8px;
+	color: #6f6f6f;
+}
+
+.case-add-fill li input {
+	float: left;
+	width: 200px;
+	height: 25px;
+	font-size: 16px;
+	border: 0;
+	background: none;
+	border-bottom: 1px solid #9a9a9a;
+}
+
+.case-add .case-introduced {
+	width: 100%;
+	overflow: hidden;
+	position: relative;
+}
+
+.case-introduced p {
+	float: left;
+	font-size: 18px;
+	margin-right: 9px;
+}
+
+.case-introduced .case-introduced-content {
+	float: left;
+	width: 680px;
+	background: #fff;
+	padding: 10px;
+	line-height: 26px;
+}
+
+.case-introduced-content li {
+	font-size: 15px;
+	color: #737373;
+}
+
+.case-add .case-add-button {
+	width: 100%;
+	height: auto;
+	text-align: right;
+	margin-top: 10px;
+}
+
+.case-add-button button {
+	width: 100px;
+	height: 33px;
+	/* border-radius: 5px; */
+	margin-right: 5px;
+	font-size: 18px;
+}
+
+.case-add-button button:last-child {
+	margin-right: 0;
+	background: #0099ff;
+	color: #fff;
+}
+
+.page-header .form-group .fileinput  .case-picture {
+	font-size: 17px;
+	color: #6f6f6f;
+}
+
+.page-header .form-group {
+	width: unset;
+}
+
+.page-header .fileinput .pic {
+	position: relative;
+	left: 200px;
+	top: -43px;
+}
+
+.page-header {
+	border: 0;
+	padding-bottom: 0;
+	margin-bottom: -30px;
+	margin-top: 0;
+}
+
+/* 新增案例 */
+.add-caseInfo-btn {
+	text-align: right;
+	margin: -35px 25px;
+}
+
+.add-caseInfo-div .close-caseInfo {
+	position: absolute;
+	top: -20px;
+	right: -15px;
+	background: #2196F3;
+	padding: 12px 16px;
+	border-radius: 100%;
+	width: 50px;
+	height: 50px;
+	font-size: 20px;
+	color: #fff;
+	cursor: pointer;
+	transition: 0.3s;
+}
+
+.add-caseInfo-div .close-caseInfo:HOVER {
+	background: #2b91e2;
+}
+
+.add-caseInfo-btn .caseInfo-btn {
+	background: transparent;
+	color: #84c9ff;
+	/* padding: 0px 25px; */
+	/* transition: 0.3s; */
+	cursor: pointer;
+	position: relative;
+	right: 35px;
+	font-size: 35px;
+	top: 8px;
+	transition: 0.3s;
+}
+
+.add-caseInfo-btn .caseInfo-btn span {
+	font-size: 20px;
+	padding: 0 10px;
+	color: #2196F3;
+	position: relative;
+	top: -5px;
+}
+
+.add-caseInfo-btn .caseInfo-btn span:HOVER {
+	color: #3898e6;
+}
+
+.add-caseInfo-btn .caseInfo-btn:HOVER {
+	color: #3898e6;
+}
+
+.add-caseInfo-div {
+	margin: 0 45px;
+	width: 650px;
+	height: auto;
+	position: absolute;
+	background: #ffffff;
+	padding: 25px 85px;
+	z-index: 99;
+	-moz-box-shadow: 2px 2px 5px #333333;
+	-webkit-box-shadow: 2px 2px 5px #333333;
+	box-shadow: 2px 2px 5px #333333;
+}
+
+.add-caseInfo-div  h3 {
+	font-size: 25px;
+	border-bottom: 1px solid #ccc;
+	padding: 15px 0;
+	margin: 0 0;
+	margin-bottom: 30px;
+	color: #0b65ad;
+	font-family: sans-serif;
+	font-weight: 500;
+}
+
+.add-caseInfo-div .preservation-info {
+	width: 343px;
+	height: 42px;
+	position: relative;
+	left: 83px;
+	margin-top: 30px;
+	margin-bottom: 25px;
+	font-size: 20px;
+	background: #2196F3;
+	color: #fff;
+	letter-spacing: 5px;
+	transition: 0.3s;
+}
+
+.add-caseInfo-div .preservation-info:HOVER {
+	background: #167dd0;
+}
+
+.add-caseInfo-div .case-textarea {
+	width: 350px;
+	height: 100px;
+	border: 1px solid #ccc;
+	margin: 10px 0;
+	padding: 10px 10px;
+	resize: none;
+}
+
+.add-caseInfo-div .case-name {
+	font-size: 16px;
+	color: #525252;
+}
+
+.add-caseInfo-div .case-textarea-name {
+	font-size: 16px;
+	color: #525252;
+	position: relative;
+	top: -80px;
+}
+
+.add-caseInfo-div input {
+	padding: 0 10px;
+	margin: 10px 0;
+	width: 350px;
+}
+
+#bodyMask {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	z-index: 1;
+	background: rgba(0, 0, 0, .3);
+	display: none;
+}
+
+.add-caseInfo-div li {
+	position: relative;
+}
+
+.empty-prompt, .empty-error, .text-restriction {
+	color: red;
+	font-size: 12px;
+	position: absolute;
+	right: 44px;
+	top: 50px;
+	display: none;
+}
+
+.add-caseInfo-div li:nth-child(8) .text-restriction, .add-caseInfo-div li:nth-child(8) .empty-prompt,
+	.add-caseInfo-div li:nth-child(8) .empty-error {
+	position: absolute;
+	right: 44px;
+	top: 112px;
+}
+/*滚动条的美化*/
+.case-textarea::-webkit-scrollbar { /*滚动条整体样式*/
+	width: 4px; /*高宽分别对应横竖滚动条的尺寸*/
+	height: 4px;
+}
+
+.case-textarea::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
+	border-radius: 5px;
+	-webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+	background: rgba(0, 0, 0, 0.2);
+}
+
+.case-textarea::-webkit-scrollbar-track { /*滚动条里面轨道*/
+	-webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+	border-radius: 0;
+	background: rgba(0, 0, 0, 0.1);
+}

@@ -1,0 +1,87 @@
+.main-box {
+	padding: 10px 20px 50px;
+}
+
+.cert-info-item {
+	padding: 5px 0;
+	position: relative;
+}
+
+.cert-info-item span:FIRST-CHILD {
+	font-weight: bold;
+	font-size: 18px;
+}
+
+.cert-info-item span {
+	font-size: 16px;
+}
+
+.cert-info-item-float {
+	float: left;
+	margin-right: 30px;
+}
+
+.cert-info-item-float-rigth {
+	float: right;
+}
+
+.clear {
+	clear: both;
+}
+
+.cert-info-item img {
+	vertical-align: top;
+	border: 1px solid #000;
+	position: relative;
+	top: 20px;
+	cursor: pointer;
+}
+
+.id-a, .id-b, .id-c, .id-license {
+	padding-bottom: 30px;
+}
+
+.id-a span:FIRST-CHILD, .id-b span:FIRST-CHILD, .id-c span:FIRST-CHILD {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.id-a img, .id-b img {
+	max-width: 400px;
+	max-height: 220px;
+}
+
+.id-c img {
+	max-height: 300px;
+}
+
+.id-license img {
+	max-height: 500px;
+}
+
+.cert-info-button {
+	text-align: center;
+}
+
+.cert-info-button .layui-btn {
+	height: 60px;
+	font-size: 28px;
+}
+
+.cert-info-button .layui-btn-danger, .cert-info-button .btn-passed {
+	width: 220px;
+}
+
+.cert-info-button .layui-btn-warm {
+	width: 420px;
+	margin: 0 20px;
+}
+
+#tips li {
+	cursor: pointer;
+}
+
+#tips li:hover {
+	color: #09f;
+}

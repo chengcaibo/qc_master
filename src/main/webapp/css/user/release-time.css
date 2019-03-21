@@ -1,0 +1,141 @@
+.releaseTime-info {
+	
+}
+
+.releaseTime-info .timeAll {
+	width: 650px;
+	margin: 0 auto;
+}
+
+.releaseTime-info .timeAll .addTime {
+	width: 300px;
+	margin: 12px 0;
+}
+
+.releaseTime-info .timeAll table tr td input[type="text"] {
+	width: 300px;
+	cursor: pointer;
+}
+
+.releaseTime-info .timeAll input[type="button"] {
+	width: 300px;
+	background: #2196F3;
+	color: #fff;
+	font-size: 16px;
+	border: 0;
+	margin: 20px 0;
+}
+
+.releaseTime-info .timeAll input[type="submit"] {
+	width: 300px;
+	background: #2196F3;
+	color: #fff;
+	font-size: 16px;
+	border: 0;
+	margin-left: 8px;
+}
+
+#InputsWrapper a {
+	text-decoration: none;
+	cursor: pointer;
+	position: absolute;
+	font-size: 30px;
+	margin-top: -3px;
+}
+
+#InputsWrapper .startTime-info {
+	width: 300px;
+	cursor: pointer;
+}
+
+#InputsWrapper .endTime-info {
+	width: 300px;
+	cursor: pointer;
+}
+
+.addtime-div .startTime-info {
+	width: 300px;
+	cursor: pointer;
+}
+
+.addtime-div .endTime-info {
+	width: 300px;
+	cursor: pointer;
+}
+
+/*添加的额外代码*/
+.mask {
+	width: 490px;
+	height: 40px;
+	position: absolute;
+	top: 0;
+	left: 4px;
+	display: block;
+	opacity: 0;
+}
+
+.calendar-container {
+	width: 650px;
+	position: relative;
+	overflow: hidden;
+	margin-left: 55px;
+}
+
+.calendar-container h1 {
+	font-size: 20px;
+	padding-left: 15px;
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 20px;
+}
+
+.button-container {
+	float: right;
+}
+
+.button-container a, .calendar-container table a {
+	display: inline-block;
+	width: 65px;
+	height: 30px;
+	border: 1px solid #ccc;
+	font-size: 15px;
+	line-height: 30px;
+	text-align: center;
+	cursor: pointer;
+	/* border-radius: 3px; */
+	text-decoration: none;
+	font-size: 12px;
+}
+
+.calendar-container table a {
+	height: 30px;
+	line-height: 28px;
+	margin-left: 10px;
+	background: #d8d8d8;
+}
+
+.calendar-container table a:hover {
+	background: #797979;
+	color: #fff;
+	border-color: #fff;
+}
+
+.button-container a:hover {
+	background: #2196F3;
+	color: #fff;
+	border-color: #fff;
+}
+
+.calendar {
+	float: left;
+	position: relative;
+	margin-top: 25px;
+}
+
+.calendar-container .input-box {
+	width: 235px;
+	margin-left: 5px;
+}
+
+.addtime-div tr {
+	line-height: 60px;
+}

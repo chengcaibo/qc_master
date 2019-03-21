@@ -1,0 +1,11 @@
+.layui-table td, .layui-table th {
+	position: relative !important;
+}
+
+a.layui-btn {
+	text-decoration: none !important;
+}
+
+.layui-btn.layui-btn-xs+.layui-btn {
+	margin-left: 0;
+}

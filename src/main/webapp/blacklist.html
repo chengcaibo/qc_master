@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>table模块快速使用</title>
+    <link rel="stylesheet" href="./lib/layui/css/layui.css" media="all">
+</head>
+<body>
+
+<table id="demo" lay-filter="test"></table>
+
+<script src="./lib/layui/layui.js"></script>
+<script type="text/html" id="templet-personal-action">
+    <div id="table-btns">
+        <a href="" class="layui-btn layui-btn-normal layui-btn-xs" target="_blank">投诉信息</a>
+        <a href="javascript:sayNoOpen();" class="layui-btn layui-btn-danger layui-btn-xs">拉黑</a>
+        <a href="javascript:sayNoOpen();" class="layui-btn layui-btn-danger layui-btn-xs">解除</a>
+    </div>
+</script>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            ,height: 500
+            ,url: '/getallinfo' //数据接口
+            ,page: true //开启分页
+            ,cols: [[ //表头
+                {field: 'id', title: 'ID', sort: true, fixed: 'left'}
+                ,{field: 'nickName', title: '用户名'}
+                ,{field: 'age', title: '年龄'}
+                ,{field: 'telephone', title: '电话号'}
+                ,{field: 'reportedTimes', title: '被举报次数', sort: true}
+                ,{field: 'introduce', title: '个人介绍',  sort: true}
+                ,{title : "操作", unresize : true, fixed : "right", templet : "#templet-personal-action",}
+            ]]
+        });
+
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qichong.dao.TheResponseDao">
+	<!-- 添加预约记录 -->
+	<insert id="addTheResponse" parameterType="TheResponse">
+		INSERT INTO `the_response` (
+		`response_id`,
+		`response_b_id`,
+		`event_id`,
+		`response_time`,
+		 response_state
+		)
+		VALUES
+		(
+		#{userA.id},
+		#{userB.id},
+		#{demand.id},
+		#{responseTime},
+		#{state.id}
+		)
+	</insert>
+	<!-- 根据id删除预约记录 -->
+	<delete id="deleteTheResponse">
+		DELETE FROM `the_response` WHERE (`id`=#{id})
+	</delete>
+
+	<!-- 修改状态 -->
+	<update id="updateState">
+		UPDATE the_response
+		SET response_state = #{stateId} WHERE id = #{id}
+	</update>
+		<!-- B方个人被响应方记录 -->
+	<select id = "byUbserBTheResponse" resultType="TheResponse">
+			SELECT
+				tr.id,
+				ui.real_name as 'userInfo.realName',
+				uib.real_name as 'userInfoB.realName',
+				ui.user_id as 'userInfo.user.id',
+				uib.user_id as 'userInfoB.user.id',
+				di.content as 'demand.content',
+				tr.event_id as 'demand.id',
+				tr.response_time,
+				s.state as 'state.state'
+			FROM
+				the_response tr
+			INNER JOIN user_info ui ON (tr.response_id = ui.user_id)
+			INNER JOIN user_info uib ON (tr.response_b_id = uib.user_id)
+			INNER JOIN demand_info di ON (tr.event_id = di.id)
+			INNER JOIN state s ON (tr.response_state = s.id)
+			WHERE
+				tr.response_b_id = #{id} AND tr.response_state = #{stateId}
+	</select>
+	<!-- A方个人响应方记录 -->
+	<select id="byUserTheResponse" resultType="TheResponse">
+		SELECT
+				tr.id,
+				ui.real_name as 'userInfo.realName',
+				uib.real_name  as 'userInfoB.realName',
+				ui.user_id as 'userInfo.user.id',
+				uib.user_id as 'userInfoB.user.id',
+				di.content as 'demand.content',
+				tr.event_id as 'demand.id',
+				tr.response_time,
+				s.state as 'state.state'
+		FROM
+			the_response tr
+		INNER JOIN user_info ui ON (tr.response_id = ui.user_id)
+		INNER JOIN user_info uib ON (tr.response_b_id = uib.user_id)
+		INNER JOIN demand_info di ON (tr.event_id = di.id)
+		INNER JOIN state s ON (tr.response_state = s.id)
+		WHERE
+			tr.response_id= #{id} AND tr.response_state = #{stateId}
+	
+	</select>
+	<!--A方企业响应记录  -->
+	<select id="byEnterpriseTheResponse" resultType="TheResponse">
+		SELECT
+			tr.id,
+			ei.enterprise_name as 'enterpriseInfo.enterpriseName',
+			ei.website as 'enterpriseInfo.website',
+			eib.website as 'enterpriseInfoB.website',
+			ei.id as 'enterpriseInfo.id',
+			eib.id as 'enterpriseInfoB.id',
+			eib.enterprise_name as 'enterpriseInfoB.enterpriseName',
+			di.content as 'demand.content',
+			tr.event_id as 'demand.id',
+			tr.response_time,
+			s.state as 'state.state'
+		FROM
+			the_response tr
+		INNER JOIN enterprise_info ei ON (tr.response_id = ei.user_id)
+		INNER JOIN enterprise_info eib ON (tr.response_b_id = eib.user_id)
+		INNER JOIN demand_info di ON (tr.event_id = di.id)
+		INNER JOIN state s ON (tr.response_state = s.id)
+		WHERE
+			tr.response_id= #{id} AND tr.response_state = #{stateId}
+	
+	</select>
+	<!--B方企业被响应记录  -->
+	<select id="byEnterpriseBTheResponse" resultType="TheResponse">
+		SELECT
+			tr.id,
+			ei.enterprise_name as 'enterpriseInfo.enterpriseName',
+			ei.website as 'enterpriseInfo.website',
+			eib.website as 'enterpriseInfoB.website',
+			ei.id as 'enterpriseInfo.id',
+			eib.id as 'enterpriseInfoB.id',
+			eib.enterprise_name  as 'enterpriseInfoB.enterpriseName',
+			di.content as 'demand.content',
+			tr.event_id as 'demand.id',
+			tr.response_time,
+			s.state as 'state.state'
+		FROM
+			the_response tr
+		INNER JOIN enterprise_info ei ON (tr.response_id = ei.user_id)
+		INNER JOIN enterprise_info eib ON (tr.response_b_id = eib.user_id)
+		INNER JOIN demand_info di ON (tr.event_id = di.id)
+		INNER JOIN state s ON (tr.response_state = s.id)
+		WHERE
+			tr.response_b_id=#{id} AND tr.response_state = #{stateId}
+	</select>
+	<!--A方个人响应企业记录  -->
+	<select id="byUserAndEnterpriseTheResponse" resultType="TheResponse">
+		SELECT
+			tr.id,
+			ui.real_name as 'userInfo.realName',
+			ui.user_id as 'userInfo.user.id',
+			eib.enterprise_name  as 'enterpriseInfoB.enterpriseName',
+			eib.website as 'enterpriseInfoB.website',
+			eib.id as 'enterpriseInfoB.id',
+			di.content as 'demand.content',
+			tr.event_id as 'demand.id',
+			tr.response_time,
+			s.state as 'state.state'
+		FROM
+			the_response tr
+		INNER JOIN user_info ui ON (tr.response_id = ui.user_id)
+		INNER JOIN enterprise_info eib ON (tr.response_b_id = eib.user_id)
+		INNER JOIN demand_info di ON (tr.event_id = di.id)
+		INNER JOIN state s ON (tr.response_state = s.id)
+		WHERE
+			tr.response_id=#{id} AND tr.response_state = #{stateId}
+	</select>
+	
+	<!--个人响应企业记录 登录的企业是被响应方 -->
+	<select id="byUserBAndEnterpriseTheResponse" resultType="TheResponse">
+		SELECT
+			tr.id,
+			ui.real_name as 'userInfo.realName',
+			ui.user_id as 'userInfo.user.id',
+			eib.enterprise_name  as 'enterpriseInfoB.enterpriseName',
+			eib.website as 'enterpriseInfoB.website',
+			eib.id as 'enterpriseInfoB.id',
+			di.content as 'demand.content',
+			tr.event_id as 'demand.id',
+			tr.response_time,
+			s.state as 'state.state'
+		FROM
+			the_response tr
+		INNER JOIN user_info ui ON (tr.response_id = ui.user_id)
+		INNER JOIN enterprise_info eib ON (tr.response_b_id = eib.user_id)
+		INNER JOIN demand_info di ON (tr.event_id = di.id)
+		INNER JOIN state s ON (tr.response_state = s.id)
+		WHERE
+			tr.response_b_id=#{id} AND tr.response_state = #{stateId}
+	</select>
+	<!--B方企业响应个人  -->
+	<select id="byEnterpriseAndUserTheResponse" resultType="TheResponse">
+		SELECT
+			tr.id,
+			ei.enterprise_name as 'enterpriseInfo.enterpriseName',
+			ei.website as 'enterpriseInfo.website',
+			ei.id as 'enterpriseInfo.id',
+			uib.real_name as 'userInfoB.realName',
+			uib.user_id as 'userInfoB.user.id',
+			di.content as 'demand.content',
+			tr.event_id as 'demand.id',
+			tr.response_time,
+			s.state as 'state.state'
+		FROM
+			the_response tr
+		INNER JOIN enterprise_info ei ON (tr.response_id = ei.user_id)
+		INNER JOIN user_info uib ON (tr.response_b_id = uib.user_id)
+		INNER JOIN demand_info di ON (tr.event_id = di.id)
+		INNER JOIN state s ON (tr.response_state = s.id)
+		WHERE
+			tr.response_id=#{id} AND tr.response_state = #{stateId}
+	</select>
+	<!-- 企业响应个人的 个人是被响应方就是登录方 -->
+	<select id="byUserAndEnterpriseBTheResponse" resultType="TheResponse">
+		SELECT
+			tr.id,
+			ei.enterprise_name as 'enterpriseInfo.enterpriseName',
+			ei.website as 'enterpriseInfo.website',
+			ei.id as 'enterpriseInfo.id',
+			uib.real_name as 'userInfoB.realName',
+			uib.user_id as 'userInfoB.user.id',
+			di.content as 'demand.content',
+			tr.event_id as 'demand.id',
+			tr.response_time,
+			s.state as 'state.state'
+		FROM
+			the_response tr
+		INNER JOIN enterprise_info ei ON (tr.response_id = ei.user_id)
+		INNER JOIN user_info uib ON (tr.response_b_id = uib.user_id)
+		INNER JOIN demand_info di ON (tr.event_id = di.id)
+		INNER JOIN state s ON (tr.response_state = s.id)
+		WHERE
+			tr.response_b_id=#{id} AND tr.response_state = #{stateId}
+	</select>
+	
+	<select id="byCount" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM the_response WHERE response_id= #{userId} AND response_b_id = #{userIdB} AND event_id = #{demandId}
+	</select>
+	<select id="byTheResposIsNo" resultType="java.lang.Integer">
+	SELECT COUNT(1) FROM the_response WHERE event_id =#{demandId} AND response_state =#{stateId} 
+	</select>
+</mapper>

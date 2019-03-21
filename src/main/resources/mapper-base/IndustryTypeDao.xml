@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qichong.dao.IndustryTypeDao">
+
+	<!-- 模糊查询行业 -->
+	<select id="selectLikeAllIndustry" resultType="com.qichong.model.ChildParentModel">
+		SELECT
+			it.industry_code AS 'code',
+			it.industry_name AS 'child',
+			(
+				SELECT industry_name FROM industry_type
+				WHERE industry_code = it.parent_code
+			) AS 'parent'
+		FROM industry_type AS it
+		WHERE it.industry_name LIKE '%${name}%'
+		<if test="pageSize != null &amp;&amp; pageNum != null">
+			LIMIT #{limit},#{offset}
+		</if>
+	</select>
+
+	<!-- 查询单个职业 -->
+	<select id="selectOne" resultType="IndustryType">
+		SELECT * FROM industry_type
+		WHERE industry_code = #{industryCode}
+	</select>
+
+	<!-- 根据父级Id查询所有子级 -->
+	<select id='selectChildByParentId' resultType="IndustryType">
+		SELECT * FROM industry_type
+		<where>
+			<if test="parentCodes==null">parent_code = #{parentCode}</if>
+			<if test="parentCodes!=null">
+				<trim prefix="parent_code IN ( " suffix=")" suffixOverrides="," >
+					<foreach collection="parentCodes" item="code">${code},</foreach>
+				</trim>
+			</if>
+		</where>
+	</select>
+
+</mapper>

@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>更换头像</title>
+
+<link rel="stylesheet"
+	href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link href="dist/cropper.min.css" rel="stylesheet">
+<link href="css/default.css" rel="stylesheet">
+<link href="css/main.css" rel="stylesheet">
+<link href="css/normalize.css" rel="stylesheet">
+<style type="text/css">
+.htmleaf-container {
+	width: 1170px;
+	background: #f9f7f6;
+	margin: 0 auto;
+	padding-top: 10px;
+}
+
+.lv-upload {
+	width: 100px;
+}
+
+.uploading {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	z-index: 999999;
+	width: 100%;
+	height: 100%;
+	font-size: 24px;
+	font-weight: bold;
+	text-align: center;
+}
+
+.uploading div {
+	width: 500px;
+	height: 100px;
+	background: white;
+	border-radius: 5px;
+	line-height: 100px;
+	margin: 200px auto 0;
+	box-shadow: inset 0px 0px 10px 1px;
+}
+</style>
+
+</head>
+<body style="background-color: transparent;">
+
+	<div class="uploading" style="display: none;">
+		<div id="uploading">正在上传...</div>
+	</div>
+
+	<script type="text/javascript">
+		var uploading = 1;
+		setInterval(function() {
+			var str = "";
+			for (var i = 0; i < uploading; i++) {
+				str += ".";
+			}
+			$("#uploading").text("正在上传" + str);
+			if (++uploading == 4) {
+				uploading = 1;
+			}
+		}, 300);
+	</script>
+
+	<div class="htmleaf-container">
+		<!-- Content -->
+		<div class="container">
+			<div class="row">
+				<div class="col-md-9 docs-buttons">
+
+					<div class="btn-group">
+						<label class="btn btn-primary btn-upload lv-upload"
+							for="inputImage"> <span title="点击更换图片"> <span>更换图片</span>
+						</span>
+						</label>
+					</div>
+
+					<div class="btn-group">
+						<label class="btn btn-primary btn-upload lv-upload" data-upload>
+							<span title="点击上传"> <span>上传</span>
+						</span>
+						</label>
+					</div>
+
+					<div class="btn-group">
+						<label class="btn btn-primary btn-upload lv-upload" data-quit>
+							<span title="取消"> <span>取消</span>
+						</span>
+						</label>
+					</div>
+
+					<form action="/update_avatar" enctype="multipart/form-data"
+						method="post" id="form-upload">
+						<input class="sr-only" id="inputImage" name="avatarFile"
+							type="file" accept="image/jpeg,image/jpg,image/png"> <input
+							class="form-control" id="putData" type="hidden" name="put">
+					</form>
+
+
+					<div class="modal fade docs-cropped" id="getCroppedCanvasModal"
+						aria-hidden="true" aria-labelledby="getCroppedCanvasTitle"
+						role="dialog" tabindex="-1">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button class="close" data-dismiss="modal" type="button"
+										aria-hidden="true">&times;</button>
+									<h4 class="modal-title" id="getCroppedCanvasTitle">Cropped</h4>
+								</div>
+								<div class="modal-body"></div>
+							</div>
+						</div>
+					</div>
+
+					<button class="btn btn-primary" data-method="getData"
+						data-option="" data-target="#putData" type="button"
+						style="display:none;">
+						<span class="docs-tooltip" data-toggle="tooltip"
+							title="$().cropper(&quot;getData&quot;)"> Get Data </span>
+					</button>
+
+				</div>
+
+				<!-- 				<a href="javascript:show();">获取</a> -->
+
+			</div>
+			<div class="row">
+				<div class="col-md-9">
+					<!-- <h3 class="page-header">Demo:</h3> -->
+					<div class="img-container">
+						<img src="" alt="请选择图片">
+					</div>
+				</div>
+				<div class="col-md-3">
+					<!-- <h3 class="page-header">Preview:</h3> -->
+					<div class="docs-preview clearfix">
+						<div class="img-preview preview-lg"></div>
+						<div class="img-preview preview-md"></div>
+						<div class="img-preview preview-sm"></div>
+						<div class="img-preview preview-xs"></div>
+					</div>
+
+					<!-- <h3 class="page-header">Data:</h3> -->
+					<div class="docs-data">
+						<div class="input-group">
+							<label class="input-group-addon" for="dataX">X</label> <input
+								readonly class="form-control" id="dataX" type="text"
+								placeholder="x"> <span class="input-group-addon">px</span>
+						</div>
+						<div class="input-group">
+							<label class="input-group-addon" for="dataY">Y</label> <input
+								readonly class="form-control" id="dataY" type="text"
+								placeholder="y"> <span class="input-group-addon">px</span>
+						</div>
+						<div class="input-group">
+							<label class="input-group-addon" for="dataWidth">Width</label> <input
+								readonly class="form-control" id="dataWidth" type="text"
+								placeholder="width"> <span class="input-group-addon">px</span>
+						</div>
+						<div class="input-group">
+							<label class="input-group-addon" for="dataHeight">Height</label>
+							<input readonly class="form-control" id="dataHeight" type="text"
+								placeholder="height"> <span class="input-group-addon">px</span>
+						</div>
+						<div class="input-group">
+							<label class="input-group-addon" for="dataRotate">Rotate</label>
+							<input readonly class="form-control" id="dataRotate" type="text"
+								placeholder="rotate"> <span class="input-group-addon">deg</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+	<script src="dist/cropper.min.js"></script>
+	<script src="js/main.js"></script>
+	<script src="js/upload.js"></script>
+</body>
+</html>

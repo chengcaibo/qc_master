@@ -1,0 +1,31 @@
+.layui-layout-admin .layui-logo {
+	color: #0099ff;
+}
+
+.layui-nav-tree .layui-nav-bar {
+	background-color: #0099ff;
+}
+
+.layui-nav-tree .layui-nav-item .current {
+	background-color:;
+}
+
+.layui-nav-tree .layui-this {
+	background-color: #0099ff !important;
+	color: #fff;
+}
+
+.layui-nav-tree .layui-this>a {
+	background-color: #0099ff !important;
+	color: #fff;
+	pointer-events: none;
+}
+
+.layui-nav .layui-this a {
+	color: #fff;
+	pointer-events: none;
+}
+
+.layui-nav .layui-this:after {
+	background-color: #0099ff !important;
+}

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.qichong.dao.ShareDao">
+
+	<!-- 更新分享记录 -->
+	<update id="addShareNum">
+		UPDATE `share`
+		SET share_num = share_num + 1
+		WHERE
+			`share`.userid = #{user_id};
+
+		UPDATE `share`
+		SET yaoqingma = #{yaoqingma}
+		WHERE
+			`share`.userid = #{user_id}
+		AND (
+			yaoqingma = ''
+			OR yaoqingma IS NULL
+		);
+	</update>
+	
+	<!--  -->
+	<select id="queryAddBalanceUseridCount" resultType="Integer">
+		SELECT
+			count(userid)
+		FROM
+			`share`
+		WHERE
+			yaoqingma = #{yaoqingma}
+		AND (
+			SELECT
+				count(1) AS num
+			FROM
+				`share`
+			WHERE
+				userid = #{user_id}
+			AND already_yaoqing = 0
+		) > 0;
+	</select>
+	
+	<!-- 更新分享记录 -->
+	<update id="addYaoqingMoney">
+		UPDATE `share`
+		SET already_yaoqing = 1
+		WHERE
+			userid = #{user_id};
+	</update>
+	
+	<!--  -->
+	<select id="queryAddBalanceUserid" resultType="Integer">
+		SELECT
+			userid
+		FROM
+			`share`
+		WHERE
+			yaoqingma = #{yaoqingma}
+		AND (
+			SELECT
+				count(1) AS num
+			FROM
+				`share`
+			WHERE
+				userid = #{user_id}
+			AND already_yaoqing = 0
+		) > 0;
+	</select>
+	
+</mapper>

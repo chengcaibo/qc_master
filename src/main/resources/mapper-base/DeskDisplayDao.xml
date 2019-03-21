@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qichong.dao.DeskDisplayDao">
+
+
+	<select id="queryAll" resultType="DeskDisplay">
+		select  dd.id,dd.end_time from desk_display dd 
+	</select>
+	
+	<!--查询个人置顶 -->
+	<select id="queryPersonalTop" resultType='com.qichong.model.PersonalTopOneModel'>
+		SELECT
+			ui.user_id,
+			ui.avatar,
+			dd.end_time,
+			ui.real_name,
+			ui.region_code,
+			r.region_name,
+			ui.score,
+			ui.hourly_wage,
+			ui.introduce,
+			dd.start_time,
+			p.job_code as 'job_info.job_code',
+			p.job_name as 'job_info.job_name',
+			dd.end_time
+		FROM
+			desk_display AS dd
+		INNER JOIN users u ON (u.id = dd.user_id)
+		INNER JOIN user_info ui ON (ui.user_id = u.id)
+		LEFT JOIN regions r ON (ui.region_code = r.region_code)
+		LEFT JOIN job_info p ON (p.job_code = ui.job_code)
+		WHERE location_id = 1
+		AND end_time >= now()
+	</select>
+	<!--查询企业置顶 -->
+	<select id="queryEnterpriseTop" resultType='com.qichong.model.EnterpriseTopOneModel'>
+		 SELECT
+		 	ei.id as 'ei.id',
+			dd.end_time as 'dd.endTime',
+		 	u.id as 'ei.user.id',
+			ei.enterprise_name as 'ei.enterprise_name',
+			ei.logo as 'ei.logo',
+			ei.business_license as 'ei.business_license',
+			ei.website as 'ei.website',
+			ei.introduce as 'ei.introduce',
+			ei.person_name as 'ei.person_name',
+			ei.telephone as 'ei.telephone',
+			ei.email as 'ei.email',
+			ei.address as 'ei.addess',
+			it.industry_name as 'industryType.industry_name',
+			r.region_code as 'ei.region.region_code',
+			r.region_name as 'ei.region.region_name'
+		FROM
+			desk_display AS dd
+		INNER JOIN users u ON (u.id = dd.user_id)
+		INNER JOIN enterprise_info ei ON (ei.user_id = u.id)
+		LEFT JOIN industry_type it ON (it.industry_code = ei.industry_code)
+		LEFT JOIN regions r ON (ei.region_code = r.region_code)
+		WHERE
+			location_id = 2
+		AND end_time >= now()
+	</select>
+	<!-- 查询三个位置的 -->
+	<select id="queryEnterpriseThree" resultType='com.qichong.model.EnterpriseTopOneModel'>
+	SELECT
+			ei.id as 'ei.id',
+		 	u.id as 'ei.user.id',
+			ei.enterprise_name as 'ei.enterprise_name',
+			ei.logo as 'ei.logo',
+			ei.business_license as 'ei.business_license',
+			ei.website as 'ei.website',
+			ei.introduce as 'ei.introduce',
+			ei.person_name as 'ei.person_name',
+			ei.telephone as 'ei.telephone',
+			ei.email as 'ei.email',
+			ei.address as 'ei.addess',
+			it.industry_name as 'industryType.industry_name',
+			r.region_code as 'ei.region.region_code',
+			r.region_name as 'ei.region.region_name'
+		FROM
+			desk_display AS dd
+		INNER JOIN users u ON (u.id = dd.user_id)
+		INNER JOIN enterprise_info ei ON (ei.user_id = u.id)
+		INNER JOIN industry_type it ON (it.industry_code = ei.industry_code)
+		INNER JOIN regions r ON (ei.region_code = r.region_code)
+		WHERE location_id = 3 AND end_time >= now()
+	</select>
+	<!-- 查询六个位置的 -->
+	<select id="queryEnterpriseSix" resultType='com.qichong.model.EnterpriseTopOneModel'>
+	 SELECT
+			ei.id as 'ei.id',
+		 	u.id as 'ei.user.id',
+			ei.enterprise_name as 'ei.enterprise_name',
+			ei.logo as 'ei.logo',
+			ei.business_license as 'ei.business_license',
+			ei.website as 'ei.website',
+			ei.introduce as 'ei.introduce',
+			ei.person_name as 'ei.person_name',
+			ei.telephone as 'ei.telephone',
+			ei.email as 'ei.email',
+			ei.address as 'ei.addess',
+			it.industry_name as 'industryType.industry_name',
+			r.region_code as 'ei.region.region_code',
+			r.region_name as 'ei.region.region_name'
+		FROM
+			desk_display AS dd
+		INNER JOIN users u ON (u.id = dd.user_id)
+		INNER JOIN enterprise_info ei ON (ei.user_id = u.id)
+		INNER JOIN industry_nexus ON (industry_nexus.user_id = ei.user_id)
+		INNER JOIN industry_type it ON (it.industry_code = industry_nexus.industry_type_code)
+		INNER JOIN regions r ON (ei.region_code = r.region_code)
+		WHERE
+			location_id = 4
+		AND end_time >= now() and industry_nexus.is_first=1
+	</select>
+	<!-- 查询十个个位置的 -->
+	<select id="queryEnterpriseTen" resultType='com.qichong.model.EnterpriseTopOneModel'>
+	 SELECT
+			ei.id as 'ei.id',
+		 	u.id as 'ei.user.id',
+			ei.enterprise_name as 'ei.enterprise_name',
+			ei.logo as 'ei.logo',
+			ei.business_license as 'ei.business_license',
+			ei.website as 'ei.website',
+			ei.introduce as 'ei.introduce',
+			ei.person_name as 'ei.person_name',
+			ei.telephone as 'ei.telephone',
+			ei.email as 'ei.email',
+			ei.address as 'ei.addess',
+			it.industry_name as 'industryType.industry_name',
+			r.region_code as 'ei.region.region_code',
+			r.region_name as 'ei.region.region_name'
+		FROM
+			desk_display AS dd
+		INNER JOIN users u ON (u.id = dd.user_id)
+		INNER JOIN enterprise_info ei ON (ei.user_id = u.id)
+		INNER JOIN industry_nexus ON (industry_nexus.user_id = ei.user_id)
+		INNER JOIN industry_type it ON (it.industry_code = industry_nexus.industry_type_code)
+		INNER JOIN regions r ON (ei.region_code = r.region_code)
+		WHERE
+			location_id = 5
+		AND end_time >= now() and industry_nexus.is_first=1
+	</select>
+	<!-- 添加置顶用户 -->
+	<insert id="insertDeskDisplay" parameterType="DeskDisplay">
+		INSERT INTO `desk_display` (
+		`user_id`,
+		`location_id`,
+		`start_time`,
+		`end_time`
+		)VALUES(
+		#{deskDisplay.user.id},
+		#{deskDisplay.location.id},
+		#{deskDisplay.satrtTime},
+		#{deskDisplay.endTime}
+		)
+	</insert>
+	<!-- 查询是否还有可抢位置 -->
+	<select id="locationCount" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+		SELECT
+				COUNT(1)
+			FROM
+				desk_display 
+			WHERE end_time >= now() AND location_id = #{locationId} 
+	</select>
+	<select id="locationList" parameterType="java.lang.Integer" resultType="DeskDisplay">
+		SELECT
+			id,
+			location_id as'location.id',
+			user_id as 'user.id',
+			start_time,
+			end_time
+		FROM
+			desk_display 
+		WHERE location_id =#{locationId}
+		ORDER BY end_time 
+	</select>
+	<update id="updateDeskDisplay" parameterType="DeskDisplay">
+		UPDATE `desk_display`
+		SET `user_id` = #{user.id},
+		 `start_time` = #{startTime},
+		 `end_time` = #{endTime}
+		WHERE
+			(`id` = #{id})
+	</update>
+	<select id="deskDisplayCheck" resultType="DeskDisplay">
+		SELECT 
+			id,
+			location_id as 'location.id',
+			user_id as 'user.id',
+			start_time,
+			end_time	
+		FROM desk_display 
+	</select>
+	
+	<update id="reservationUpdateDeskdisplay" parameterType="DeskDisplay">
+		UPDATE `desk_display`
+		SET `user_id` = #{user.id},
+		 `start_time` = #{startTime},
+		 `end_time` = #{endTime}
+		WHERE
+			(`location_id` = #{locationId})
+	</update>
+</mapper>
+        

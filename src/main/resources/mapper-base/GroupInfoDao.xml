@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qichong.dao.GroupInfoDao">
+
+	<!-- 查询所有【团体】信息并且筛选 -->
+	<select id="selectAllByFilter" resultType="GroupInfo" parameterType="com.qichong.model.Filters">
+		SELECT
+			ginfo.id,
+			<!-- users 信息 -->
+			users.id as 'user.id',
+			users.username as 'user.username',
+			users.type_id as 'user.type_id',
+			users.wx_open_id as 'user.wx_open_id',
+			users.longitude as 'user.longitude',
+			users.latitude as 'user.latitude',
+			users.last_update_time as 'user.last_update_time',
+			<!-- userInfo 信息 -->
+			uinfo.id as 'userInfo.id',
+			uinfo.avatar as 'userInfo.avatar',
+			uinfo.nick_name as 'userInfo.nick_name',
+			uinfo.real_name as 'userInfo.real_name',
+			uinfo.introduce as 'userInfo.introduce',
+			uinfo.telephone as 'userInfo.telephone',
+			uinfo.address as 'userInfo.address',
+			<!-- enterpriseInfo 信息 -->
+			einfo.id as 'enterpriseInfo.id',
+			einfo.logo as 'enterpriseInfo.logo',
+			einfo.enterprise_name as 'enterpriseInfo.enterprise_name',
+			einfo.telephone as 'enterpriseInfo.telephone',
+			<!-- groupInfo 信息 -->
+			ginfo.group_name,
+			ginfo.quantity,
+			ginfo.max_quantity,
+			ginfo.picture,
+			ginfo.introduce,
+			ginfo.personnel_cost,
+			ginfo.personnel_explain,
+			ginfo.tool_cost,
+			ginfo.tool_explain,
+			itype.industry_code as 'industry.industry_code',
+			itype.industry_name as 'industry.industry_name',
+			regions.region_code as 'region.region_code',
+			regions.region_name as 'region.region_name',
+			ginfo.create_time,
+			ginfo.address,
+			ginfo.industry_details,
+			ginfo.state_id
+		FROM group_info AS ginfo
+		INNER JOIN users ON (users.id = ginfo.user_id)
+		LEFT JOIN user_info AS uinfo ON (uinfo.user_id = users.id)
+		LEFT JOIN enterprise_info AS einfo ON (einfo.user_id = users.id)
+		LEFT JOIN industry_type AS itype ON (itype.industry_code = ginfo.industry_code)
+		LEFT JOIN regions ON (regions.region_code = ginfo.region_code)
+		LEFT JOIN state ON (state.id = ginfo.state_id)
+		<where>
+			<!-- 根据Id查询 -->
+			<if test="groupId != null">AND ginfo.id = #{groupId}</if>
+			<if test="userId != null">AND users.id = #{userId}</if>
+			<!-- 关键字模糊搜索，搜索范围：团体名称、团体介绍、拼接详细行业、详细地址、地区名称、行业名称、人员解释、工具解释 -->
+			<if test="keyword != null">
+				<![CDATA[AND (
+					ginfo.group_name LIKE '%${keyword}%' OR
+					ginfo.introduce LIKE '%${keyword}%' OR
+					ginfo.industry_details LIKE '%${keyword}%' OR
+					ginfo.address LIKE '%${keyword}%' OR
+					regions.region_name LIKE '%${keyword}%' OR
+					itype.industry_name LIKE '%${keyword}%' OR
+					ginfo.personnel_explain LIKE '%${keyword}%' OR
+					ginfo.tool_explain LIKE '%${keyword}%'
+				)]]>
+			</if>
+			<!-- 人员数量区间筛选 -->
+			<if test="beginQuantity!=null &amp;&amp; endQuantity!=null">AND ginfo.quantity BETWEEN #{beginQuantity} AND #{endQuantity}</if>
+			<!-- 人员费用区间筛选 -->
+			<if test="beginPersonnelCost!=null &amp;&amp; endPersonnelCost!=null">AND ginfo.personnel_cost BETWEEN #{beginPersonnelCost} AND #{endPersonnelCost}</if>
+			<!-- 工具费用区间筛选 -->
+			<if test="beginToolCost!=null &amp;&amp; endToolCost!=null">AND ginfo.tool_cost BETWEEN #{beginToolCost} AND #{endToolCost}</if>
+			<!-- 地区Code筛选 -->
+			<if test="regionCode != null">AND regions.region_code = #{regionCode}</if>
+			<!-- 多个：地区Code筛选 -->
+			<if test="regionCodes != null">AND regions.region_code IN (${regionCodes})</if>
+			<!-- 行业Code筛选 -->
+			<if test="industryCode != null">AND itype.industry_code = #{industryCodes}</if>
+			<!-- 多个：行业Code筛选 -->
+			<if test="industryCodes != null">AND itype.industry_code IN (${industryCodes})</if>
+			<if test="stateId != null">AND ginfo.state_id = #{stateId}</if>
+		</where>
+		<!-- 排序 -->
+		<trim prefix="ORDER BY" suffixOverrides=",">
+			<if test="orderQuantity != null">ginfo.quantity ${orderQuantity},</if>
+			<if test="orderPersonnelCost != null">ginfo.personnel_cost ${orderPersonnelCost},</if>
+			<if test="orderToolCost != null">ginfo.tool_cost ${orderToolCost},</if>
+			<if test="orderCreateTime != null">ginfo.create_time ${orderCreateTime},</if>
+		</trim>
+		<if test="pageNum!=null">LIMIT #{limit},#{offset}</if> 
+	</select>
+
+	<!-- 查询所有的团体信息，并筛选 -->
+	<select id="selectAllAndFilter" resultType="GroupInfo">
+		SELECT
+			gi.id,
+			gi.user_id AS 'user.id',
+			gi.group_name,
+			gi.quantity,
+			gi.picture,
+			gi.introduce,
+			gi.personnel_cost,
+			gi.tool_cost,
+			regions.region_code AS 'region.regionCode',
+			regions.region_name AS 'region.regionName',
+			industry_type.industry_code AS 'industry.industryCode',
+			industry_type.industry_name AS 'industry.industryName',
+			gi.address,
+			gi.create_time
+		FROM group_info gi
+		LEFT JOIN users ON (users.id = gi.user_id)
+		LEFT JOIN enterprise_info ON (enterprise_info.user_id = gi.user_id)
+		LEFT JOIN industry_type ON (industry_type.industry_code = gi.industry_code)
+		INNER JOIN regions ON (regions.region_code = gi.region_code)
+		<where>
+			<if test="filters.regionCode != null">
+				AND gi.region_code = #{filters.regionCode}
+			</if>
+			<if test="filters.regionCode == null &amp;&amp; city != &quot;&quot;">
+				AND gi.address LIKE '%${city}%'
+			</if>
+			<if test="filters.industryCode != null">
+				AND industry_type.industry_code = #{filters.industryCode}
+			</if>
+			<if test="filters.beginQuantity != null &amp;&amp; filters.endQuantity != null">
+				AND gi.quantity BETWEEN #{filters.beginQuantity} AND #{filters.endQuantity}
+			</if>
+			<if test="filters.searchKeyword != null">
+				AND (
+					gi.industry_details LIKE '%${filters.searchKeyword}%' OR
+					gi.address LIKE '%${filters.searchKeyword}%' OR
+					regions.region_name LIKE '%${filters.searchKeyword}%'
+				)
+			</if>
+		</where>
+		LIMIT #{filters.limit},#{filters.pageSize}
+	</select>
+
+	<!-- 查询所有的团体信息，并筛选 total -->
+	<select id="groupInfoFilters_total" resultType="java.lang.Integer">
+		SELECT count(1) FROM group_info gi
+		LEFT JOIN users ON (users.id =
+		gi.user_id)
+		LEFT JOIN enterprise_info ON (enterprise_info.user_id =
+		gi.user_id)
+		LEFT JOIN industry_type ON (industry_type.industry_code =
+		gi.industry_code)
+		INNER JOIN regions ON (regions.region_code =
+		gi.region_code)
+		<where>
+			<if test="filters.regionCode != null">
+				AND gi.region_code = #{filters.regionCode}
+			</if>
+			<if test="filters.regionCode == null &amp;&amp; city != &quot;&quot;">
+				AND gi.address LIKE '%${city}%'
+			</if>
+			<if test="filters.industryCode != null">
+				AND industry_type.industry_code = #{filters.industryCode}
+			</if>
+			<if test="filters.beginQuantity != null &amp;&amp; filters.endQuantity != null">
+				AND gi.quantity BETWEEN #{filters.beginQuantity} AND #{filters.endQuantity}
+			</if>
+		</where>
+	</select>
+
+	<!-- 查询最新注册的最后三个人的信息 -->
+	<select id="groupPreferred" resultType="com.qichong.model.GroupInfoModel">
+		SELECT
+			gi.id as 'gi.id',
+			gi.group_name as 'gi.groupName',
+			gi.introduce as 'gi.introduce',
+			gi.quantity as 'gi.quantity',
+			gi.picture as 'gi.picture',
+			gi.tool_cost as 'gi.toolCost',
+			gi.personnel_cost as 'gi.personnelCost',
+			reg.region_name as 'gi.region.regionName',
+			it.industry_name as 'gi.industry.industryName',
+			gi.create_time as 'gi.createTime'
+		FROM group_info AS gi
+		INNER JOIN regions reg ON (gi.region_code=reg.region_code)
+		INNER JOIN industry_type it ON (gi.industry_code = it.industry_code)
+		ORDER BY gi.id DESC LIMIT 3
+	</select>
+
+	<!-- 查询最大得的五条团体信息 -->
+	<select id="querFiveGroup" resultType="com.qichong.model.GroupInfoModel">
+		SELECT
+			gi.id as 'gi.id',
+			gi.group_name as 'gi.group_name',
+			gi.introduce as 'gi.introduce',
+			gi.quantity as 'gi.quantity',
+			gi.picture as 'gi.picture',
+			gi.tool_cost as 'gi.tool_cost',
+			gi.personnel_cost as 'gi.personnel_cost',
+			reg.region_name as 'gi.region.region_name',
+			it.industry_name as 'gi.industry.industry_name',
+			gi.create_time as 'gi.create_time'
+		FROM group_info AS gi
+		INNER JOIN industry_type AS it ON (it.industry_code = gi.industry_code)
+		INNER JOIN regions AS reg ON (reg.region_code = gi.region_code)
+		ORDER BY gi.id DESC
+		LIMIT 0,5;
+	</select>
+	<!--查询新发布的十三个团体 -->
+	<select id="querthirteenGroup" resultType="com.qichong.model.GroupInfoModel">
+		SELECT
+			gi.id as 'gi.id',
+			gi.group_name as 'gi.group_name',
+			gi.introduce as 'gi.introduce',
+			gi.quantity as 'gi.quantity',
+			gi.picture as 'gi.picture',
+			gi.tool_cost as 'gi.tool_cost',
+			gi.personnel_cost as 'gi.personnel_cost',
+			reg.region_name as 'gi.region.region_name',
+			it.industry_name as 'gi.industry.industry_name',
+			gi.create_time as 'gi.create_time',
+			gi.address as 'gi.address'
+		FROM group_info AS gi
+		INNER JOIN industry_type AS it ON (it.industry_code = gi.industry_code)
+		INNER JOIN regions AS reg ON (reg.region_code = gi.region_code)
+		WHERE gi.address LIKE '%${city}%'
+		ORDER BY gi.id DESC
+		LIMIT 0,10;
+	</select>
+	<select id="queryOneGroup" resultType="com.qichong.model.GroupInfoModel">
+		SELECT
+			gi.id as 'gi.id',
+			gi.group_name as 'gi.group_name',
+			gi.introduce as 'gi.introduce',
+			gi.quantity as 'gi.quantity',
+			gi.picture as 'gi.picture',
+			gi.tool_cost as 'gi.tool_cost',
+			gi.personnel_cost as 'gi.personnel_cost',
+			reg.region_name as 'gi.region.region_name',
+			it.industry_name as 'gi.industry.industry_name',
+			gi.create_time as 'gi.create_time',
+			gi.address as 'gi.address'
+		FROM group_info AS gi
+		INNER JOIN industry_type AS it ON (it.industry_code = gi.industry_code)
+		INNER JOIN regions AS reg ON (reg.region_code = gi.region_code)
+		WHERE gi.address LIKE '%${city}%'
+		ORDER BY gi.id DESC
+		LIMIT 0,1;
+	</select>
+	<!-- 新增团体信息 -->
+	<insert id="insertOne" parameterType="GroupInfo" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO group_info (
+			user_id,
+			group_name,
+			quantity,
+			picture,
+			introduce,
+			personnel_cost,
+			personnel_explain,
+			tool_cost,
+			tool_explain,
+			industry_code,
+			region_code,
+			create_time,
+			address,
+			industry_details
+		) VALUES (
+			#{user.id},
+			#{groupName},
+			#{quantity},
+			#{picture},
+			#{introduce},
+			#{personnelCost},
+			#{personnelExplain},
+			#{toolCost},
+			#{toolExplain},
+			#{industry.industryCode},
+			#{region.regionCode},
+			#{createTime},
+			#{address},
+			#{industryDetails}
+		)
+	</insert>
+
+	<select id="likeGroup" resultType="com.qichong.model.GroupInfoModel">
+		SELECT
+			g.id as 'gi.id',
+			g.group_name as 'gi.group_name',
+			g.introduce as 'gi.introduce',
+			g.quantity as 'gi.quantity',
+			g.picture as 'gi.picture',
+			g.tool_cost as 'gi.tool_cost',
+			g.personnel_cost as 'gi.personnel_cost',
+			g.tool_cost as 'gi.tool_cost',
+			g.personnel_explain as 'gi.personnelExplain',
+			g.tool_explain as 'gi.toolExplain',
+			g.create_time as 'gi.create_time',
+			g.address as 'gi.address',
+			ui.telephone as 'userInfo.telephone',
+			g.industry_code as 'gi.industry.industryCode',
+			it.industry_name as 'gi.industry.industryName'
+		FROM group_info g
+		INNER JOIN user_info ui ON g.user_id = ui.user_id
+		INNER JOIN industry_type it ON g.industry_code = it.industry_code
+		WHERE g.industry_code = #{industryCode}
+		LIMIT 0,4
+
+	</select>
+	
+	<!-- 修改团体信息 -->
+	<update id="updateOne" parameterType="GroupInfo">
+		UPDATE group_info
+		<set>
+			<if test="(user != null)&amp;&amp;(user.id != null)">user_id = #{user.id},</if>
+			<if test="groupName != null">group_name = #{groupName},</if>
+			<if test="quantity != null">quantity = #{quantity},</if>
+			<if test="picture.name != null">picture = #{picture},</if>
+			<if test="introduce != null">introduce = #{introduce},</if>
+			<if test="toolCost != null">tool_cost = #{toolCost},</if>
+			<if test="toolExplain != null">tool_explain = #{toolExplain},</if>
+			<if test="personnelCost != null">personnel_cost = #{personnelCost},</if>
+			<if test="personnelExplain != null">personnel_explain = #{personnelExplain},</if>
+			<if test="(industry != null)&amp;&amp;(industry.industryCode != null)">industry_code = #{industry.industryCode},</if>
+			<if test="(region != null)&amp;&amp;(region.regionCode != null)">region_code = #{region.regionCode},</if>
+			<if test="createTime != null">create_time = #{createTime},</if>
+			<if test="address != null">address = #{address},</if>
+			<if test="industryDetails != null">industry_details = #{industryDetails},</if>
+			<if test="(state != null)&amp;&amp;(state.id != null)">state_id = #{state.id},</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+
+	<!-- 删除团体信息 -->
+	<delete id="deleteOne">
+		DELETE FROM group_info
+   		<where>
+   			 id = #{id}
+   			 <if test="userId!=null">AND user_id = #{userId}</if>
+   		</where>
+	</delete> 
+	
+	<!--模糊查询 -->
+	<select id="byNameGroupInfo" resultType="com.qichong.model.GroupInfoModel">
+		SELECT
+			gi.id as 'gi.id',
+			gi.group_name as 'gi.groupName',
+			gi.introduce as 'gi.introduce',
+			gi.quantity as 'gi.quantity',
+			gi.picture as 'gi.picture',
+			gi.tool_cost as 'gi.toolCost',
+			gi.personnel_cost as 'gi.personnelCost',
+			reg.region_name as 'gi.region.regionName',
+			it.industry_name as 'gi.industry.industryName',
+			gi.create_time as 'gi.createTime',
+			gi.address as 'gi.address',
+			gi.industry_details as 'gi.industryDetails'
+		FROM
+		group_info AS gi
+		INNER JOIN regions reg ON (gi.region_code=reg.region_code)
+		INNER JOIN industry_type it ON (gi.industry_code = it.industry_code)
+		WHERE gi.industry_details like '%${name}%' AND gi.address LIKE '%${city}%'
+	</select>
+	
+</mapper>

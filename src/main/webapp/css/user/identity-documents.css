@@ -1,0 +1,44 @@
+.identity-documents {
+	
+}
+
+.identity-documents h3 {
+	font-size: 30px;
+	margin-top: 0;
+	width: 650px;
+	margin: 0 auto;
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 19px;
+	color: #404040;
+	margin-bottom: 30px;
+}
+
+.identity-documents .identity-card {
+	
+}
+/* 
+.identity-documents .identity-card  li input[type="text"] {
+	margin: 15px auto;
+} */
+.identity-documents .identity-card .gender {
+	position: relative;
+	top: 7px;
+}
+
+.identity-documents .identity-card  li button {
+	margin: 0 5px;
+	border: 0;
+	border-radius: 0;
+	background: #2196F3;
+	color: #fff;
+	font-size: 16px;
+	width: 150px;
+	position: relative;
+	top: -50px;
+	left: 91px;
+	transition: 0.3s;
+}
+
+.identity-documents .identity-card  li button:HOVER {
+	background: #1f8ce2;
+}

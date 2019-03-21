@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qichong.dao.RegionsDao">
+
+	<!-- 模糊查询地区 -->
+	<select id="selectLikeRegion" resultType="com.qichong.model.ChildParentModel">
+		SELECT
+			region_code AS 'code',
+			region_name AS 'child',
+			(
+				SELECT region_name FROM regions
+				WHERE region_code = reg.parent_region_code
+			) AS 'parent'
+		FROM regions AS reg
+		WHERE reg.region_name LIKE '%${name}%'
+		-- AND (SELECT COUNT(1) FROM regions WHERE parent_region_code = reg.region_code) = 0
+		<if test="pageSize != null &amp;&amp; pageNum != null">
+			LIMIT #{limit},#{offset}
+		</if>
+	</select>
+
+	<!-- 查询单个地区 -->
+	<select id="selectOne" resultType="Regions">
+		SELECT * FROM regions
+		WHERE region_code = #{regionCode}
+	</select>
+	
+	<!-- 根据父行政区代码查询出全部的子地区 -->
+	<select id="selectChildByParentId" resultType="Regions">
+		SELECT * FROM regions
+		<where>
+			<if test="parentCodes==null">parent_region_code = #{parentCode}</if>
+			<if test="parentCodes!=null">
+				<trim prefix="parent_region_code IN ( " suffix=")" suffixOverrides="," >
+					<foreach collection="parentCodes" item="code">${code},</foreach>
+				</trim>
+			</if>
+		</where>
+	</select>
+
+</mapper>

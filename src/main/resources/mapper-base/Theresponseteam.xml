@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qichong.dao.TheresponseteamDao">
+	<!-- 添加响应 -->
+	<insert id="addTheResponseteam" parameterType="Theresponseteam">
+		INSERT INTO `the_response_team`
+		(
+			`responseteam_id`,
+			`responseteam_b_id`,
+			`eventteam_id`,
+			`required_number`,
+			`responseteam_time`,
+			`responseteam_state`
+			)
+		VALUES
+		( 
+			#{userA.id},
+			#{userB.id},
+			#{groupInfo.id},
+			#{requiredNumber},
+			#{responseTeamTime},
+			#{state.id}
+			)
+	</insert>
+	<!-- 根据id删除响应 -->
+	<delete id="deleteTheResponseteam">
+		delete form the_response_team where id = #{id};
+	</delete>
+	<!-- 个人响应个人发布的团队  响应人是登录者，也就是我响应的-->
+	 <select id="selectUserAAndUserTheResponseteam" resultType="Theresponseteam">
+		SELECT
+			trt.id,
+			trt.responseteam_id as 'userA.id',
+			trt.responseteam_b_id as 'userB.id',
+			ui.real_name as 'userInfoA.realName',
+			uib.real_name as 'userInfoB.realName',
+			gi.group_name as 'groupInfo.groupName',
+			trt.eventteam_id as 'groupInfo.id',
+			trt.responseteam_time,
+			trt.required_number,
+			s.state as 'state.state'
+		FROM
+			the_response_team trt
+		INNER JOIN user_info ui ON (trt.responseteam_id = ui.user_id)
+		INNER JOIN user_info uib ON (trt.responseteam_b_id = uib.user_id)
+		INNER JOIN group_info gi ON (trt.eventteam_id = gi.id)
+		INNER JOIN state s ON (trt.responseteam_state = s.id)
+		WHERE trt.responseteam_id =#{id}  AND trt.responseteam_state =#{stateId}
+	</select>
+	<!-- 个人响应个人发布的团队  被响应人是登录者，也就是响应我的 展示时展示userinfo的name 不是userB-->
+	<select id="selectUserAndUserBTheResponseteam" resultType="Theresponseteam">
+		SELECT
+			trt.id,
+			trt.responseteam_id as 'userA.id',
+			trt.responseteam_b_id as 'userB.id',
+			ui.real_name as 'userInfoA.realName',
+			uib.real_name as 'userInfoB.realName',
+			gi.group_name as 'groupInfo.groupName',
+			trt.eventteam_id as 'groupInfo.id',
+			trt.responseteam_time,
+			trt.required_number,
+			s.state as 'state.state'
+		FROM
+			the_response_team trt
+		INNER JOIN user_info ui ON (trt.responseteam_id = ui.user_id)
+		INNER JOIN user_info uib ON (trt.responseteam_b_id = uib.user_id)
+		INNER JOIN group_info gi ON (trt.eventteam_id = gi.id)
+		INNER JOIN state s ON (trt.responseteam_state = s.id)
+		WHERE trt.responseteam_b_id =#{id}  AND trt.responseteam_state =#{stateId}
+	</select>
+	<!-- 企业响应个人发布的团队  响应人是登录者，也就是我响应的 展示时展示userinfoB的name 不是userA-->
+	<select id="selectEnterpriseAAndUserBTheResponseteam" resultType="Theresponseteam">
+		SELECT
+			trt.id,
+			trt.responseteam_id as 'userA.id',
+			ei.enterprise_name as 'enterpriseInfo.enterpriseName',
+			ei.website as 'enterpriseInfo.website',
+			ei.id as 'enterpriseInfo.id',
+			uib.real_name as 'userInfoB.realName',
+			gi.group_name as 'groupInfo.groupName',
+			trt.eventteam_id as 'groupInfo.id',
+			trt.responseteam_time,
+			trt.required_number,
+			s.state as 'state.state'
+		FROM
+			the_response_team trt
+		INNER JOIN enterprise_info ei ON (trt.responseteam_id = ei.user_id)
+		INNER JOIN user_info uib ON (trt.responseteam_b_id = uib.user_id)
+		INNER JOIN group_info gi ON (trt.eventteam_id = gi.id)
+		INNER JOIN state s ON (trt.responseteam_state = s.id)
+		WHERE trt.responseteam_id =#{id}  AND trt.responseteam_state =#{stateId}
+	</select>
+	
+		<!-- 企业响应个人，被响应者是登录者 -->
+		<select id="selectByUserBAndEnterpriseATheResponseteam" resultType="Theresponseteam">
+		SELECT
+			trt.id,
+			trt.responseteam_id as 'userA.id',
+			ei.enterprise_name as 'enterpriseInfo.enterpriseName',
+			ei.website as 'enterpriseInfo.website',
+			ei.id as 'enterpriseInfo.id',
+			uib.real_name as 'userInfoB.realName',
+			gi.group_name as 'groupInfo.groupName',
+			trt.eventteam_id as 'groupInfo.id',
+			trt.responseteam_time,
+			trt.required_number,
+			s.state as 'state.state'
+		FROM
+			the_response_team trt
+		INNER JOIN enterprise_info ei ON (trt.responseteam_id = ei.user_id)
+		INNER JOIN user_info uib ON (trt.responseteam_b_id = uib.user_id)
+		INNER JOIN group_info gi ON (trt.eventteam_id = gi.id)
+		INNER JOIN state s ON (trt.responseteam_state = s.id)
+		WHERE trt.responseteam_b_id =#{id}  AND trt.responseteam_state =#{stateId}
+	</select>
+	
+	<!-- 个人响应企业发布的团队  被响应人是登录者，也就是响应我的 展示时展示userinfo的name 不是userB-->
+	<select id="selectUserAAndEnterpriseBTheResponseteam" resultType="Theresponseteam">
+		SELECT
+			trt.id,
+			trt.responseteam_id as 'userA.id',
+			ui.real_name as 'userInfoA.realName',
+			eib.enterprise_name as 'enterpriseInfoB.enterpriseName',
+			eib.website as 'enterpriseInfoB.website',
+			eib.id as 'enterpriseInfoB.id',
+			gi.group_name as 'groupInfo.groupName',
+			trt.eventteam_id as 'groupInfo.id',
+			trt.responseteam_time,
+			trt.required_number,
+			s.state as 'state.state'
+		FROM
+			the_response_team trt
+		INNER JOIN user_info ui ON (trt.responseteam_id = ui.user_id)
+		INNER JOIN enterprise_info eib ON (trt.responseteam_b_id = eib.user_id)
+		INNER JOIN group_info gi ON (trt.eventteam_id = gi.id)
+		INNER JOIN state s ON (trt.responseteam_state = s.id)
+		WHERE trt.responseteam_b_id =#{id}  AND trt.responseteam_state =#{stateId}
+	</select>
+	<!-- 个人响应企业发布的团队  响应人是登录者，也就是我响应的 展示时展示enterpriseInfoB的enterpriseName 不是userA-->
+	<select id="selectByUserAAndEnterpriseBTheResponseteam" resultType="Theresponseteam">
+		SELECT
+			trt.id,
+			trt.responseteam_id as 'userA.id',
+			ui.real_name as 'userInfoA.realName',
+			eib.enterprise_name as 'enterpriseInfoB.enterpriseName',
+			eib.website as 'enterpriseInfoB.website',
+			eib.id as 'enterpriseInfoB.id',
+			gi.group_name as 'groupInfo.groupName',
+			trt.eventteam_id as 'groupInfo.id',
+			trt.responseteam_time,
+			trt.required_number,
+			s.state as 'state.state'
+		FROM
+			the_response_team trt
+		INNER JOIN user_info ui ON (trt.responseteam_id = ui.user_id)
+		INNER JOIN enterprise_info eib ON (trt.responseteam_b_id = eib.user_id)
+		INNER JOIN group_info gi ON (trt.eventteam_id = gi.id)
+		INNER JOIN state s ON (trt.responseteam_state = s.id)
+		WHERE trt.responseteam_id =#{id}  AND trt.responseteam_state =#{stateId}
+	</select>
+		<!-- 企业响应企业发布的团队  响应人是登录者，也就是我响应的 展示时展示enterpriseB的name 不是enterprise-->
+	<select id="selectEnterpriseAAndEnterpriseBTheResponseteam" resultType="Theresponseteam">
+			SELECT
+			trt.id,
+			ei.id as 'enterpriseInfo.id',
+			ei.enterprise_name as 'enterpriseInfo.enterpriseName',
+			ei.website as 'enterpriseInfo.website',
+			eib.enterprise_name as 'enterpriseInfoB.enterpriseName',
+			eib.website as 'enterpriseInfoB.website',
+			eib.id as 'enterpriseInfoB.id',
+			gi.group_name as 'groupInfo.groupName',
+			trt.eventteam_id as 'groupInfo.id',
+			trt.responseteam_time,
+			trt.required_number,
+			s.state as 'state.state'
+		FROM
+			the_response_team trt
+		INNER JOIN enterprise_info ei ON (trt.responseteam_id = ei.user_id)
+		INNER JOIN enterprise_info eib ON (trt.responseteam_b_id = eib.user_id)
+		INNER JOIN group_info gi ON (trt.eventteam_id = gi.id)
+		INNER JOIN state s ON (trt.responseteam_state = s.id)
+		WHERE trt.responseteam_id =#{id}  AND trt.responseteam_state =#{stateId}
+	</select>
+	<!-- 企业响应企业发布的团队  被响应人是登录者，也就是响应我的 展示时展示enterprise的name 不是enterpriseB-->
+	<select id="selectEnterpriseAAndEnterpriseTheResponseteam" resultType="Theresponseteam">
+			SELECT
+			trt.id,
+			ei.id as 'enterpriseInfo.id',
+			ei.enterprise_name as 'enterpriseInfo.enterpriseName',
+			ei.website as 'enterpriseInfo.website',
+			eib.enterprise_name as 'enterpriseInfoB.enterpriseName',
+			eib.website as 'enterpriseInfoB.website',
+			eib.id as 'enterpriseInfoB.id',
+			gi.group_name as 'groupInfo.groupName',
+			trt.eventteam_id as 'groupInfo.id',
+			trt.responseteam_time,
+			trt.required_number,
+			s.state as 'state.state'
+		FROM
+			the_response_team trt
+		INNER JOIN enterprise_info ei ON (trt.responseteam_id = ei.user_id)
+		INNER JOIN enterprise_info eib ON (trt.responseteam_b_id = eib.user_id)
+		INNER JOIN group_info gi ON (trt.eventteam_id = gi.id)
+		INNER JOIN state s ON (trt.responseteam_state = s.id)
+		WHERE trt.responseteam_id =#{id}  AND trt.responseteam_state =#{stateId}
+	</select>
+	<select id="byCount" resultType="java.lang.Integer">
+		SELECT SUM(required_number) FROM the_response_team WHERE eventteam_id = #{teamId}
+	</select>
+	<select id="byCountIsNo" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM the_response_team WHERE  eventteam_id=#{teamId}
+	</select>
+	<update id="updateTeam">
+		UPDATE `the_response_team` SET `responseteam_state`=#{stateId} WHERE (`id`=#{id})
+	</update>
+	<!-- 判断这个团队是否已被响应 -->
+	<select id="byResponseIsNo" resultType="java.lang.Integer">
+		SELECT SUM(required_number) FROM the_response_team WHERE eventteam_id =#{groupId} AND responseteam_state =#{stateId} 
+	</select>
+</mapper>

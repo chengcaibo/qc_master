@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.qichong.dao.SkillInfoDao">
+
+	<!-- 根据Id查询单个技能 -->
+	<select id="selectOneById" resultType="SkillInfo">
+		SELECT id, user_id as 'user.id', skill_name
+		FROM skill_info
+		WHERE id = #{id}
+	</select>
+
+	<!-- 查询用户拥有的技能 -->
+	<select id="queryUserSkillInfo" resultType="SkillInfo">
+		SELECT id, user_id as 'user.id', skill_name
+		FROM skill_info
+		WHERE user_id = #{userId}
+	</select>
+	
+	<!-- 新增技能 -->
+	<insert id="addSkillInfo" parameterType="SkillInfo">
+		INSERT INTO skill_info
+		(
+			user_id,
+			skill_name
+		)
+		VALUES
+		(
+			#{user.id},
+			#{skillName}
+		)
+	</insert>
+	
+	<!-- 查询userId的总数  count-->
+	<select id="skillCount" resultType="Integer">
+		SELECT COUNT(user_id) FROM skill_info WHERE user_id = #{user.id}
+	</select>
+	
+	<!-- 根据id更新单个技能 -->
+	<update id="updateOne">
+		UPDATE skill_info SET skill_name = #{skill} WHERE id = #{id};
+	</update>
+	
+	<!-- 根据id删除单个技能 -->
+	<delete id="deleteOne">
+		delete from skill_info where id = #{id};
+	</delete>
+	
+</mapper>

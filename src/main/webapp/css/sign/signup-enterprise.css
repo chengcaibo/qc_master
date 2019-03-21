@@ -1,0 +1,174 @@
+﻿.step-box {
+	text-align: left;
+	font-size: 0;
+	position: relative;
+	padding-left: 45px;
+}
+
+.step-progress {
+	position: absolute;
+	top: 18px;
+	left: 0;
+	width: 100%;
+	height: 18px;
+	background-color: #ccc;
+	z-index: 1;
+	border-radius: 9px;
+	overflow: hidden;
+}
+
+.step-percent {
+	width: 0;
+	height: 100%;
+	background-color: #66ccff; /* 天依蓝 */
+	/* 过滤 */
+	transition: width 0.5s linear;
+	-ms-transition: width 0.5s linear;
+	-webkit-transition: width 0.5s linear;
+	-o-transition: width 0.5s linear;
+	-moz-transition: width 0.5s linear;
+}
+
+.step-percent-1 {
+	width: 204px;
+}
+
+.step-percent-2 {
+	width: 488px;
+}
+
+.step-percent-3 {
+	width: 100%;
+}
+
+.step-item {
+	display: inline-block;
+	vertical-align: top;
+	margin-left: 100px;
+	margin-right: 100px;
+	text-align: center;
+	position: relative;
+	z-index: 2;
+}
+
+.step-number {
+	width: 50px;
+	height: 50px;
+	line-height: 40px;
+	border-radius: 50%;
+	font-size: 18px;
+	color: #666;
+	background-color: #f5f5f5;
+	border: 5px solid #ccc;
+	margin: 0 auto;
+	transition: background-color 0.5s linear, border-color 0.5s linear;
+	-ms-transition: background-color 0.5s linear, border-color 0.5s linear;
+	-webkit-transition: background-color 0.5s linear, border-color 0.5s linear;
+	-o-transition: background-color 0.5s linear, border-color 0.5s linear;
+	-moz-transition: background-color 0.5s linear, border-color 0.5s linear;
+}
+
+.step-current .step-number {
+	background-color: #E6E6FA;
+	border-color: #66ccff;
+}
+
+.step-detail {
+	font-size: 12px;
+	color: #777;
+	padding-top: 10px;
+}
+
+.step-1, .step-2, .step-3 {
+	display: none;
+}
+
+.step-4 .form-item {
+	width: 832px;
+	text-align: left;
+	float: right;
+}
+
+.step-next-button, .step-last-button {
+	width: 190px;
+	height: 45px;
+	line-height: 45px;
+}
+
+.step-next-button {
+	margin-left: 15px;
+}
+
+.step-next-button i, .step-last-button i {
+	font-size: 18px;
+	padding: 0 5px;
+	vertical-align: middle;
+}
+
+.form-item-double {
+	font-size: 0;
+	vertical-align: top;
+}
+
+.form-item-double .form-item {
+	display: inline-block;
+	width: 245px;
+	text-align: center;
+}
+
+.form-item-double .form-item:FIRST-CHILD {
+	padding-left: 135px;
+}
+
+.file-box input[type=file] {
+	display: none;
+}
+
+.file-box img {
+	width: 100px;
+	height: 100px;
+	cursor: pointer;
+	border: 1px solid #ccc !important;
+}
+
+.file-box span {
+	display: block;
+	font-size: 12px;
+	position: relative;
+	top: 10px;
+}
+
+.form-item-no-bottom {
+	margin-bottom: 0 !important;
+}
+
+.btn-back {
+	outline: none;
+	text-align: left !important;
+	height: 15px;
+	line-height: 15px !important;
+	padding: 0 !important;
+	margin-bottom: 6px !important;
+}
+
+textarea.protocol {
+	margin: 0px;
+	width: 750px;
+	height: 185px;
+	min-height: 185px;
+	max-height: 233px;
+	border: 1px solid #ccc;
+	resize: vertical;
+}
+
+.step-3 .submit-button {
+	width: 750px;
+	font-size: 24px;
+}
+
+.step-3 .icon-loading {
+	vertical-align: middle !important;
+	font-size: 24px !important;
+	padding-right: 5px !important;
+	color: white !important;
+}

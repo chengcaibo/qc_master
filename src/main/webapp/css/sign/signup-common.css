@@ -1,0 +1,350 @@
+﻿* {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: none;
+}
+
+body {
+	background-color: #F5F5F5;
+}
+
+a {
+	text-decoration: none;
+}
+
+::-webkit-input-placeholder {
+	color: #ccc;
+}
+
+.header-nav {
+	width: 100%;
+	height: 105px;
+	background: #39c0fb;
+	padding-top: 15px;
+}
+
+.header-nav img {
+	width: 80px;
+	margin-left: 244px;
+}
+
+.header-nav p {
+	line-height: 105px;
+	font-size: 36px;
+	position: absolute;
+	top: 18px;
+	left: 340px;
+	color: #fff;
+	font-family: "微软雅黑";
+}
+/* ------------------------------- */
+/* ----------- body-main --------- */
+/* ------------------------------- */
+.body-main {
+	width: 100%;
+	min-width: 1024px;
+	min-height: 600px;
+}
+
+.sign-main {
+	width: 1000px;
+	min-height: 500px;
+	margin: 50px auto 50px;
+	background-color: white;
+	position: relative;
+	padding-bottom: 50px;
+}
+
+.sign-welcome {
+	font: 32px bold;
+	height: 100px;
+	line-height: 100px;
+	text-align: center;
+}
+
+.goto-login {
+	position: absolute;
+	top: 30px;
+	right: 30px;
+	font-size: 14px;
+}
+
+.goto-login a {
+	color: #1E90FF;
+}
+
+.goto-login a:hover {
+	color: #52A8FF;
+}
+
+/* ------------------------------- */
+/* ------------ toggle ----------- */
+/* ------------------------------- */
+.toggle {
+	width: 100%;
+	font-size: 0;
+	-webkit-text-size-adjust: none;
+}
+
+.toggle .toggle-button {
+	display: inline-block;
+	padding: 0 !important;
+	width: 50%;
+	height: 100%;
+	text-decoration: none;
+	background-color: #F5F5F5;
+	color: black;
+	cursor: pointer;
+}
+
+.toggle .toggle-button:hover {
+	background-color: #94E1FF;
+}
+
+.toggle .toggle-button:active {
+	background-color: #B0C4DE;
+}
+
+.toggle-this {
+	color: white !important;
+	background-color: #39C0FA !important;
+	cursor: default !important;
+}
+
+.toggle-sign {
+	width: 90%;
+	height: 70px;
+	margin: 0 auto;
+}
+
+.toggle-sign .toggle-button {
+	line-height: 60px !important;
+	font: 24px bold;
+	border-radius: 0 35px 35px 0;
+	-ms-border-radius: 0 35px 35px 0;
+}
+
+.toggle-sign .toggle-button i, .toggle-sign .toggle-button span {
+	vertical-align: middle;
+}
+
+.toggle-sign .toggle-button i {
+	font: 24px bold;
+	padding-right: 20px;
+}
+
+.toggle-sign .toggle-button:FIRST-CHILD {
+	border-radius: 35px 0 0 35px;
+}
+/* ------------------------------- */
+/* ----------- sign-item --------- */
+/* ------------------------------- */
+.sign-item {
+	width: 100%;
+	min-height: 300px;
+	padding: 30px 40px 0px;
+	display: none;
+	overflow: hidden;
+}
+/* ------------------------------- */
+/* ----------- form-item --------- */
+/* ------------------------------- */
+.form-item {
+	width: 100%;
+	position: relative;
+	margin-bottom: 25px;
+	text-align: right;
+}
+
+.form-item .input-box {
+	width: 400px;
+	height: 40px;
+	border: 1px solid #ccc;
+	margin: 0 auto;
+	display: inline-block;
+	vertical-align: top;
+	position: relative;
+}
+
+.form-item .input-box:hover {
+	border-color: #00C1DE;
+}
+
+.form-item .input-no-border {
+	text-align: left;
+	border: 0 !important;
+}
+
+.form-item .input-box i, .form-item .input-box .input-master, .form-item .toggle-pwd {
+	height: 38px;
+	line-height: 38px;
+	font-size: 16px;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.form-item .input-box i, .form-item .toggle-pwd {
+	width: 40px;
+	text-align: center;
+}
+
+.form-item .toggle-pwd {
+	height: 38px !important;
+	line-height: 38px;
+	background-color: white;
+	cursor: pointer;
+	position: absolute;
+	right: 0px;
+}
+
+.form-item .icon-pwd-hide {
+	color: #ccc;
+}
+
+.form-item .toggle-pwd:active {
+	padding-left: 5px;
+	line-height: 43px;
+}
+
+.form-item .input-box .input-master {
+	width: calc(100% - 40px);;
+}
+
+.form-item .input-mini {
+	width: 261px;
+}
+
+.form-item .input-button {
+	width: 125px;
+	height: 40px;
+	margin-left: 10px;
+	display: inline-block;
+	vertical-align: top;
+	outline: none !important;
+}
+
+.input-dialog {
+	width: 420px;
+	height: 40px;
+	line-height: 40px;
+	font-size: 12px;
+	margin-left: 10px;
+	text-align: left;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.form-item-success .input-dialog {
+	color: green !important;
+}
+
+.form-item-success .input-box {
+	border-color: green !important;
+}
+
+.form-item-error .input-dialog {
+	color: red !important;
+}
+
+.form-item-error .input-box {
+	border-color: red !important;
+}
+
+.form-item-warn .input-dialog {
+	color: #DAA520 !important;
+}
+
+.form-item-warn .input-box {
+	border-color: #DAA520 !important;
+}
+
+.submit-button {
+	width: 400px;
+	height: 60px;
+	line-height: 60px;
+	color: white;
+	background-color: #39c0fb;
+	border-radius: 5px;
+	margin: 0 auto;
+	padding: 0;
+	display: inline-block;
+	vertical-align: top;
+	font-size: 18px;
+}
+
+.submit-button:hover {
+	color: white;
+	background-color: #5CCEFF;
+}
+
+.submit-button[disabled] {
+	color: black;
+	background-color: #cccccc;
+}
+
+.form-item-left {
+	text-align: left;
+	padding-left: 88px;
+}
+
+.form-item-left .input-protocol {
+	vertical-align: top;
+	margin-right: 3px;
+}
+
+.input-master-error {
+	color: red;
+	font-size: 12px;
+	display: none;
+}
+
+.input-master-error-show {
+	display: block;
+}
+
+.input-validation-l {
+	width: 69%;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.input-validation-r {
+	width: 29%;
+	display: inline-block;
+	position: relative;
+	top: 1px;
+	vertical-align: top;
+}
+
+.input-validation-r .validation {
+	width: 86px;
+	height: 32px;
+	line-height: 32px;
+	font-size: 18px;
+	text-align: center;
+	border: 1px solid #CCCCCC;
+	border-radius: 3px;
+	background: url(/img/login-sign/img/Yzm_1.png) 0 0 no-repeat;
+	background-size: 128px;
+	margin: 0 auto;
+}
+
+.sign-ok {
+	text-align: center;
+}
+
+.sign-ok .bigger-a {
+	font-size: 24px;
+}
+
+.sign-ok .bigger-ok {
+	display: block;
+	width: 500px;
+	height: 300px;
+	line-height: 300px;
+	font-size: 233px;
+	color: green;
+	margin: 0 auto;
+	text-align: center;
+}

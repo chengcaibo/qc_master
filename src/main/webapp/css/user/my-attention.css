@@ -1,0 +1,106 @@
+/*我的关注*/
+.personal-page .my-attention {
+	width: 650px;
+	height: auto;
+	padding: 0 28px;
+	display: none;
+	min-height: 850px;
+	position: relative;
+	margin: 0 auto;
+}
+/*美化虫*/
+.my-attention .beautify-seven img {
+	width: 500px;
+}
+
+.my-attention h5 {
+	font-size: 18px;
+	margin-bottom: 20px;
+}
+
+.my-attention ul {
+	width: 650px;
+	height: auto;
+	overflow: hidden;
+	min-height: 500px;
+}
+
+.my-attention ul li {
+	width: 610px;
+	display: flex;
+	justify-content: center;
+	border-bottom: 1px solid #e8e8e8;
+	height: 90px;
+	padding-top: 3px;
+}
+
+.my-attention ul li:nth-child(3n) {
+	margin-right: 0;
+}
+
+.my-attention ul li .my-attention-img {
+	width: 80px;
+	height: 100%;
+	float: left;
+}
+
+.my-attention-img img {
+	width: 70px;
+	height: 70px;
+	margin: 5px;
+	border-radius: 50%;
+}
+
+.my-attention ul li .my-attention-content {
+	display: flex;
+	justify-content: space-between;
+}
+
+.my-attention-content p {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	padding: 30px 25px;
+	width: 146px;
+}
+
+.my-attention ul li .focus-on-button {
+	margin-top: 25px;
+}
+
+.focus-on-button button {
+	font-size: 13px;
+	padding: 4px;
+	width: 90px;
+	height: 30px;
+	background: #ccc !important;
+	transition: 0.3s;
+}
+
+.focus-on-button button:HOVER {
+	background: #929292 !important;
+}
+
+/* 
+.focus-on-button button:first-child {
+	background:#0080FF;
+	width: 70px;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	background: #0080FF;
+	color: #fff;
+}
+ */
+.focus-on-button button:last-child {
+	color: #333;
+	background: #fff;
+}
+
+.focus-on-button button span {
+	padding-right: 5px;
+}
+
+.Switch {
+	background: #3bc5ff !important;
+	color: #fff !important;
+}

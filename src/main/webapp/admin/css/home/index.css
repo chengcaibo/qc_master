@@ -1,0 +1,33 @@
+.layui-body .body-loading {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 999;
+	background-color: white;
+	font-size: 32px;
+	text-align: center;
+	padding: 100px 0 0;
+}
+
+.layui-body[hideLoading=true] .body-loading {
+	display: none;
+}
+
+.count-box {
+	font-size: 0;
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+.demand-newest-box .layui-table-view {
+	margin: 0;
+}
+
+.demand-newest-box tbody .layui-table-cell {
+	height: 50px;
+	line-height: 50px;
+}

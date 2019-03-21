@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qichong.dao.GroupPersonnelDao">
+	
+	<!-- 根据groupId查询所有队员 -->
+	<select id="selectPersonnelByGroupId" parameterType="java.lang.Integer" resultType="GroupPersonnel">
+		SELECT
+			groupp.group_id,
+			groupp.user_id,
+			groupp.identity_id,
+			groupp.create_time,
+			uinfo.nick_name AS 'uinfo.nick_name',
+			uinfo.avatar AS 'uinfo.avatar',
+			uinfo.introduce AS 'uinfo.introduce',
+			uinfo.introduce AS 'uinfo.introduce',
+			uinfo.introduce AS 'uinfo.introduce',
+			jobinfo.job_code AS 'uinfo.jobInfo.job_code',
+			jobinfo.job_name AS'uinfo.jobInfo.job_name',
+			groupi.id AS 'identity.id',
+			groupi.identity AS 'identity.identity'
+		FROM
+			group_personnel AS groupp
+		INNER JOIN user_info AS uinfo ON uinfo.user_id = groupp.user_id
+		INNER JOIN job_info AS jobinfo ON jobinfo.job_code = uinfo.job_code
+		INNER JOIN group_identity AS groupi ON groupi.id = groupp.identity_id
+		WHERE
+			groupp.group_id = #{groupId}
+		ORDER BY groupp.create_time DESC;
+	</select>
+	
+		
+	<!-- 根据userId查询所在团队 -->
+	<select id="selectGroupsByUserId" parameterType="java.lang.Integer" resultType="GroupPersonnel">
+		SELECT
+			groupp.group_id,
+			groupp.user_id,
+			groupp.identity_id,
+			groupp.create_time,
+			ginfo.group_name AS 'ginfo.group_name',
+			ginfo.picture AS 'ginfo.picture',
+			ginfo.introduce AS 'ginfo.introduce',
+			groupi.id AS 'identity.id',
+			groupi.identity AS 'identity.identity'
+		FROM
+			group_personnel AS groupp
+		INNER JOIN group_info AS ginfo ON ginfo.id = groupp.group_id
+		INNER JOIN group_identity AS groupi ON groupi.id = groupp.identity_id
+		WHERE
+			groupp.user_id = #{userId};
+	</select>
+	
+	<!-- 根据groupId和userId查询团队 -->
+	<select id="selectOneByGroupIdAndUserId" parameterType="java.lang.Integer" resultType="GroupPersonnel">
+		SELECT
+			groupp.group_id,
+			groupp.user_id,
+			groupp.identity_id,
+			groupi.id AS 'identity.id',
+			groupp.create_time,
+			groupi.identity AS 'identity.identity'
+		FROM
+			group_personnel AS groupp
+		INNER JOIN group_identity AS groupi ON groupi.id = groupp.identity_id
+		WHERE
+			groupp.group_id = #{groupId}
+		AND groupp.user_id = #{userId};
+	</select>
+	
+	<!-- 添加一条新队员 -->
+	<insert id="insertOne" parameterType="GroupPersonnel">
+		INSERT INTO group_personnel (
+			group_id,
+			user_id,
+			identity_id
+		) VALUES (
+			#{groupId}, 
+			#{userId}, 
+			#{identityId}
+		)
+	</insert>
+	
+	<delete id="deleteByGroupId">
+		DELETE FROM group_personnel
+		WHERE group_id = #{groupId}
+	</delete>
+	
+	<delete id="deleteByGroupIdAndUserId">
+		DELETE FROM group_personnel
+		WHERE group_id = #{groupId} AND user_id = #{userId}
+	</delete>
+	
+</mapper>

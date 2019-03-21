@@ -1,0 +1,260 @@
+﻿.con_ad {
+	width: 800px;
+	-moz-box-shadow: 2px 2px 5px #333333;
+	-webkit-box-shadow: 2px 2px 5px #333333;
+	box-shadow: 2px 2px 5px #333333;
+	margin: 100px auto;
+	padding: 50px 100px;
+	background: #fff;
+}
+
+.con_ad h3 {
+	font-size: 20px;
+	border-bottom: 1px solid #aaa;
+	padding: 20px 0;
+	margin: 0;
+}
+
+.con_ad table {
+	margin: 50px 82px;
+	margin-bottom: 0;
+}
+
+.sub_ad {
+	position: relative;
+	left: 300px;
+	padding: 20px 0;
+}
+
+.td_1 {
+	padding: 0px 35px;
+	text-align: right;
+}
+
+.con_ad table tr td textarea {
+	padding: 6px 10px;
+	width: 350px;
+	height: 100px;
+	resize: none;
+}
+
+.con_ad table input[type="submit"]:HOVER {
+	background: #067aaf;
+}
+
+.con_ad table input[type="text"] {
+	width: 350px;
+	height: 40px;
+	margin: 11px 0;
+	border: 1px solid #aaa;
+	padding: 0 8px;
+	color: #aaa;
+}
+
+.con_ad table input[type="submit"] {
+	color: #fff;
+	width: 150px;
+	height: 40px;
+	background: #03A9F4;
+	transition: 1s;
+	border: 0;
+	/* margin: 50px 274px; */
+	position: relative;
+	left: 220px;
+	top: 30px;
+	margin-bottom: 20px;
+}
+
+.con_all {
+	width: 800px;
+	background: #fff;
+	margin: 0 auto;
+	margin-top: 41px;
+	font-family: 微软雅黑;
+	border-radius: 2px;
+	box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.25);
+	position: relative;
+	padding-bottom: 50px;
+	padding-top: 50px;
+}
+
+.con_all h3 {
+	margin: -20px 100px;
+	margin-bottom: 24px;
+	border-bottom: 1px solid #ccc;
+	padding: 15px 0;
+	color: #2196F3;
+}
+
+.con_all table {
+	margin: 0px 200px;
+}
+
+.con_all table input[type="text"] {
+	border: 1px solid #aaa;
+	width: 295px;
+	line-height: 35px;
+	margin: 10px 0px;
+	padding: 0 11px;
+	font-size: 14px;
+	color: #9a9a9a;
+}
+
+.con_all textarea {
+	border: 1px solid #aaa;
+	padding: 6px 11px;
+	height: 80px;
+	width: 295px;
+	/* line-height: 21px; */
+	font-size: 14px;
+	color: #9a9a9a;
+}
+
+.right select {
+	border: 1px solid #aaa;
+	width: 114px;
+	height: 38px;
+	font-size: 12px;
+	padding: 6px;
+	color: #676767;
+	margin-top: 11px;
+}
+
+.region-mask {
+	display: none;
+	width: 280px;
+	height: 30px;
+	line-height: 30px;
+	border: 1px solid #ccc;
+	text-align: center;
+	background-color: white;
+	font-size: 14px;
+	margin: 0px 9px;
+	position: fixed;
+	top: 357px;
+}
+
+.con_all table input[type="submit"] {
+	width: 294px;
+	line-height: 35px;
+	margin: 30px 88px;
+	font-size: 14px;
+	letter-spacing: 8px;
+	background: #03A9F4;
+	transition: 1s;
+	cursor: pointer;
+	border-radius: 5px;
+	height: 40px;
+	color: #fff;
+}
+
+.con_all table input[type="submit"]:HOVER {
+	background: #0780b7;
+}
+
+.page-header {
+	border: 0;
+	margin: 17px 0px;
+	margin-bottom: 0;
+}
+
+.return-icon {
+	width: 400px;
+	height: 260px;
+	position: fixed;
+	background: #fff;
+	z-index: 2;
+	left: 50%;
+	top: 50%;
+	margin-top: -130px;
+	margin-left: -200px;
+	-moz-box-shadow: 0px 1px 5px #8c8c8c;
+	-webkit-box-shadow: 0px 1px 5px #8c8c8c;
+	box-shadow: 0px 1px 5px #8c8c8c;
+}
+
+.return-icon .return-success {
+	font-size: 100px;
+	margin: 150px;
+	position: relative;
+	top: 30px;
+	color: #2196F3;
+}
+
+.return-icon  h3 {
+	font-size: 25px;
+	text-align: center;
+	margin-top: 20px;
+}
+
+.return-icon span {
+	float: right;
+	position: relative;
+	right: 15px;
+	top: 30px;
+}
+
+.return-icon span a {
+	text-decoration: none;
+}
+
+.return-icon .return-close {
+	float: right;
+	position: absolute;
+	right: 12px;
+	top: 10px;
+	cursor: pointer;
+	color: #797979;
+	transition: 1s;
+}
+
+.return-icon .return-close:HOVER {
+	color: #353535;
+}
+
+.con_all table .group-btn {
+	width: 295px;
+	height: 40px;
+	border: 0;
+	background: #03A9F4;
+	margin: 25px 106px;
+	color: #fff;
+	font-size: 20px;
+	letter-spacing: 2px;
+	padding: 0;
+	transition: 1s;
+}
+
+.con_all table .group-btn:HOVER {
+	background: #0f83de;
+}
+
+#bodyMask {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	z-index: 1;
+	background: rgba(0, 0, 0, .3);
+	display: none;
+}
+
+/*添加的正则css*/
+td {
+	position: relative;
+}
+
+td p {
+	position: absolute;
+	right: 0;
+	top: 35%;
+	font-size: 12px;
+	color: red;
+	display: none;
+}
+/*后台*/
+.user-option{
+	width: 295px;
+    height: 35px;
+    margin-top: 10px;
+}

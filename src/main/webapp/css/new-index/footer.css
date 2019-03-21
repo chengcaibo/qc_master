@@ -1,0 +1,56 @@
+*{
+	text-decoration:none;
+}
+.footer{
+	width:100%;
+	height:300px;
+	background:#000;
+	margin-top:50px;
+}
+.footer .footer-typeArea{
+	width:1000px;
+	height:100%;
+	margin:0 auto;
+}
+/*上半部分的样式*/
+.footer .footer-typeArea .footer-typeArea-plate-top{
+	width:100%;
+	height:40%;
+	margin-bottom:10px;
+}
+.footer .footer-typeArea .footer-typeArea-plate-top .footer-typeArea-plate-top-one{
+	width:600px;
+	height:100%;
+	background:cadetblue;
+	float:left;
+	text-align: center;
+	font-size: 50px;
+}
+.footer .footer-typeArea .footer-typeArea-plate-top .qr-code-scanning{
+	width:120px;
+	height:120px;
+	background:cadetblue;
+	float:right;
+}
+.footer .footer-typeArea .footer-typeArea-plate-top .qr-code-scanning .scanning-img{
+	width:120px;
+}
+
+/*下半部分的样式*/
+.footer .footer-typeArea .footer-typeArea-plate-bottom{
+	width:100%;
+	height:40%;
+	margin-bottom:10px;
+	background:slateblue;
+	text-align: center;
+	font-size: 50px;
+}
+
+/*备案*/
+.footer .footer-typeArea .footer-typeArea-plate-putOnRecord{
+	width:100%;
+	height:13%;
+	background:orangered;
+	text-align: center;
+	font-size:20px;
+}

@@ -1,0 +1,77 @@
+.head-portrait {
+	
+}
+
+.head-portrait h3 {
+	font-size: 30px;
+	margin-top: 0;
+	width: 650px;
+	margin: 0 auto;
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 19px;
+	color: #404040;
+	margin-bottom: 30px;
+}
+
+.head-portrait ul li {
+	padding: 80px 0;
+	border-bottom: 1px dashed #2383f9;
+	padding-bottom: 60px;
+}
+
+.head-portrait ul li .head-info {
+	width: 150px;
+	height: 150px;
+}
+
+.head-portrait ul li .head-info p {
+	text-align: center;
+	margin-top: 9px;
+	height: 36px;
+	background: #2196F3;
+	padding: 10px 0;
+	color: #fff;
+	font-size: 13px;
+	cursor: pointer;
+}
+
+.head-portrait ul {
+	width: 650px;
+	margin: 0 auto;
+}
+
+.head-portrait ul li .head-show {
+	width: 200px;
+	height: 200px;
+}
+
+.head-portrait ul li .head-show img {
+	width: 200px;
+	height: 200px;
+}
+
+.head-portrait ul li .head-show p {
+	text-align: center;
+	font-size: 16px;
+	margin: 10px auto;
+}
+
+.head-portrait ul li .head-show-three {
+	width: 250px;
+	height: 250px;
+	float: right;
+	position: relative;
+	top: -250px;
+	right: 145px;
+}
+
+.head-portrait ul li .head-show-three img {
+	width: 250px;
+	height: 250px;
+}
+
+.head-portrait ul li .head-show-three p {
+	text-align: center;
+	font-size: 16px;
+	margin: 10px auto;
+}

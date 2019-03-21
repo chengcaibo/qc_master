@@ -1,0 +1,139 @@
+﻿/*** ------------ ***/
+/*** - 公共 CSS 样式 - ***/
+/*** - 创建人：孙建雷   - ***/
+/*** ------------ ***/
+
+/* 注意： 这里只能添加不能修改和删除 */
+/* 注意： 这里禁止使用 MyEclipse 的格式化功能 */
+
+* {
+	transition: transform 0.3s;
+	-ms-transition: transform 0.3s;
+	-moz-transition: transform 0.3s; /* Firefox 4 */
+	-webkit-transition: transform 0.3s; /* Safari 和 Chrome */
+	-o-transition: transform 0.3s; /* Opera */
+}
+/* ------------------------------ */
+/* 功能：通用样式  --> 开始 */
+/* ------------------------------ */
+input[disabled] {
+	cursor: not-allowed !important;
+}
+/* ------------------------------ */
+/* 功能：通用样式  --> 结束 */
+/* ------------------------------ */
+
+/* ------------------------------ */
+/* 特效：当用户移动到图片上的时候放大该图片  --> 开始 */
+/* ------------------------------ */
+.common-img-hover-bigger-1, .common-img-hover-bigger-2, .common-img-hover-bigger-3, .common-img-hover-bigger-4,
+	.common-img-hover-bigger-5 {
+	overflow: hidden;
+}
+
+.common-img-hover-bigger-1:hover img {
+	        transform: scale(1.1, 1.1);
+	    -ms-transform: scale(1.1, 1.1); /* IE 9 */
+       -moz-transform: scale(1.1, 1.1); /* Firefox */
+	-webkit-transform: scale(1.1, 1.1); /* Safari 和 Chrome */
+	     -o-transform: scale(1.1, 1.1); /* Opera */
+}
+
+.common-img-hover-bigger-2:hover img {
+	transform: scale(1.2, 1.2);
+	-ms-transform: scale(1.2, 1.2); /* IE 9 */
+	-moz-transform: scale(1.2, 1.2); /* Firefox */
+	-webkit-transform: scale(1.2, 1.2); /* Safari 和 Chrome */
+	-o-transform: scale(1.2, 1.2); /* Opera */
+}
+
+.common-img-hover-bigger-3:hover img {
+	transform: scale(1.3, 1.3);
+	-ms-transform: scale(1.3, 1.3); /* IE 9 */
+	-moz-transform: scale(1.3, 1.3); /* Firefox */
+	-webkit-transform: scale(1.3, 1.3); /* Safari 和 Chrome */
+	-o-transform: scale(1.3, 1.3); /* Opera */
+}
+
+.common-img-hover-bigger-4:hover img {
+	transform: scale(1.4, 1.4);
+	-ms-transform: scale(1.4, 1.4); /* IE 9 */
+	-moz-transform: scale(1.4, 1.4); /* Firefox */
+	-webkit-transform: scale(1.4, 1.4); /* Safari 和 Chrome */
+	-o-transform: scale(1.4, 1.4); /* Opera */
+}
+
+.common-img-hover-bigger-5:hover img {
+	transform: scale(1.5, 1.5);
+	-ms-transform: scale(1.5, 1.5); /* IE 9 */
+	-moz-transform: scale(1.5, 1.5); /* Firefox */
+	-webkit-transform: scale(1.5, 1.5); /* Safari 和 Chrome */
+	-o-transform: scale(1.5, 1.5); /* Opera */
+}
+/* ------------------------------ */
+/* 特效：当用户移动到图片上的时候放大该图片  --> 结束 */
+/* ------------------------------ */
+/* ------------------------------ */
+/* 功能：清除浮动 --> 开始 */
+/* ------------------------------ */
+.common-clear-both {
+	clear: both;
+}
+
+.common-clear-left {
+	clear: left;
+}
+
+.common-clear-right {
+	clear: right;
+}
+/* ------------------------------ */
+/* 功能：清除浮动 --> 结束 */
+/* ------------------------------ */
+/* ------------------------------ */
+/* 功能：设置显示样式 --> 开始 */
+/* ------------------------------ */
+.common-show, .common-show-block {
+	display: block !important;
+}
+
+.common-show-inline {
+	display: inline !important;
+}
+
+.common-show-inline-block {
+	display: inline-block !important;
+}
+
+.common-hide {
+	display: none !important;
+}
+/* ------------------------------ */
+/* 功能：设置显示样式 --> 结束 */
+/* ------------------------------ */
+
+/* ------------------------------ */
+/* 特效：字体图表进行旋转实现loading效果 --> 开始 */
+/* ------------------------------ */
+.common-icon-loading:before {
+	display:inline-block;
+
+	animation-name: common-icon-loading-animation;
+	animation-duration: 0.8s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+	transform-origin: 50% 50%;
+}
+
+@keyframes common-icon-loading-animation {
+	
+	from {
+		transform:rotate(0deg);
+	}
+	to {
+		transform: rotate(359deg);
+	}
+}
+/* ------------------------------ */
+/* 特效：字体图表进行旋转实现loading效果 --> 结束 */
+/* ------------------------------ */

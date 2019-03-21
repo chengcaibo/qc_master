@@ -1,0 +1,323 @@
+/*综合技能*/
+.comprehensive-skills {
+	width: 100%;
+	height: auto;
+	display: none;
+	position: relative;
+	margin: -60px auto;
+	min-height: 850px;
+}
+/*美化虫*/
+.comprehensive-skills .beautify-two img {
+	width: 500px;
+}
+
+.skill-info-user {
+	width: 650px;
+	margin: 0 auto;
+}
+
+.comprehensive-skills .beautify-two {
+	height: auto;
+}
+
+.comprehensive-skills .beautify-two img {
+	width: 600px;
+}
+
+.comprehensive-skills .comprehensive-skills-top, .skills-label {
+	height: auto;
+}
+
+.comprehensive-skills-top li, .skills-label li {
+	width: 306px;
+	height: 40px;
+	display: inline-block;
+	/*margin-right: 20px;*/
+	margin-bottom: 26px;
+	position: relative;
+}
+
+.comprehensive-skills-top li input {
+	width: 250px;
+	height: 40px;
+	border-radius: 3px;
+	float: left
+}
+
+.comprehensive-skills-top li input:focus {
+	border: 1px solid #00b7ee;
+	box-shadow: 0px 0px 5px #ccc;
+}
+
+.comprehensive-skills-top li button {
+	width: 50px;
+	height: 40px;
+	text-align: center;
+	line-height: 40px;
+	float: left;
+	background: #fff;
+}
+
+.comprehensive-skills-top li button i {
+	font-size: 40px;
+	color: #c5c5c5;
+}
+
+.add-skills-button {
+	width: 750px;
+	height: 50px;
+	padding-left: 150px;
+	position: relative;
+	text-align: right;
+	right: 90px;
+	top: -10px;
+	cursor: pointer;
+}
+
+.add-skills-button button {
+	width: 234px;
+	float: right;
+	color: #0099ff;
+	background: none;
+}
+
+.add-skills-button a {
+	text-decoration: none;
+}
+
+.comprehensive-skills .push-button {
+	height: auto;
+}
+
+.comprehensive-skills .push-button button {
+	width: 40%;
+	height: 40px;
+	border-radius: 5px;
+	font-size: 19px;
+	margin-right: 32px;
+	background: #0099ff;
+	color: #fff;
+}
+
+.comprehensive-skills .spacing {
+	width: 100%;
+	height: 851px;
+	background: #f5f5f5;
+	margin-top: 100px;
+}
+
+.skills-label li {
+	width: auto;
+    padding: 10px 20px;
+    background-color: #66c2ff;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+}
+
+.skills-label li a {
+	width: 15px;
+	height: 15px;
+	line-height: 15px;
+	text-align: center;
+	background-color: red;
+	border-radius: 50%;
+	color: white;
+	position: absolute;
+	right: -2px;
+	top: -2px;
+	display: none;
+	text-decoration: none !important;
+}
+
+.skills-label li:hover a {
+	display: block;
+}
+
+.comprehensive-skills hr {
+	height: 1px;
+	border: none;
+	border-top: 1px dashed #0066CC;
+	width: 700px;
+	margin-top: 60px;
+}
+
+.comprehensive-skills h4 {
+	font-size: 30px;
+	width: 650px;
+	margin: 20px -20px;
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 19px;
+	color: #404040;
+}
+
+.qualification-content {
+	width: 650px;
+	margin: -45px auto;
+	position: relative;
+}
+
+.qualification-content hr {
+	height: 1px;
+	border: none;
+	border-top: 1px solid #ccc;
+	width: 650px;
+}
+
+.qualification-content h4 {
+	font-size: 30px;
+}
+
+.qualification-content .add-iaInfo-btn {
+	position: absolute;
+	right: -40px;
+	margin: -29px 37px;
+	cursor: pointer;
+	transition: 0.3s;
+}
+
+.qualification-content .add-iaInfo-btn .iaInfo-btn:HOVER {
+	color: #2281cc;
+}
+
+.qualification-content .add-iaInfo-btn .iaInfo-btn {
+	font-size: 30px;
+	color: #2196F3;
+}
+
+.qualification-content .add-iaInfo-btn .iaInfo-btn span {
+	padding: 0px 10px;
+	font-size: 20px;
+	position: relative;
+	top: -3px;
+}
+
+.qualification-content .qf-con .qf-img {
+	width: 100px;
+	height: 100px;
+}
+
+.qualification-content .qf-con .qf-img img {
+	width: 100px;
+	height: 100px;
+	border: 1px solid #d4d4d4;
+}
+
+.qualification-content .qf-con {
+	width: 700px;
+}
+
+.qualification-content .qf-con li {
+	width: 305px;
+	font-size: 16px;
+	background: #ffffff;
+	padding: 20px 8px;
+	box-shadow: 2px 2px 5px 0px;
+	float: left;
+	margin: 12px 10px;
+	height: 140px;
+}
+
+.qualification-content .qf-con li span {
+	display: flow-root;
+	width: 200px;
+	position: relative;
+	top: -99px;
+	left: 106px;
+	line-height: 30px;
+	padding: 0 10px;
+	font-size: 15px;
+	color: #5a5a5a;
+}
+
+.qualification-content .qf-con .qf-img button {
+	background: 0;
+	font-size: 16px;
+	padding: 6px 12px;
+	color: #2196F3;
+	position: relative;
+	top: -95px;
+	left: 265px;
+	transition: 0.3s;
+}
+
+.qualification-content .qf-con .qf-img button:HOVER {
+	color: #2281cc;
+}
+
+.qualification-content .qf-con .qf-span {
+	
+}
+
+.qualifications-info {
+	width: 650px;
+	margin: 50px 75px;
+	background: #fff;
+	padding: 26px;
+	position: absolute;
+	z-index: 3;
+}
+
+.qualifications-info h4 {
+	font-size: 30px;
+	text-align: center;
+}
+
+.qualifications-info li {
+	padding: 18px 0;
+	font-size: 17px;
+	color: #6f6f6f;
+}
+
+.qualifications-info li input {
+	font-size: 14px;
+	height: 45px;
+}
+
+.qualifications-info li button {
+	width: 230px;
+	height: 45px;
+	background: #2196F3;
+	color: #fff;
+	font-size: 20px;
+	cursor: pointer;
+	transition: 0.3s;
+	position: relative;
+	top: -15px;
+	left: 88px;
+	border-radius: 3px;
+}
+
+.qualifications-info li button:HOVER {
+	background: #1d7dca;
+}
+
+.my-qualification .qualifications-info .close-iaInfo {
+	position: absolute;
+	top: -20px;
+	right: -15px;
+	background: #2196F3;
+	padding: 12px 16px;
+	border-radius: 100%;
+	width: 50px;
+	height: 50px;
+	font-size: 20px;
+	color: #fff;
+	cursor: pointer;
+	transition: 0.3s;
+}
+
+.qualification-content .qf-con .qf-img .ia-a {
+	position: relative;
+	top: -79px;
+	left: 220px;
+	font-size: 15px;
+}
+
+.qualification-content .qf-con .qf-img .ia-con-span {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 190px;
+}

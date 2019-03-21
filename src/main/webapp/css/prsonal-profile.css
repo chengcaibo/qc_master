@@ -1,0 +1,1287 @@
+h1, h2, p, ul, li, div, img {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	border: 0;
+	color: #333;
+	box-sizing: border-box;
+}
+
+a:link, a:visited {
+	text-decoration: none;
+	color: #337ab7;
+}
+
+a:hover {
+	color: #23527c;
+}
+
+body {
+	background: #f5f5f5;
+}
+
+/*第一块*/
+.my-home-page {
+	width: 1000px;
+	margin: 0 auto;
+	height: 74px;
+	margin-top: 80px;
+}
+
+.my-home-page h1 {
+	font-size: 30px;
+	font-weight: bold;
+}
+
+.my-home-page .back_p {
+	width: 138px;
+	height: 32px;
+	background: #3f8fff;
+	float: left;
+	margin-right: 10px;
+}
+
+.my-home-page div {
+	padding-left: 148px;
+}
+
+.my-home-page p {
+	letter-spacing: 1px;
+	font-size: 14px;
+}
+
+.prsonal-profile-top {
+	width: 888px;
+	margin: 0 auto;
+	height: auto;
+	overflow: hidden;
+	background: #fff;
+	/* border-radius: 5px; */
+	box-shadow: 1px 1px 3px #adadad;
+}
+
+.prsonal-profile-top .prsonal-profile-top-img {
+	/* width: 210px; */
+	height: 290px;
+	float: left;
+	margin-right: 10px;
+	overflow: hidden;
+	text-align: center;
+}
+
+.prsonal-profile-top-img img {
+	width: 220px;
+	margin: 35px 20px;
+}
+
+.prsonal-profile-top .prsonal-profile-top-information {
+	width: 349px;
+	float: left;
+	padding-top: 39px;
+	padding-right: 40px;
+}
+
+.prsonal-profile-top-information .information-top {
+	width: 100%;
+	height: 51px;
+}
+
+.information-top .information-top-name {
+	font-size: 22px;
+	display: inline-block;
+	margin-right: 5px;
+}
+
+.information-top .information-top-certification {
+	font-size: 13px;
+	display: inline-block;
+	color: #009fe7;
+	margin-right: 7px;
+}
+
+.information-top-certification .icon-gerenrenzheng {
+	font-size: 17px;
+	padding-right: 6px;
+}
+
+.information-top .information-top-addition {
+	display: inline-block;
+	width: 60px;
+	height: 24px;
+	border: 1px solid #c7c7c7;
+	text-align: center;
+	line-height: 24px;
+	font-size: 12px;
+	border-radius: 5px;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.click {
+	background: #49d1ff;
+	color: #fff !important;
+	border: 1px solid #fff;
+}
+
+.information-top-addition:hover {
+	background: #49d1ff;
+	color: #fff;
+	border: 1px solid #fff;
+}
+
+.prsonal-profile-top-information .information-meddle {
+	width: 319px;
+	color: #26a1ff;
+}
+
+.information-meddle .information-meddle-zan {
+	font-size: 17px;
+	height: 47px;
+	color: #26a1ff;
+}
+
+.information-meddle-zan p {
+	margin-right: 57px;
+	font-size: 16px;
+}
+
+.information-meddle-zan p, .information-meddle-zan a {
+	display: inline-block;
+	color: #26a1ff;
+}
+
+.information-meddle-zan a {
+	font-size: 21px;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.information-meddle-zan a .icon-zan {
+	font-size: 28px;
+	color: #f4ea2a;
+}
+
+.information-meddle-zan a .icon-zan:HOVER {
+	color: #e4da10;
+}
+
+.icon-zan1 {
+	font-size: 28px !important;
+	color: #f4ea2a !important;
+}
+
+.information-meddle .information-meddle-credit {
+	height: 35px;
+	font-size: 17px;
+	color: #26a1ff;
+	margin-top: 10px;
+}
+
+.information-meddle-credit p {
+	font-size: 16px;
+	color: #989898;
+}
+
+.icon-like-xing-1, .icon-like-xing-2, .icon-like-xing-3 {
+	font-size: 20px;
+	color: #f4ea2a;
+}
+
+.information-meddle-ability {
+	height: 35px;
+}
+
+.information-meddle-ability p {
+	display: inline;
+	color: #989898;
+	font-size: 16px;
+	line-height: 21px;
+}
+
+.information-meddle-ability p:nth-child(1) {
+	margin-right: 24px;
+}
+
+.prsonal-profile-top .prsonal-profile-top-salary {
+	width: 265px;
+	height: 100%;
+	float: left;
+	padding-top: 6px;
+	margin: 0 -20px;
+}
+
+.prsonal-profile-top-salary .salary-frame {
+	width: 265px;
+	height: 250px;
+	margin-top: 21px;
+	text-align: left;
+	padding-left: 12px;
+	border-left: 1px solid #ccc;
+	margin-bottom: 25px;
+}
+
+.salary-frame .salary-frame-top, .salary-frame .salary-frame-bottom {
+	width: 100%;
+	height: auto;
+	position: relative;
+}
+
+.salary-frame-top p:nth-child(1), .salary-frame-bottom p:nth-child(1) {
+	font-size: 14px;
+	font-weight: bold;
+	margin-top: 20px;
+}
+
+
+
+.salary-frame-top p:nth-child(2) {
+	/* width: 180px;
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;  */
+	font-size: 60px;
+	color: #ee7900;
+}
+
+.hourl {
+	position: relative;
+	top: 30px;
+	right: 48px;
+}
+
+.salary-frame-bottom p:nth-child(2) {
+	font-size: 30px;
+	font-weight: bold;
+	padding-left: 17px;
+	color: #ee7900;
+	padding-top: 0px;
+}
+
+.salary-frame-bottom p:nth-child(2) span {
+	font-weight: normal;
+	font-size: 25px;
+	color: #333;
+}
+
+ .salary-frame-top span{
+	font-size: 20px;
+	color: #333;
+	position: absolute;
+	top: 60px;
+} 
+
+/*  .salary-frame-top p:nth-child(2) span {
+	font-size: 20px;
+	color: #333;
+}  */
+/*p:first-child{*/
+/*margin-left: 19px;*/
+/*}*/
+
+/*我的技能*/
+.my-skills {
+	width: 770px;
+	margin: 0 auto;
+	margin-bottom: 70px;
+}
+
+.my-skills .my-skills-content {
+	height: 35px;
+	width: 730px;
+	background: #9ec7fe;
+	padding-left: 39px;
+	padding-right: 39px;
+	margin-bottom: 20px;
+}
+
+.my-skills-content p:nth-child(1), .my-skills-content p:nth-child(2) {
+	font-size: 16px;
+	color: #fff;
+	line-height: 35px;
+	float: left;
+}
+
+.my-skills-content p:nth-child(2) {
+	float: right;
+}
+
+/*自我介绍*/
+.self-introduction {
+	width: 770px;
+	margin: 0 auto;
+	text-align: left;
+	margin-bottom: 70px;
+}
+
+.self-introduction h1 {
+	font-size: 17px;
+	color: #333;
+	height: 50px;
+	line-height: 65px;
+	font-weight: bold;
+	border-bottom: 1px solid #9a9595;
+}
+
+.self-introduction h1 span {
+	font-size: 14px;
+	font-weight: bold;
+	float: left;
+	margin-right: 10px;
+}
+
+.self-introduction .self-introduction-content {
+	width: 95%;
+	background: #fff;
+	padding: 25px 30px;
+	-moz-box-shadow: 2px 2px 5px #333333;
+	-webkit-box-shadow: 2px 2px 5px #333333;
+	box-shadow: 1px 1px 3px #333333;
+	margin: 30px 20px;
+	border-radius: 3px;
+}
+
+.self-introduction-content p {
+	color: #333;
+	font-size: 16px;
+	line-height: 20px;
+}
+
+/*我的优势*/
+.my-ascendancy {
+	width: 1000px;
+	margin: 0 auto;
+	margin-bottom: 64px;
+}
+
+.my-ascendancy h1 {
+	font-size: 23px;
+	color: #fd7c00;
+	padding-left: 77px;
+	height: 64px;
+	line-height: 65px;
+}
+
+.my-ascendancy-centent {
+	height: auto;
+	width: 95%;
+	padding: 25px 30px;
+	background: #fff;
+	-moz-box-shadow: 2px 2px 5px #333333;
+	-webkit-box-shadow: 2px 2px 5px #333333;
+	box-shadow: 1px 1px 3px #333333;
+	margin: 30px 20px;
+	border-radius: 3px;
+}
+
+/*案例&证书*/
+.case-and-certificate {
+	width: 770px;
+	margin: 0 auto;
+	margin-bottom: 70px;
+}
+
+.case-and-certificate .case {
+	width: 770px;
+	height: auto;
+	overflow: hidden;
+}
+
+.case h1, .certificate h1 {
+	height: 47px;
+	width: 100%;
+	font-size: 18px;
+	line-height: 47px;
+	color: #fff;
+	font-weight: bold;
+	background: #9ec7fe;
+	padding-left: 24px;
+	margin-bottom: 37px;
+}
+
+.certificate h1 {
+	margin-top: 47px;
+}
+
+.case ul {
+	width: 100%;
+	height: auto;
+	/*overflow: hidden;*/
+}
+
+.case ul li {
+	width: 766px;
+    margin: 0 0px 20px 0;
+    min-height: 180px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    background: #fff;
+    -moz-box-shadow: 2px 2px 5px #888888;
+    -webkit-box-shadow: 2px 2px 5px #888888;
+    box-shadow: 2px 2px 5px #888888;
+}
+
+.case ul li .caseinfo-content p:FIRST-CHILD{
+	font-size: 20px;
+}
+
+
+.case ul li .caseinfo-content{
+    height: auto;
+    min-height: 100px;
+    display: inline-block;
+    /* background: #fffffff5; */
+    width: 526px;
+    font-size: 14px;
+    padding: 5px;
+}
+
+/* .case ul li:hover {
+	transform: scale(1.1);
+}
+ */
+.case ul li p {
+	/* width: 100%;
+	height: 100%;
+	background: rgba(255, 193, 7, 0.18);
+	position: absolute;
+	top: 0;
+	left: 177px;
+	opacity: 0;
+	transition: all .6s;
+	word-wrap: break-word;
+	word-break: normal;
+	padding: 10px;
+	font-size: 15px;
+	overflow-x: hidden;
+	padding: 10px 5px 0 20px;
+	color: #808080; */
+	    margin: 6px;
+}
+
+/* .case ul li:hover p {
+	left: 0px;
+	opacity: 1;
+}
+ */
+.case ul li img {
+	width: 200px;
+	vertical-align: top;
+	margin: 15px 0px 0 14px;
+}
+
+ .certificate ul li img{
+ 	width: 200px;
+	vertical-align: top;
+ }
+
+.case ul li:nth-child(4n), .certificate ul li:nth-child(4n) {
+	margin-right: 0px;
+}
+
+.case-and-certificate .certificate {
+	width: 770px;
+	height: auto;
+	overflow: hidden;
+}
+
+.certificate ul {
+	width: 100%;
+	height: auto;
+	/*overflow: hidden;*/
+}
+
+.certificate ul li {
+	width: 177px;
+	height: 156px;
+	background: #fff1c9;
+	float: left;
+	/*margin-right: 20px;*/
+	overflow: hidden;
+	text-align: center;
+	position: relative;
+	margin: 0 8px;
+	cursor: pointer;
+}
+
+.certificate ul li:hover {
+	transform: scale(1.1);
+}
+
+.certificate ul li p {
+	width: 100%;
+	height: 100%;
+	background: rgba(255, 193, 7, 0.18);
+	position: absolute;
+	top: 0;
+	left: 177px;
+	opacity: 0;
+	transition: all .6s;
+	word-wrap: break-word;
+	word-break: normal;
+	font-size: 15px;
+	overflow-x: hidden;
+	padding: 10px 5px 0 20px;
+}
+
+.certificate ul li p::-webkit-scrollbar {
+	width: 14px;
+	height: 14px;
+}
+
+.certificate ul li p::-webkit-scrollbar-track, .certificate ul li p::-webkit-scrollbar-thumb
+	{
+	border-radius: 999px;
+	border: 5px solid transparent;
+}
+
+.certificate ul li p::-webkit-scrollbar-track {
+	box-shadow: 1px 1px 5px rgba(0, 0, 0, .2) inset;
+}
+
+.certificate ul li p::-webkit-scrollbar-thumb {
+	min-height: 20px;
+	background-clip: content-box;
+	box-shadow: 0 0 0 5px rgba(0, 0, 0, .2) inset;
+}
+
+.certificate ul li p::-webkit-scrollbar-corner {
+	background: transparent;
+}
+
+.certificate ul li:hover p {
+	left: 0px;
+	opacity: 1;
+}
+/*可预约时间*/
+.available-time {
+	height: auto;
+	width: 770px;
+	margin: 0 auto;
+	margin-bottom: 70px;
+}
+
+.available-time h1 {
+	font-size: 23px;
+	color: #029afe;
+	padding-left: 77px;
+	height: 64px;
+	line-height: 64px;
+}
+
+.available-time h1 .sharing-covenant {
+	display: inline-block;
+	width: 120px;
+	height: 36px;
+	background: #00b7ee;
+	border-radius: 30px;
+	color: #fff;
+	font-size: 18px;
+	line-height: 36px;
+	text-align: center;
+	margin-left: 630px;
+}
+
+.available-time .available-time-content {
+	width: 100%;
+	height: auto;
+	/*overflow: hidden;*/
+	position: relative;
+}
+
+.available-time-content .available-time-content-top {
+	/*position: absolute;*/
+	height: 40px;
+	width: 100%;
+	background: #9ec7fe;
+	border-bottom: 1px solid #ccc;
+	overflow-y: hidden;
+	overflow-x: hidden;
+	white-space: nowrap;
+	transition: height 0.3s;
+	-webkit-transition: height 0.3s;
+	-moz-transition: height 0.3s;
+}
+
+.available-time-content .available-time-content-top:hover {
+	height: 52px;
+	overflow-x: scroll;
+}
+
+.available-time-content-top::-webkit-scrollbar {
+	height: 12px;
+	border-top: 1px solid #ccc;
+}
+
+/* Handle */
+.available-time-content-top::-webkit-scrollbar-thumb {
+	background: rgba(255, 255, 255, 0.4);
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+}
+
+.available-time-content-top::-webkit-scrollbar-thumb:hover {
+	background: rgba(255, 255, 255, 0.6);
+}
+
+.available-time-content-top::-webkit-scrollbar-thumb:active {
+	background: rgba(255, 255, 255, 0.8);
+}
+
+.bg-color {
+	background: #2196F3 !important;
+	color: #fff !important;
+}
+
+.available-time-content-top li {
+	width: 110px;
+	height: 40px;
+	line-height: 40px;
+	font-size: 18px;
+	text-align: center;
+	display: inline-block;
+	/* border-right: 1px solid #ccc; */
+	user-select: none;
+	-ms-user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+}
+
+.available-time-content-top li:last-child {
+	border-right: 0;
+	margin-right: 0;
+}
+
+.available-time-content-top li a {
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+	color: #fff;
+	text-decoration: none;
+	transition: background-color 0.3s;
+	-webkit-transition: background-color 0.3s;
+	-moz-transition: background-color 0.3s;
+	cursor: pointer;
+}
+
+.available-time-content-top li a:hover {
+	background: #c0d8f7;
+}
+
+.available-time-content .available-time-content-bottom {
+	height: auto;
+	width: 100%;
+	padding: 30px 100px;
+	background: #fff;
+	overflow: hidden;
+}
+
+.available-time-content-bottom ul {
+	overflow: hidden;
+}
+
+.available-time-content-bottom li {
+	width: 113px;
+	height: 45px;
+	margin-right: 1px;
+	line-height: 45px;
+	text-align: center;
+	float: left;
+}
+
+.addcolor {
+	
+}
+
+.available-time-content-bottom li a {
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+}
+
+/*预约*/
+.covenant {
+	height: auto;
+	width: 770px;
+	margin: 0 auto;
+}
+
+.covenant h1 {
+	height: 64px;
+	width: 100%;
+	font-size: 24px;
+	line-height: 64px;
+	color: #029afe;
+	padding-left: 77px;
+}
+
+.covenant ul {
+	border-bottom: 0;
+	margin-bottom: 65px;
+}
+
+.covenant ul li {
+	height: 60px;
+	border-bottom: 1px solid #7f797b;
+}
+
+.covenant ul li:first-child {
+	border-top: 1px solid #7f797b;
+}
+
+.covenant ul li .covenant-content {
+	height: 100%;
+	/* line-height: 3; */
+	padding-left: 30px;
+	padding-top: 20px;
+}
+
+.covenant-content p {
+	float: left;
+	margin-right: 44px;
+	font-size: 15px;
+	color: #333;
+}
+
+.covenant-content a {
+	font-size: 17px;
+}
+
+.covenant-content p:nth-child(3) {
+	margin-right: 48px;
+}
+
+.covenant-content p:nth-child(4), .covenant-content p:nth-child(5),
+	.covenant-content p:nth-child(6) {
+	margin-right: 50px;
+}
+
+/*分享*/
+.sharing {
+	width: 838px;
+	height: 60px;
+	margin: 0 auto;
+	padding-left: 645px;
+	line-height: 60px;
+	font-size: 20px;
+	margin-bottom: 70px;
+}
+
+.sharing-new {
+	width: 1000px;
+	padding-left: 800px;
+	border-bottom: 1px solid #b0b0b0;
+	margin-bottom: 20px;
+}
+
+.sharing-bottom {
+	margin-bottom: 10px;
+}
+
+.sharing p {
+	color: #0098fe;
+	display: inline-block;
+	font-size: 16px;
+}
+
+.sharing p a {
+	display: inline-block;
+	width: 26px;
+	height: 26px;
+	line-height: 30px;
+	margin-left: 16px;
+	text-decoration: none;
+}
+
+.sharing p a i {
+	font-size: 26px;
+}
+
+.sharing p a:nth-child(2) {
+	margin: 0 12px;
+}
+
+.sharing p a:nth-child(3) {
+	margin: 0;
+}
+
+/*对他的评价*/
+.appraise {
+	width: 770px;
+	height: auto;
+	margin: 0 auto;
+}
+
+.appraise h1 {
+	height: 64px;
+	width: 100%;
+	font-size: 24px;
+	line-height: 64px;
+	color: #009bff;
+	padding-left: 77px;
+}
+
+.appraise ul {
+	width: 100%;
+	border-bottom: 0;
+}
+
+.appraise ul li {
+	height: 48px;
+	border-bottom: 1px solid #b0b0b0;
+	padding-left: 77px;
+}
+
+.appraise ul li:first-child {
+	border-top: 1px solid #b0b0b0;
+}
+
+.appraise ul li p {
+	line-height: 48px;
+	font-size: 17px;
+}
+
+.appraise ul li p span {
+	color: #0394ff;
+}
+
+/*您可能还喜欢*/
+.you-like {
+	width: 770px;
+	height: auto;
+	margin: 0 auto;
+	overflow: hidden;
+}
+
+.you-like .bg-img {
+	width: 100%;
+	height: 50px;
+	background: url("../images/534044378038627709.png") no-repeat 0 20px;
+}
+
+.you-like h1, .you-like a {
+	height: 25px;
+	font-size: 24px;
+	line-height: 25px;
+	color: #009bff;
+	padding-left: 77px;
+}
+
+.you-like a {
+	float: right;
+}
+
+.you-like ul {
+	height: auto;
+	width: 100%;
+	overflow: hidden;
+	padding: 5px 0;
+}
+
+.you-like ul li {
+	width: 144px;
+	height: 160px;
+	margin-right: 12px;
+	float: left;
+	overflow: hidden;
+	text-align: center;
+	box-shadow: 0px 0px 6px #989898;
+	background: #fff1c9;
+}
+
+.you-like ul li img {
+	width: 175px;
+}
+
+.you-like ul li:nth-child(5n) {
+	margin-right: 0;
+}
+
+.information-meddle-zan {
+	text-align: right;
+	position: relative;
+	top: -35px;
+	right: -238px;
+	width: 50px;
+}
+
+.industry-div {
+	font-size: 16px;
+	color: #26a1ff;
+}
+
+.industry-div p {
+	color: #989898;
+	width: 200px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+/*预约时间*/
+.appointment-info {
+	width: 1000px;
+	margin: 0 auto;
+}
+
+.appointment-info .appointment-title {
+	width: 1000px;
+	height: 50px;
+	margin: 0 auto;
+	background: #2196f3;
+	padding: 8px 36px;
+}
+
+.appointment-info  .fixed-time {
+	width: 1000px;
+	height: auto;
+	background: #fff;
+	padding: 25px 25px 25px 0;
+}
+
+.appointment-info .appointment-ul {
+	
+}
+
+.appointment-info .appointment-ul li {
+	display: inline-block;
+	font-size: 16px;
+	width: 125px;
+	background: #bdd7fb;
+	margin: 14px 15px;
+	position: relative;
+	left: 25px;
+	cursor: pointer;
+	color: #5f5f5f;
+	text-align: center;
+	padding: 8px;
+	transition: 0.3s;
+}
+
+.appointment-info .appointment-ul li:HOVER {
+	background: #92bffd;
+	color: #000;
+}
+
+.appointment-info .appointment-title  .form-addtime .form-control {
+	width: 300px;
+	border-radius: 0;
+	color: #5f5f5f;
+	font-size: 16px;
+}
+
+.sub-time {
+	width: 1000px;
+	text-align: right;
+}
+
+.sub-time input {
+	width: 265px;
+	height: 35px;
+	position: relative;
+	right: 160px;
+	padding: 0 8px;
+	font-size: 14px;
+}
+
+.sub-time button {
+	width: 130px;
+	height: 35px;
+	border: 0;
+	background: #2196F3;
+	color: #fff;
+	font-size: 16px;
+	transition: 0.3s;
+	position: relative;
+	right: 41px;
+	margin-top: 15px;
+}
+
+.sub-time button:HOVER {
+	background: #2c92e2;
+}
+
+.appointment-ul .active {
+	color: #09f;
+	background: #ddd;
+}
+
+.appointment-info .appointment-ul .time-in label {
+	position: absolute;
+	top: -7px;
+	left: -5px;
+	width: 20px;
+	height: 20px;
+	/* border: 1px solid #ccc; */
+	border-radius: 15px;
+	cursor: pointer;
+}
+
+.appointment-info .appointment-ul .time-in label input[type='checkbox']
+	{
+	position: absolute;
+	top: -4px;
+	left: 0px;
+	width: 20px;
+	height: 20px;
+	background: #2196f3;
+	/* border: 1px solid #ccc; */
+	border-radius: 15px;
+	opacity: 0;
+	height: 20px;
+	cursor: pointer;
+}
+
+.start {
+	color: red;
+}
+
+.end {
+	color: green;
+}
+
+/*追加代码--复选框*/
+.checkbox-box {
+	float: right;
+	position: relative;
+	top: -5px;
+	left: 1px;
+}
+
+.checkbox-box .checkbox-input {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	opacity: 0;
+	position: absolute;
+	right: -10px;
+	top: -10px;
+	z-index: 2;
+	background: red;
+	top: -10px;
+	cursor: pointer;
+}
+
+.checkbox-box .checkbox-input:checked+.checkbox-mask .icon-checked {
+	display: inline;
+	color: #000 !important;
+}
+
+.checkbox-box .checkbox-input:hover+.checkbox-mask .icon-checked {
+	color: #666;
+}
+
+.checkbox-box .checkbox-input:disabled+.checkbox-mask .icon-checked {
+	display: none;
+}
+
+.checkbox-box .checkbox-input:disabled+.checkbox-mask .icon-chuyidong {
+	color: #fff;
+	display: block;
+}
+
+.checkbox-box .checkbox-input:disabled+.checkbox-mask {
+	background-color: #a9a9a9 !important;
+}
+
+.checkbox-box .checkbox-mask {
+	width: 20px;
+	height: 20px;
+	background-color: #4dd023;
+	border-radius: 50%;
+	position: absolute;
+	right: 0;
+	top: 0;
+	z-index: 1;
+	box-shadow: 2px 2px 5px #a9a9a9;
+	text-align: center;
+	line-height: 20px;
+}
+
+.checkbox-box .checkbox-input+.checkbox-mask .icon-chuyidong {
+	display: none;
+}
+
+.checkbox-box .checkbox-mask .icon-checked, .checkbox-box .checkbox-mask .icon-chuyidong
+	{
+	color: #fff;
+	position: relative;
+	left: 0px;
+	font-size: 14px;
+	top: 1px;
+}
+
+.checkbox-box .checkbox-mask  .icon-checked:hover {
+	color: #6cb3ff;
+	font-size: 14px;
+}
+
+/* 预约成功提示 */
+.make-info {
+	width: 400px;
+	/* height: 315px; */
+	position: absolute;
+	background: #fff;
+	box-shadow: 2px 2px 3px 1px;
+	z-index: 3;
+	margin-left: 288px;
+}
+
+.make-info .return-close {
+	position: absolute;
+	right: 0;
+	background: #2196f3;
+	color: #fff;
+	width: 40px;
+	height: 40px;
+	border-radius: 25px;
+	padding: 10px 12.5px;
+	font-size: 16px;
+	right: -15px;
+	top: -15px;
+	cursor: pointer;
+}
+
+.make-info p {
+	color: #5a5a5a;
+	position: relative;
+	left: 50px;
+	line-height: 25px;
+	/* text-align: center; */
+	margin-top: 3px;
+}
+
+.make-info .return-success {
+	font-size: 130px;
+	margin: 0 135px;
+	position: absolute;
+	top: 5px;
+	color: #2196f3;
+}
+
+.make-info .suc {
+	text-align: center;
+	margin-top: 148px;
+}
+
+.make-info span {
+	position: relative;
+	top: -12px;
+	left: 295px;
+}
+
+.make-info span a {
+	color: #4c4c4c;
+	font-size: 16px;
+}
+
+.focus-on-success {
+	width: 400px;
+	height: 315px;
+	position: absolute;
+	background: #fff;
+	box-shadow: 2px 2px 3px 1px;
+	z-index: 3;
+	margin-left: 288px;
+}
+
+.focus-on-success .return-close {
+	position: absolute;
+	right: 0;
+	background: #2196f3;
+	color: #fff;
+	width: 40px;
+	height: 40px;
+	border-radius: 25px;
+	padding: 10px 12.5px;
+	font-size: 16px;
+	right: -15px;
+	top: -15px;
+	cursor: pointer;
+}
+
+.focus-on-success p {
+	color: #5a5a5a;
+	position: relative;
+	left: 25px;
+	line-height: 25px;
+}
+
+.focus-on-success .return-success {
+	font-size: 130px;
+	margin: 0 135px;
+	position: absolute;
+	top: 5px;
+	color: #2196f3;
+}
+
+.focus-on-success .suc {
+	text-align: center;
+	margin-top: 162px;
+}
+
+.focus-on-success span {
+	position: relative;
+	top: 8px;
+	left: 295px;
+}
+
+.focus-on-success span a {
+	color: #4c4c4c;
+	font-size: 16px;
+}
+
+#bodyMask {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	z-index: 1;
+	background: rgba(0, 0, 0, .3);
+	display: none;
+}
+
+.focus-on-success {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	margin-left: -180px;
+	margin-top: -125px;
+	height: 250px;
+	width: 360px;
+}
+
+.focus-on-success .return-success {
+	margin: 0 115px;
+}
+
+.select-datetime dl dd em .make-span {
+	color: #00b900;
+	position: absolute;
+	margin-left: -22px;
+	margin-top: 13px;
+}
+
+.close-calendar {
+	display: none;
+	position: absolute;
+	top: 3px;
+	right: -112px;
+	color: #fff;
+	border: 0;
+	background: #ce1b1b;
+	cursor: pointer;
+	width: 100px;
+	height: 30px;
+	text-align: center;
+	padding: 5px 0;
+}
+
+.close-calendar:hover {
+	text-decoration: none;
+	color: #fff;
+}
+
+.form-addtime {
+	position: relative;
+}

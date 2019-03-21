@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qichong.dao.MessageOfflineDao">
+
+	<!-- 查询所有的离线消息并筛选 -->
+	<select id="selectAllByFilter" resultType="MessageOffline" parameterType="com.qichong.model.Filters">
+		SELECT
+			msgoff.id,
+			msgoff.user_id_a AS 'userA.id',
+			msgoff.user_id_b AS 'userB.id',
+			msgoff.message,
+			msgoff.create_time,
+			state.id AS 'state.id',
+			state.state AS 'state.state'
+		FROM message_offline AS msgoff
+		LEFT JOIN state ON state.id = msgoff.state_id
+		<where>
+			<if test="id!=null">AND msgoff.id = #{id}</if>
+			<if test="userIdA!=null">AND msgoff.user_id_a = #{userIdA}</if>
+			<if test="userIdB!=null">AND msgoff.user_id_b = #{userIdB}</if>
+			<if test="stateId!=null">AND state.id = #{stateId}</if>
+		</where>
+		ORDER BY msgoff.create_time DESC
+	</select>
+
+	<!-- 插入一条记录 -->
+	<insert id="insertOne" parameterType="MessageOffline">
+		INSERT INTO message_offline
+		(
+			user_id_a,
+			user_id_b,
+			message,
+			create_time,
+			state_id
+		) VALUES (
+			#{userA.id},
+			#{userB.id},
+			#{message},
+			#{createTime},
+			#{state.id}
+		)
+	</insert>
+
+	<!-- 根据Id删除一条记录 -->
+	<delete id="deleteOne">
+		DELETE FROM message_offline WHERE id = #{id}
+	</delete>
+	
+	<!-- 根据userIdB删除多条记录 -->
+	<delete id="deleteListByUserIdB">
+		DELETE FROM message_offline WHERE user_id_b = #{userId}
+	</delete>
+
+	<!-- 根据多个Id删除多条记录 -->
+	<delete id="deleteList">
+		DELETE FROM message_offline
+		<where>
+			<trim prefix="id IN (" suffix=")" suffixOverrides=",">
+				<foreach collection="ids" item="item">#{item},</foreach>
+			</trim>
+		</where>
+	</delete>
+
+</mapper>

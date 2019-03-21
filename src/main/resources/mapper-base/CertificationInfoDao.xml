@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.qichong.dao.CertificationInfoDao">
+
+	<!-- 查询出所有的信息 -->
+	<select id="selectAll" resultType="CertificationInfo" parameterType="com.qichong.model.Filters">
+		SELECT
+			cert.id,
+			cert.user_id AS `user.id`,
+			users.username AS `user.username`,
+			users.create_time AS `user.create_time`,
+			users.type_id AS `user.type_id`,
+			users.wx_open_id AS `user.wx_open_id`,
+			cert.real_name,
+			cert.identity,
+			cert.identity_picture_a,
+			cert.identity_picture_b,
+			cert.identity_picture_c,
+			cert.create_time,
+			cert.edit_time,
+			cert.reason,
+			cert.form_id,
+			cert.state_id AS `state.id`,
+			state.state AS `state.state`,
+			cert.isAgree
+		FROM certification_info AS cert
+		INNER JOIN users ON (users.id = cert.user_id)
+		INNER JOIN state ON (state.id = cert.state_id)
+		<where>
+			<if test="id != null">AND cert.id = #{id}</if>
+			<if test="userId != null &amp;&amp; userId != 0">AND cert.user_id = #{userId}</if>
+			<if test="notId != null">AND cert.id != #{notId}</if>
+			<if test="stateId != null &amp;&amp; stateId != 1">AND cert.state_id = #{stateId}</if>
+		</where>
+		<if test="stateId != null &amp;&amp; stateId != 4">ORDER BY cert.edit_time DESC</if>
+		<if test="stateId != null &amp;&amp; stateId == 4">ORDER BY cert.create_time DESC</if>
+		LIMIT #{limit},#{offset}
+	</select>
+	
+	<!-- 查询出所有的信息 -->
+	<select id="selectAllCount" resultType="java.lang.Integer" parameterType="com.qichong.model.Filters">
+		SELECT count(1) FROM certification_info AS cert
+		INNER JOIN users ON (users.id = cert.user_id)
+		INNER JOIN state ON (state.id = cert.state_id)
+		<where>
+			<if test="userId != null &amp;&amp; userId != 0">AND cert.user_id = #{userId}</if>
+			<if test="stateId != null &amp;&amp; stateId != 1">AND cert.state_id = #{stateId}</if>
+		</where>
+	</select>
+
+	<!-- 插入一条信息 -->
+	<insert id="insertOne" parameterType="CertificationInfo"  useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO certification_info (
+			user_id,
+			real_name,
+			identity,
+			identity_picture_a,
+			identity_picture_b,
+			identity_picture_c,
+			create_time,
+			edit_time,
+			form_id,
+			state_id,
+			isAgree
+		) VALUES (
+			#{user.id},
+			#{realName},
+			#{identity},
+			#{identityPictureA},
+			#{identityPictureB},
+			#{identityPictureC},
+			#{createTime},
+			NULL,
+			#{formId},
+			'4',
+			0
+		);
+	</insert>
+
+	<!-- 更新一条信息 -->
+	<update id="updateOne" parameterType="CertificationInfo" >
+		UPDATE certification_info
+		 <set>
+		 	<if test="realName != null">real_name = #{realName},</if>
+		 	<if test="identity != null">identity = #{identity},</if>
+		 	<if test="identityPictureA.name != null">identity_picture_a = #{identityPictureA},</if>
+		 	<if test="identityPictureB.name != null">identity_picture_b = #{identityPictureB},</if>
+		 	<if test="identityPictureC.name != null">identity_picture_c = #{identityPictureC},</if>
+		 	<if test="createTime != null">create_time = #{createTime},</if>
+		 	<if test="editTime != null">edit_time = #{editTime},</if>
+		 	<if test="reason != null">reason = #{reason},</if>
+		 	<if test="formId != null">form_id = #{formId},</if>
+		 	<if test="state != null &amp;&amp; state.id != null">state_id = #{state.id},</if>
+		 </set>
+		WHERE id = #{id}
+	</update>
+
+	<!-- 删除一条信息 -->
+	<delete id="deleteOne">
+		DELETE FROM certification_info WHERE id = #{id}
+	</delete>
+	<!-- 查询没有发布广告的已经认证用户 -->
+	<select id="selectUserByadPublic" parameterType="com.qichong.model.Filters" resultType="CertificationInfo">
+		SELECT 
+		c.id as id,
+		c.user_id as `user.id`,
+		c.real_name as `realName`,
+		c.identity as `identity`
+		from certification_info as c
+		LEFT JOIN users u on u.id=c.user_id
+		where c.user_id not in(select user_id from ad_public)
+		LIMIT #{limit},#{offset}
+	</select>
+</mapper>

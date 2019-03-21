@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.qichong.dao.AdPrivateDao">
+
+	<!-- 查询所有【需求搜索位】广告 -->
+	<select id="selectToolsSearchListAd" resultType="com.qichong.model.adprivate.ToolsSearchListAd">
+		SELECT
+			tinfo.id,
+			tinfo.user_id,
+			tinfo.picture1,
+			tinfo.tool_name,
+			tinfo.tool_description,
+			tinfo.address,
+			tinfo.address_name,
+			tinfo.create_time,
+			tinfo.update_time,
+			tinfo.tool_rent
+		FROM
+			ad_private AS adp
+		INNER JOIN tools_info AS tinfo ON tinfo.id = adp.open_id
+		WHERE
+			adp.state_id = 1
+		AND adp.ad_type_id = 2
+		AND adp.open_type = 'OPEN_TOOLS_INFO';
+	</select>
+	
+	<!-- 查询所有【需求搜索位】广告 -->
+	<select id="selectDemandSearchListAd" resultType="com.qichong.model.adprivate.DemandSearchListAd">
+		SELECT
+			dinfo.id,
+			dinfo.user_id,
+			dinfo.content,
+			dinfo.picture,
+			dinfo.contact,
+			dinfo.address,
+			dinfo.address_name,
+			dinfo.release_time,
+			dinfo.reward
+		FROM
+			ad_private AS adp
+		INNER JOIN demand_info AS dinfo ON dinfo.id = adp.open_id
+		WHERE
+			adp.state_id = 1
+		AND adp.ad_type_id = 2
+		AND adp.open_type = 'OPEN_DEMAND_INFO';
+	</select>
+	
+	<!-- 查询所有【团体搜索位】广告 -->
+	<select id="selectGroupSearchListAd" resultType="com.qichong.model.adprivate.GroupSearchListAd">
+		SELECT
+			ginfo.id,
+			ginfo.user_id,
+			ginfo.group_name,
+			ginfo.picture,
+			ginfo.introduce,
+			ginfo.personnel_cost,
+			itype.industry_code,
+			itype.industry_name,
+			regions.region_code,
+			regions.region_name
+		FROM
+			ad_private AS adp
+		INNER JOIN group_info AS ginfo ON ginfo.id = adp.open_id
+		INNER JOIN industry_type AS itype ON itype.industry_code = ginfo.industry_code
+		INNER JOIN regions ON regions.region_code = ginfo.region_code
+		WHERE
+			adp.state_id = 1
+		AND adp.ad_type_id = 2
+		AND adp.open_type = 'OPEN_GROUP_INFO';
+	</select>
+	
+	<!-- 查询所有【企业热门】广告 -->
+	<select id="selectEnterpriseHotsAd" resultType="AdPrivate">
+		SELECT
+			adp.id,
+			adp.open_id,
+			adp.title,
+			adp.content,
+			adp.cover_picture,
+			adp.state_id
+		FROM
+			ad_private AS adp
+		WHERE
+			adp.state_id = 1
+		AND adp.ad_type_id = 6
+		AND open_type = 'OPEN_ENTERPRISE_INFO';
+	</select>
+	
+	<!-- 查询所有【企业搜索位】广告 -->
+	<select id="selectEnterpriseSearchListAd" resultType="com.qichong.model.adprivate.EnterpriseSearchListAd">
+		SELECT
+			einfo.user_id,
+			einfo.enterprise_name,
+			einfo.logo,
+			einfo.introduce,
+			itype.industry_code,
+			itype.industry_name,
+			regions.region_code,
+			regions.region_name
+		FROM
+			ad_private AS adp
+		INNER JOIN enterprise_info AS einfo ON einfo.user_id = adp.open_id
+		INNER JOIN industry_type AS itype ON itype.industry_code = einfo.industry_code
+		INNER JOIN regions ON regions.region_code = einfo.region_code
+		WHERE
+			adp.ad_type_id = 2
+		AND open_type = 'OPEN_ENTERPRISE_INFO';
+	</select>
+	
+	<!-- 查询所有【个人搜索位】广告 -->
+	<select id="selectPersonalSearchListAd" resultType="com.qichong.model.adprivate.PersonalSearchListAd">
+		SELECT
+			uinfo.user_id,
+			uinfo.nick_name,
+			uinfo.avatar,
+			uinfo.score,
+			uinfo.hourly_wage,
+			jobinfo.job_code,
+			jobinfo.job_name,
+			regions.region_code,
+			regions.region_name,
+			uinfo.address
+		FROM
+			ad_private AS adp
+		INNER JOIN user_info AS uinfo ON uinfo.user_id = adp.open_id
+		INNER JOIN job_info AS jobinfo ON jobinfo.job_code = uinfo.job_code
+		INNER JOIN regions ON regions.region_code = uinfo.region_code
+		WHERE
+			adp.state_id = 1
+		AND adp.ad_type_id = 2
+		AND open_type = 'OEPN_PERSONAL_INFO';
+	</select>
+
+	<!-- 查询所有【广告】信息并且筛选 -->
+	<select id="selectAllByFilter" resultType="AdPrivate" parameterType="com.qichong.model.Filters">
+		<!-- SELECT * FROM ( -->
+			SELECT
+				ad_private.id,
+				ad_type.id AS 'adType.id',
+				ad_type.`name` AS 'adType.name',
+				ad_private.title,
+				ad_private.content,
+				ad_private.offer_text,
+				ad_private.address,
+				ad_private.address_name,
+				ad_private.latitude,
+				ad_private.longitude,
+				ad_private.open_url,
+				ad_private.open_type,
+				ad_private.open_id,
+				ad_private.open_page,
+				ad_private.open_we_app_id,
+				ad_private.open_we_original_id,
+				ad_private.open_we_path,
+				ad_private.open_we_data,
+
+				regions.region_code AS 'filter_region.region_code',
+				regions.region_name AS 'filter_region.region_name',
+				industry_type.industry_code AS 'filter_industry.industry_code',
+				industry_type.industry_name AS 'filter_industry.industry_code',
+				job_info.job_code AS 'filter_job.job_code',
+				job_info.job_name AS 'filter_job.job_name',
+				shared_types.`code` AS 'filter_shared_type.code',
+				shared_types.`name` AS 'filter_shared_type.name',
+
+				ad_private.begin_time,
+				ad_private.end_time,
+				ad_private.cover_picture,
+				ad_private.qr_code_picture1,
+				ad_private.qr_code_name1,
+				ad_private.qr_code_picture2,
+				ad_private.qr_code_name2,
+				ad_private.qr_code_picture3,
+				ad_private.qr_code_name3,
+				ad_private.qr_code_show_num,
+				ad_private.picture1,
+				ad_private.picture2,
+				ad_private.picture3,
+				ad_private.display_order,
+				state.id AS 'state.id',
+				state.state AS 'state.state'
+				<!-- 如果筛选了经纬度，则计算距离 -->
+				<if test="latitude != null &amp;&amp; longitude!=null">
+					<![CDATA[,
+	 				ROUND(
+				        6378.138 * 2 * ASIN(
+				            SQRT(
+				                POW(
+				                    SIN(
+				                        (
+				                            #{latitude} * PI() / 180 - ad_private.latitude * PI() / 180
+				                        ) / 2
+				                    ),
+				                    2
+				                ) + COS(#{latitude} * PI() / 180) * COS(ad_private.latitude * PI() / 180) * POW(
+				                    SIN(
+				                        (
+				                            #{longitude} * PI() / 180 - ad_private.longitude * PI() / 180
+				                        ) / 2
+				                    ),
+				                    2
+				                )
+				            )
+				        ) * 1000
+					) AS 'distance_number'
+					]]>
+				</if>
+			FROM ad_private
+			INNER JOIN ad_type ON (ad_type.id = ad_private.ad_type_id)
+			INNER JOIN state ON (state.id = ad_private.state_id)
+			LEFT JOIN regions ON regions.region_code = ad_private.filter_region_code
+			LEFT JOIN industry_type ON industry_type.industry_code = ad_private.filter_industry_code
+			LEFT JOIN job_info ON job_info.job_code = ad_private.filter_job_code
+			LEFT JOIN shared_types ON shared_types.`code` = ad_private.filter_shared_type_code
+			<where>
+				<!-- 根据Id查询 -->
+				<if test="id != null">AND ad_private.id = #{id}</if>
+				<!-- 根据广告类型id查询 -->
+				<if test="adTypeId!=null">AND ad_type.id = #{adTypeId}</if>
+				<!-- 根据多个广告类型id查询 -->
+				<if test="adTypeIds!=null">AND ad_type.id IN (${adTypeIds})</if>
+				<!-- 根据状态id查询 -->
+				<if test="stateId!=null">AND state.id = #{stateId}</if>
+				<!-- 根据open_type筛选 -->
+				<if test="openType!=null">AND open_type = #{openType}</if>
+				
+				<!-- 根据code查询 -->
+				<if test="regionCode!=null">AND filter_region_code = #{regionCode}</if>
+				<if test="industryCode!=null">AND filter_industry_code = #{industryCode}</if>
+				<if test="jobCode!=null">AND filter_job_code = #{jobCode}</if>
+				<if test="sharedCode!=null">AND filter_shared_type_code = #{sharedCode}</if>
+
+			</where>
+			<!-- 排序 -->
+			<!-- <trim prefix="ORDER BY" suffixOverrides=",">
+				<if test="orderCreateTime != null">adinfo.time ${orderCreateTime},</if>
+			</trim> -->
+		<!--) AS s
+		<where>
+			<if test="distance != null"><![CDATA[s.distance_number < #{distance}]]></if>
+		</where>
+		<trim prefix="ORDER BY" suffixOverrides=",">
+			<if test="orderDistance != null">s.distance_number ${orderDistance},</if>
+		</trim> -->
+		<if test="pageNum!=null">LIMIT #{limit},#{offset}</if>
+	</select>
+	
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qichong.dao.WalletsDao">
+
+	<!-- 根据userId查询 -->
+	<select id="selectOneByUserId" parameterType="java.lang.Integer" resultType="Wallets">
+		SELECT
+			id,
+			user_id,
+			balance,
+			margin
+		FROM
+			wallets
+		WHERE
+			user_id = #{userId}
+	</select>
+
+	<!-- 更新一条数据 -->
+	<update id="updateOne" parameterType="Wallets">
+		UPDATE wallets
+		<set>
+			<if test="balance != null">balance = #{balance},</if>
+			<if test="plusBalance != null">balance = balance + #{plusBalance},</if>
+			<if test="lessBalance != null">balance = balance - #{lessBalance},</if>
+			<if test="margin != null">margin = #{margin},</if>
+		</set>
+		<where>
+			<if test="id!=null"> AND id = #{id}</if>
+			<if test="userId!=null">AND user_id = #{userId}</if>
+			<if test="id==null&amp;&amp;userId==null ">AND 1 = 2</if>
+		</where>
+	</update>
+
+	<!-- 插入一条新数据 -->
+	<insert id="insertOne" parameterType="Wallets">
+		<trim prefix="INSERT INTO wallets (" suffix=")" suffixOverrides=",">
+			user_id,
+			<if test="balance != null">balance,</if>
+			<if test="margin != null">margin,</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			#{userId},
+			<if test="balance != null">#{balance},</if>
+			<if test="margin != null">#{margin},</if>
+		</trim>
+	</insert>
+
+</mapper>

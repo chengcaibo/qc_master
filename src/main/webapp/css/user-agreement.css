@@ -1,0 +1,43 @@
+
+h1,h2,h3,h4,h5,h6{
+    margin:0;
+}
+.user-agreement-prompt{
+    width:1200px;
+    margin:50px auto;
+    background:#fff;
+    padding:50px;
+    box-shadow: 0 0 5px #ccc;
+}
+ p{
+    font-size:14px;
+    color: #444;
+     padding:0 20px;
+     line-height:25px;
+     margin-bottom: 30px;
+}
+.user-agreement-prompt h1{
+    color:#333;
+    font-size:20px;
+    font-weight: bold;
+    margin-bottom:20px;
+    text-align: center;
+}
+
+.user-agreement-prompt h2{
+    color:#333;
+    font-size:18px;
+    font-weight: bold;
+margin-bottom:5px;
+text-align:left;
+}
+
+
+
+
+
+
+
+
+
+

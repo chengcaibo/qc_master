@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qichong.dao.LikesInfoDao">
+	<select id="likesInfoCount" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM likes_info WHERE user_id_b = #{userId}
+	</select>
+	<insert id="insertLikesInfo" parameterType="LikesInfo">
+		INSERT INTO `likes_info`
+		(`user_id_a`, `user_id_b`)
+		VALUES
+		(#{userIdA.id}, #{userIdB.id})
+	</insert>
+	<select id="likesInfoUserACount" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM likes_info
+		WHERE user_id_a = #{userIdA}
+		AND user_id_b = #{userIdB}
+	</select>
+
+</mapper>

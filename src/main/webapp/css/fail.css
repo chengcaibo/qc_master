@@ -1,0 +1,61 @@
+﻿*{
+	margin:0;
+	padding:0;
+	border:0;
+	text-decoration: none;
+	color:#333;
+}
+body{
+	background:#f5f5f5;
+}
+.success-includes{
+	width:1000px;
+	height:700px;
+	position:absolute;
+	left:calc(50% - 500px);
+	top:calc(50% - 350px);
+	background:#fff;
+}
+.success-includes .success-includes-headings{
+	height:100px;
+	width:100%;
+	text-align: center;
+	line-height:100px;
+	font-size:60px;
+	color:red;
+}
+.success-includes .success-includes-content{
+	height:100px;
+	text-align: center;
+	line-height: 100px;
+}
+.success-includes .success-includes-img{
+	width:256px;
+	height:256px;
+	margin:0 auto;
+	text-align: center;
+	background:red;
+	line-height: 236px;
+	border-radius: 50%;
+	font-size:200px;
+	font-family:"微软雅黑";
+}
+.success-includes .success-includes-img .success-includes-img-p{
+	color:#fff;
+}
+.success-includes .return{
+	display: block;
+	width:200px;
+	height:50px;
+	border:1px solid #ccc;
+	text-align: center;
+	line-height: 50px;
+	margin:0 auto;
+	margin-top:150px;
+	border-radius:10px;
+	background:aliceblue;
+	box-shadow: 0px 1px 1px #333;
+}
+.success-includes .return:hover{
+	box-shadow: none;
+}

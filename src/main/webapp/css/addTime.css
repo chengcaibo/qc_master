@@ -1,0 +1,107 @@
+﻿* {
+	margin: 0 auto;
+}
+
+.time {
+	margin: 150px 0;
+	margin-bottom: 150px;
+}
+
+.timeAll {
+	width: 800px;
+	-moz-box-shadow: 2px 2px 5px #333333;
+	-webkit-box-shadow: 2px 2px 5px #333333;
+	box-shadow: 2px 2px 5px #333333;
+	margin: 100px auto;
+	padding: 50px 100px
+}
+
+.timeAll  h3 {
+	font-size: 22px;
+	border-bottom: 1px solid #aaa;
+	padding: 15px 0;
+	position: relative;
+	top: -40px;
+}
+
+.timeAll input[type="text"] {
+	width: 280px;
+	height: 35px;
+	padding: 0 10px;
+	font-size: 12px;
+	margin: 10px 0;
+	color: #5d5a5a;
+}
+
+.btn_time {
+	text-align: right;
+	padding: 20px 0px;
+}
+
+/* .btn {
+	width: 120px;
+	height: 35px;
+	border: 0;
+	transition: 1s;
+	border-radius: 5px;
+	color: #fff;
+	cursor: pointer;
+	float: right;
+	margin: 0 0px;
+}
+ */
+.btn input[type="button"] {
+	background: #b9b9b98c;
+	border: 0;
+	padding: 5px 10px;
+	border-radius: 2px;
+	color: #fff;
+	transition: 1s;
+}
+
+.btn input[type="button"]:HOVER {
+	background: #7170708c;
+	color: #fff;
+}
+
+.addSub {
+	width: 130px;
+	height: 40px;
+	background: #03A9F4;
+	border: 0;
+	border-radius: 3px;
+	color: #fff;
+	padding: 0 0;
+	position: relative;
+	left: 305px;
+	top: 18px;
+	margin-bottom: 20px;
+	transition: 1s;
+}
+
+.addSub:HOVER {
+	background: #057aaf;
+}
+
+.del {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.removeclass {
+	font-size: 30px;
+	padding: 0 5px;
+	color: #2196F3;
+	position: relative;
+	top: 4px;
+	left: 6px;
+	text-decoration: none;
+}
+
+.removeclass:HOVER {
+	text-decoration: none;
+	color: #095fa5;
+}

@@ -1,0 +1,111 @@
+
+.person-big-div {
+	width: 1200px;
+	margin: 60px auto;
+	padding-bottom: 30px;
+}
+
+.person-li {
+	margin-top: 30px;
+    background: #fff;
+    /* margin: 19px; */
+    padding-bottom: 22px;
+    padding-top: 10px;
+}
+
+.person-big-div .person-li .pseron-content img {
+	width: 120px;
+	height: 120px;
+}
+
+.person-info {
+	    display: inline-block;
+    position: relative;
+    top: 33px;
+    left: 20px;
+    color: #656565;
+}
+
+.pseron-content{
+	    padding: 0 20px;
+}
+
+.person-info P {
+	
+}
+
+.person-info p span {
+	
+}
+
+.person-info-introduce {
+	position: absolute;
+}
+
+.person-info-num {
+	    width: 200px;
+    float: right;
+    position: relative;
+    top: 42px;
+    right: 70px;
+    font-size: 20px;
+    color: #FF9800;
+}
+
+.person-border {
+	    border-left: 1px solid #bbb;
+    height: 100px;
+    float: right;
+    position: relative;
+    top: 25px;
+    right: 335px;
+}
+
+.check-h4 {
+	width: 1200px;
+	margin: 0 auto;
+	border-bottom: 1px solid #ccc;
+}
+
+.check-h4 h4 {
+font-size: 30px;
+    color: #585858;
+}
+
+.person-info .person-on {
+	margin-left: 40px;
+}
+
+.check-return {
+	text-align: right;
+	position: relative;
+	top: -37px;
+	left: 95px;
+	width: 1200px;
+	cursor: pointer;
+}
+
+.check-return h4 {
+	cursor: pointer;
+}
+
+.check-return h4 a {
+	text-decoration: none;
+	position: relative;
+	right: 100px;
+	color: #8e8e8e;
+}
+
+.seach-in-ul {
+	display: flow-root;
+}
+
+.person-info-introduce p{
+	    text-align: left;
+    position: relative;
+    left: 505px;
+    top: -105px;
+    color: #656565;
+    font-size: 12px;
+    width: 280px;
+}

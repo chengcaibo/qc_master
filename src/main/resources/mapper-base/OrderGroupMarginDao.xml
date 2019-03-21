@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qichong.dao.OrderGroupMarginDao">
+	
+	<!-- 根据groupId查询 -->
+	<select id="selectByGroupId" resultType="OrderGroupMargin">
+		SELECT * FROM order_group_margin
+		WHERE group_id = #{groupId}
+	</select>
+
+	<!-- 根据groupId查询已支付且未退款的保证金 -->
+	<select id="selectNoRefundByGroupId" resultType="OrderGroupMargin">
+		SELECT * FROM order_group_margin
+		WHERE group_id = #{groupId}
+			  AND refunded = 0
+			  AND transaction_id IS NOT NULL
+	</select>
+
+	<!-- 根据groupId查询未支付的保证金 -->
+	<select id="selectNoPaymentByGroupId" resultType="OrderGroupMargin">
+		SELECT * FROM order_group_margin
+		WHERE group_id = #{groupId} AND transaction_id IS NULL
+		LIMIT 1
+	</select>
+	
+	<!-- 更新一条数据 -->
+	<update id="updateOne">
+		UPDATE order_group_margin
+		<set>
+			<if test="refundId != null">refundId = #{refund_id},</if>
+			<if test="refunded != null">refunded = #{refunded},</if>
+			<if test="transactionId != null">transaction_id = #{transactionId},</if>
+		</set>
+		<where>
+			<if test="groupId != null">AND group_id = #{groupId}</if>
+			<if test="orderId != null">AND order_id = #{orderId}</if>
+			<!-- 防止两个参数都为空 -->
+			<if test="groupId == null &amp;&amp; orderId == null">AND 1 = 2</if>
+		</where>
+	</update>
+
+	<!-- 插入一条数据 -->
+	<insert id="insertOne">
+		INSERT INTO order_group_margin (
+			group_id,
+			order_id,
+			prepay_id,
+			margin,
+			offer_money,
+			offer_content
+		) VALUES (
+			#{groupId},
+			#{orderId},
+			#{prepayId},
+			#{margin},
+			#{offerMoney},
+			#{offerContent}
+		)
+	</insert>
+
+</mapper>

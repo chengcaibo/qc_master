@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qichong.dao.OrderUserMarginDao">
+	
+	<!-- 根据userId查询 -->
+	<select id="selectByUserId" resultType="OrderUserMargin">
+		SELECT * FROM order_user_margin
+		WHERE user_id = #{userId}
+	</select>
+
+	<!-- 根据userId查询未退款的保证金 -->
+	<select id="selectNoRefundByUserId" resultType="OrderUserMargin">
+		SELECT * FROM order_user_margin
+		WHERE user_id = #{userId} AND refunded = 0
+		LIMIT 1
+	</select>
+	
+	<!-- 更新一条数据 -->
+	<update id="updateOne">
+		UPDATE order_user_margin
+		<set>
+			<if test="refundId != null">refund_id = #{refundId},</if>
+			<if test="refunded != null">refunded = #{refunded},</if>
+			<if test="transactionId != null">transaction_id = #{transactionId},</if>
+		</set>
+		<where>
+			<if test="userId != null">AND user_id = #{userId}</if>
+			<if test="orderId != null">AND order_id = #{orderId}</if>
+			<!-- 防止两个参数都为空 -->
+			<if test="userId == null &amp;&amp; orderId == null">AND 1 = 2</if>
+		</where>
+	</update>
+
+	<!-- 插入一条数据 -->
+	<insert id="insertOne">
+		INSERT INTO order_user_margin (
+			user_id,
+			order_id,
+			prepay_id,
+			<if test="offerMoney != null">offer_money,</if>
+			<if test="offerContent != null">offer_content,</if>
+			margin
+		) VALUES (
+			#{userId},
+			#{orderId},
+			#{prepayId},
+			<if test="offerMoney != null">#{offerMoney},</if>
+			<if test="offerContent != null">#{offerContent},</if>
+			#{margin}
+		)
+	</insert>
+
+</mapper>

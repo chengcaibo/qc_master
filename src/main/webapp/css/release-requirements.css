@@ -1,0 +1,51 @@
+﻿*{
+	margin:0;
+	padding:0;
+	border:0;
+	outline: none;
+}
+body{
+	background:#f5f5f5;
+}
+.release-requirements{
+	width:128px;
+	height:44px;
+	margin:0 auto;
+	margin-top:20px;
+	margin-bottom:20px;
+}
+.release-requirements-interface{
+	width:1000px;
+	background:#fff;
+	margin:0 auto;
+	padding-bottom: 20px;
+}
+.release-requirements-interface .release-requirements-interface-content{
+	width:600px;
+	height:200px;
+	padding-top:20px;
+	margin:0 auto;
+}
+.release-requirements-interface-content .release-requirements-interface-content-labelling{
+	text-align:left;
+	margin-bottom:20px;
+}
+.release-requirements-interface-content .release-requirements-interface-content-text{
+ 	width:560px;
+ 	height:60px;
+ 	border:1px solid #000;
+ 	display: block;
+ 	padding:20px;
+ 	font-size:18px;
+ }
+.release-requirements-posted{
+	display: block;
+	width:100px;
+	height:30px;
+	background:orange;
+	text-align: center;
+	line-height: 30px;
+	text-decoration: none;
+	color:#fff;
+	margin:0 auto;
+}

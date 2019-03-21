@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.qichong.dao.ReservationDao">
+	<insert id="insertReservation" parameterType="Reservation">
+			INSERT INTO `reservation` (
+					`ent_id`,
+					`location_id`,
+					`creation_time`,
+					`end_time`
+			)
+			VALUES
+				(
+					#{user.id},
+					#{location.id},
+					#{creationTime},
+					#{endTime}
+				)
+	</insert>
+	<delete id="deleteLocation" parameterType="java.lang.Integer">
+		DELETE FROM `reservation` WHERE location_id=#{loctionId}
+	</delete>
+	<select id="byLocationIdCount" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM reservation WHERE location_id = 2
+	</select>
+	<select id="selectReservation" resultType="Reservation">
+		SELECT 
+			rt.id,
+			rt.ent_id as 'user.id',
+			rt.creation_time,
+			rt.location_id,
+			ei.enterprise_name as 'enterpriseInfo.enterpriseName',
+			dl.`name` as 'location.name'
+		FROM reservation rt 
+		INNER JOIN enterprise_info ei ON(rt.ent_id = ei.user_id)
+		INNER JOIN desk_location dl ON (rt.location_id=dl.id)
+	</select>
+	
+</mapper>

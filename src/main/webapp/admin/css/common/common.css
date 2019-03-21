@@ -1,0 +1,36 @@
+* {
+	outline: none;
+	text-decoration: none;
+	/*box-sizing: border-box;*/
+}
+
+body {
+	min-width: 1024px;
+	overflow: hidden;
+	background-color: #f0f0f0;
+}
+
+button:disabled {
+	background-color: #ccc !important;
+}
+
+.layui-nav-bar {
+	background-color: #0099ff;
+}
+
+.layui-body {
+	padding: 10px 10px;
+}
+
+.body-title {
+	margin: 10px 0;
+}
+/* 全屏layui body部分 */
+.layui-layout-admin .layui-body {
+	top: 60px;
+	bottom: 0px;
+}
+
+.layui-card {
+	margin-bottom: 10px;
+}

@@ -1,0 +1,18 @@
+.btn-u-lg, a.btn-u-lg {
+    background-color: #FFCF00;
+    border-color: #EBC000;
+}
+
+.btn-u:hover {
+    background-color: #FFCF00 !important;
+    border-color: #EBC000 !important;
+    opacity: 0.6;
+}
+
+.copyright a {
+    color: #EBC000 !important;
+}
+
+#appicon-bg {
+    background-color: transparent !important;
+}

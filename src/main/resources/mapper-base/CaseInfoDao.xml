@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		
+<mapper namespace="com.qichong.dao.CaseInfoDao">
+
+	<!-- 根据id查询数据 -->
+	<select id="selectOneByCaseId" resultType="CaseInfo">
+		SELECT
+		id,
+		user_id,
+		case_name,
+		start_time,
+		end_time,
+		client_name,
+		client_telephone,
+		case_content,
+		picture,
+		client_address
+		FROM case_info
+		WHERE id = #{caseId}
+	</select>
+
+	<!-- 根据UserId查询成功案例 -->
+	<select id="selectOneByUserId" resultType="CaseInfo">
+		SELECT
+			id,
+			user_id as 'user.id',
+			case_name,
+			start_time,
+			end_time,
+			client_name,
+			client_telephone,
+			case_content,
+			picture,
+			client_address
+		FROM case_info
+		WHERE user_id = #{userId}
+	</select>
+
+	<update id="updateOne" parameterType="CaseInfo">
+		UPDATE case_info
+		<set>
+			<if test="caseName != null">case_name = #{caseName},</if>
+			<if test="startTime != null">start_time = #{startTime},</if>
+			<if test="endTime != null">end_time = #{endTime},</if>
+			<if test="clientName != null">client_name = #{clientName},</if>
+			<if test="clientTelephone != null">client_telephone = #{clientTelephone},</if>
+			<if test="caseContent != null">case_content = #{caseContent},</if>
+			<if test="(picture != null)&amp;&amp;(picture.name != null)">picture = #{picture},</if>
+			<if test="clientAddress != null">client_address = #{clientAddress},</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+
+	<!-- 新增成功案例信息 -->
+	<insert id="insertOne" parameterType="CaseInfo">
+		INSERT INTO case_info
+		(
+			user_id,
+			case_name,
+			start_time,
+			end_time,
+			client_name,
+			client_telephone,
+			case_content,
+			picture,
+			client_address
+		) VALUES (
+			#{user.id},
+			#{caseName},
+			#{startTime},
+			#{endTime},
+			#{clientName},
+			#{clientTelephone},
+			#{caseContent},
+			#{picture},
+			#{clientAddress}
+		)
+	</insert>
+
+	<!-- 删除案例 -->
+	<delete id="deleteOne">
+		DELETE FROM case_info WHERE id=#{id}
+	</delete>
+
+	<!-- 判断在caseInfo表里userId的总数 -->
+	<select id="caseUserIdCount" resultType="Integer">
+		SELECT COUNT(user_id) FROM case_info WHERE user_id = #{user.id}
+	</select>
+
+</mapper>

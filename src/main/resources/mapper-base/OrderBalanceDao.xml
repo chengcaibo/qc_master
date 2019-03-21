@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qichong.dao.OrderBalanceDao">
+
+	<!-- 根据orderId查询订单 -->
+	<select id="selectByOrderId" resultType="OrderBalance">
+		SELECT * FROM order_balance AS ob
+		WHERE ob.order_id = #{orderId}
+		LIMIT 1
+	</select>
+
+	<!-- 插入一条信息 -->
+	<insert id="insertOne" parameterType="OrderBalance">
+		INSERT INTO order_balance (
+			user_id,
+			order_id,
+			prepay_id,
+			money
+		) VALUES (
+			#{userId},
+			#{orderId},
+			#{prepayId},
+			#{money}
+		)
+	</insert>
+	
+</mapper>

@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC " -//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.qichong.dao.DemandInfoDao">
+	
+	<!-- 查询所有【需求】信息并且筛选 -->
+	<select id="selectAllByFilter" resultType="DemandInfo" parameterType="com.qichong.model.Filters">
+		SELECT * FROM (
+			SELECT
+				<if test="fieldId!=null">(dinfo.user_id = ${fieldId}) AS 'isMySubmit',</if>
+				dinfo.id,
+				<!-- users 信息 -->
+				users.id AS 'user.id',
+				users.username AS 'user.username',
+				users.type_id AS 'user.type_id',
+				<!-- userInfo 信息 -->
+				uinfo.id AS 'userInfo.id',
+				uinfo.avatar AS 'userInfo.avatar',
+				uinfo.nick_name AS 'userInfo.nick_name',
+				uinfo.real_name AS 'userInfo.real_name',
+				uinfo.introduce AS 'userInfo.introduce',
+				uinfo.telephone AS 'userInfo.telephone',
+				uinfo.address AS 'userInfo.address',
+				<!-- enterpriseInfo 信息 -->
+				einfo.id AS 'enterpriseInfo.id',
+				einfo.logo AS 'enterpriseInfo.logo',
+				einfo.enterprise_name AS 'enterpriseInfo.enterprise_name',
+				einfo.telephone AS 'enterpriseInfo.telephone',
+				dinfo.latitude,
+				dinfo.longitude,
+				dinfo.content,
+				dinfo.picture,
+				dinfo.reward,
+				dinfo.end_reward,
+				dinfo.address,
+				dinfo.release_time,
+				dinfo.end_time,
+				dinfo.phone,
+				dinfo.contact,
+				dinfo.note,
+				dinfo.address_name,
+				dinfo.state_id AS 'state.id',
+				dinfo.user_type,
+				stype.code as 'sharedType.code',
+				stype.name as 'sharedType.name'
+				<!-- 如果筛选了经纬度，则计算距离 -->
+				<if test="latitude != null &amp;&amp; longitude!=null">
+					<![CDATA[,
+	 				ROUND(
+				        6378.138 * 2 * ASIN(
+				            SQRT(
+				                POW(
+				                    SIN(
+				                        (
+				                            #{latitude} * PI() / 180 - dinfo.latitude * PI() / 180
+				                        ) / 2
+				                    ),
+				                    2
+				                ) + COS(#{latitude} * PI() / 180) * COS(dinfo.latitude * PI() / 180) * POW(
+				                    SIN(
+				                        (
+				                            #{longitude} * PI() / 180 - dinfo.longitude * PI() / 180
+				                        ) / 2
+				                    ),
+				                    2
+				                )
+				            )
+				        ) * 1000
+					) AS 'distance_number'
+					]]>
+				</if>
+			FROM demand_info AS dinfo
+			INNER JOIN users ON (users.id = dinfo.user_id)
+			LEFT JOIN user_info AS uinfo ON (uinfo.user_id = users.id)
+			LEFT JOIN enterprise_info AS einfo ON (einfo.user_id = users.id)
+			LEFT JOIN shared_types AS stype ON (stype.code = dinfo.shared_type_code)
+			LEFT JOIN state ON (state.id = dinfo.state_id)
+			<where>
+				<!-- 根据Id查询 -->
+				<if test="demandId != null">AND dinfo.id = #{demandId}</if>
+				<if test="userId != null">AND users.id = #{userId}</if>
+				<!-- 如果筛选了经纬度，则没有经纬度的需求将不会被搜索到 -->
+				<if test="latitude != null">AND dinfo.latitude IS NOT NULL</if>
+				<if test="longitude!=null">AND dinfo.longitude IS NOT NULL</if>
+				<!-- 筛选状态 -->
+				<if test="stateId !=null">
+					AND dinfo.state_id =#{stateId}
+				</if>
+				<!-- 关键字模糊搜索，搜索范围：需求内容，需求地址，备注，详细地址  -->
+				<if test="keyword != null">
+					<![CDATA[AND (
+						dinfo.content LIKE '%${keyword}%' OR
+						dinfo.note LIKE '%${keyword}%' OR
+						dinfo.address LIKE '%${keyword}%' OR
+						dinfo.address_name LIKE '%${keyword}%'
+					)]]>
+				</if>
+				<!-- 酬劳区间筛选 -->
+				<if test="beginReward!=null &amp;&amp; endReward!=null">AND dinfo.reward BETWEEN #{beginReward} AND #{endReward}</if>
+				<!-- 酬劳仅看可面议 -->
+				<if test="onlyNegotiable!=null &amp;&amp; onlyNegotiable==true">AND (dinfo.reward = 0 OR dinfo.end_reward = 0)</if>
+				<!-- 酬劳不看可面议 -->
+				<if test="onlyNotNegotiable!=null &amp;&amp; onlyNotNegotiable==true">AND (dinfo.reward > 0 AND dinfo.end_reward > 0)</if>
+				<!-- 共享类型筛选 -->
+				<if test="sharedCode!=null">AND stype.code = #{sharedCode}</if>
+				<!-- 多个：共享类型筛选 -->
+				<if test="sharedCodes!=null">AND stype.code IN (${sharedCodes})</if>
+				<!-- 根据用户标识判断 -->
+				<if test="userType!=null">AND dinfo.user_type = #{userType}</if>
+			</where>
+			<!-- 排序 -->
+			<trim prefix="ORDER BY" suffixOverrides=",">
+				<if test="orderCreateTime != null">dinfo.release_time ${orderCreateTime},</if>
+				<if test="orderReward != null">dinfo.reward ${orderReward},</if>
+			</trim>
+		) AS s
+		<where>
+			<if test="distance != null"><![CDATA[s.distance_number < #{distance}]]></if>
+		</where>
+		<trim prefix="ORDER BY" suffixOverrides=",">
+			<if test="orderDistance != null">s.distance_number ${orderDistance},</if>
+		</trim>
+		<if test="pageNum!=null">LIMIT #{limit},#{offset}</if> 
+	</select>
+	
+	<!-- 查询所有【团体】信息并且筛选的结果数 -->
+	<select id="selectAllByFilterTotal" resultType="java.lang.Integer" parameterType="com.qichong.model.Filters">
+		SELECT COUNT(1) FROM demand_info AS dinfo
+		INNER JOIN users ON (users.id = dinfo.user_id)
+		LEFT JOIN user_info AS uinfo ON (uinfo.user_id = users.id)
+		LEFT JOIN enterprise_info AS einfo ON (einfo.user_id = users.id)
+		LEFT JOIN shared_types AS stype ON (stype.code = dinfo.shared_type_code)
+		<where>
+			<!-- 根据Id查询 -->
+			<if test="demandId != null">AND dinfo.id = #{demandId}</if>
+			<if test="userId != null">AND users.id = #{userId}</if>
+			<!-- 如果筛选了经纬度，则没有经纬度的需求将不会被搜索到 -->
+			<if test="latitude != null">AND users.latitude IS NOT NULL</if>
+			<if test="longitude!=null">AND users.longitude IS NOT NULL</if>
+			<!-- 关键字模糊搜索，搜索范围：需求内容，需求地址，备注，详细地址  -->
+			<if test="keyword != null">
+				<![CDATA[AND (
+					dinfo.content LIKE '%${keyword}%' OR
+					dinfo.address LIKE '%${keyword}%' OR
+					dinfo.note LIKE '%${keyword}%' OR
+					dinfo.address_name LIKE '%${keyword}%'
+				)]]>
+			</if>
+			<!-- 酬劳区间筛选 -->
+			<if test="beginReward!=null &amp;&amp; endReward!=null">AND dinfo.reward BETWEEN #{beginReward} AND #{endReward}</if>
+			<!-- 酬劳仅看可面议 -->
+			<if test="onlyNegotiable!=null &amp;&amp; onlyNegotiable==true">AND (dinfo.reward = 0 OR dinfo.end_reward = 0)</if>
+			<!-- 酬劳不看可面议 -->
+			<if test="onlyNotNegotiable!=null &amp;&amp; onlyNotNegotiable==true">AND (dinfo.reward > 0 AND dinfo.end_reward > 0)</if>
+			<!-- 共享类型筛选 -->
+			<if test="sharedCode!=null">AND stype.code = #{sharedCode}</if>
+			<!-- 根据用户标识判断 -->
+			<if test="userType!=null">AND dinfo.user_type = #{userType}</if>
+		</where>
+	</select> 
+
+   	<!-- 查询最新注册的三个人发布的需求 -->
+   	<select id="demandPreferred" resultType="com.qichong.model.DemandInfoModel">
+   	SELECT
+		di.id as 'di.id',
+		di.picture as 'di.picture',
+		di.content as 'di.content',
+		di.reward as 'di.reward',
+		di.end_reward as 'di.endReward',
+		di.release_time as 'di.release_time',
+		di.contact as 'di.contact',
+		di.address as 'di.address',
+		di.phone as 'di.phone',
+		ui.nick_name as 'ui.nickName'
+	FROM
+		demand_info di
+		INNER JOIN user_info ui ON (di.user_id = ui.user_id)
+	ORDER BY di.id DESC LIMIT 3
+   	</select> 
+   	
+   	<!--需求的广告  -->
+   	<select id="maxFive" resultType="com.qichong.model.DemandInfoModel">
+ 		SELECT
+			di.id as 'di.id',
+   			di.picture as 'di.picture',
+			di.content as 'di.content',
+			di.reward as 'di.reward',
+			di.end_reward as 'di.endReward',
+			di.release_time as 'di.release_time',
+			di.contact as 'di.contact',
+			di.address as 'di.address',
+			di.phone as 'di.phone'
+		FROM
+			demand_info di
+		WHERE di.address LIKE '%${city}%'
+		ORDER BY di.id DESC
+		LIMIT #{limit},#{offset}
+   	</select>
+   	
+   	<!-- 新增需求 -->
+   	<insert id="insertOne"  parameterType="DemandInfo">
+    	INSERT INTO demand_info (
+			user_id,
+			content,
+			picture,
+			reward,
+			end_reward,
+			phone,
+			release_time,
+			end_time,
+			contact,
+			note,
+			longitude, 
+			latitude,
+			address,
+			address_name,
+			shared_type_code,
+			user_type
+		)
+		VALUES (
+			#{user.id},
+			#{content},
+			#{picture},
+			#{reward},
+			#{endReward},
+			#{phone},
+			#{releaseTime},
+			#{endTime},
+			#{contact},
+			#{note},
+			#{longitude},
+			#{latitude},
+			#{address},
+			#{addressName},
+			#{sharedType.code},
+			#{userType}
+		)
+   	</insert>
+   	
+   	<update id="updateOne" parameterType="DemandInfo">
+		UPDATE demand_info
+		<set>
+			<if test="(user != null)&amp;&amp;(user.id != null)">user_id = #{user.id},</if>
+			<if test="content != null">content = #{content},</if>
+			<if test="picture.name != null">picture = #{picture},</if>
+			<if test="reward != null">reward = #{reward},</if>
+			<if test="endReward != null">end_reward = #{endReward},</if>
+			<if test="releaseTime != null">release_time = #{releaseTime},</if>
+			<if test="endTime != null">end_time = #{endTime},</if>
+			<if test="phone != null">phone = #{phone},</if>
+			<if test="contact != null">contact = #{contact},</if>
+			<if test="note != null">note = #{note},</if>
+			<if test="longitude != null">longitude = #{longitude},</if>
+			<if test="latitude != null">latitude = #{latitude},</if>
+			<if test="address != null">address = #{address},</if>
+			<if test="addressName != null">address_name = #{addressName},</if>
+			<if test="userType != null">user_type = #{userType},</if>
+			<if test="(sharedType != null)&amp;&amp;(sharedType.code != null)">shared_type_code = #{sharedType.code},</if>
+			<if test="(state != null)&amp;&amp;(state.id != null)">state_id = #{state.id},</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+   	
+   	<delete id="deleteOne">
+   		DELETE FROM demand_info
+   		<where>
+   			 id = #{id}
+   			 <if test="userId!=null">AND user_id = #{userId}</if>
+   		</where>
+   	</delete>
+    	
+</mapper>

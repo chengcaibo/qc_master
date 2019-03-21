@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		
+<mapper namespace="com.qichong.dao.FollowNexusDao">
+
+
+	<!-- 根据UserId查询关注或粉丝的总数（count） -->
+	<select id="selectFollowNexusCountByUserId" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM follow_nexus
+		<!--          这里拼接了 whereTable -->
+		WHERE user_id_${whereTable} = #{userId}
+	</select>
+	
+	<!-- 根据UserId查询关注或粉丝（limit） -->
+	<select id="selectFollowNexusByUserId" resultType="com.qichong.model.FollowesInfoModel">
+		SELECT 
+			fns.id,
+			ui.user_id AS 'ui.user.id',
+			ui.real_name AS 'ui.real_name',
+			ui.nick_name AS 'ui.nick_name',
+			p.job_name as 'ui.job_info.job_name',
+			ui.avatar AS 'ui.avatar',
+			<if test="loginId != null">
+				(SELECT child_fns.user_id_b FROM follow_nexus AS child_fns WHERE child_fns.user_id_a = ui.user_id AND child_fns.user_id_b = #{loginId}) AS follow_login,
+				(SELECT child_fns_b.user_id_b FROM follow_nexus AS child_fns_b WHERE child_fns_b.user_id_a = #{loginId} AND child_fns_b.user_id_b = ui.user_id) AS login_follow,
+			</if>
+			ui.introduce AS 'ui.introduce'
+		FROM follow_nexus AS fns
+		<!--                                                   这里拼接了joinTable -->
+		INNER JOIN user_info AS ui ON(ui.user_id = fns.user_id_${joinTable})
+		LEFT JOIN job_info p ON (p.job_code = ui.job_code)
+		<!--              这里拼接了 whereTable -->
+		WHERE fns.user_id_${whereTable} = #{userId}
+		ORDER BY fns.id DESC
+		LIMIT #{filters.limit},#{filters.pageSize}
+	</select>
+
+	<!--查询是否关注过 -->
+	<select id="followNexusUserACount" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM follow_nexus
+		WHERE user_id_a = #{userIdA}
+		AND user_id_b = #{userIdB}
+	</select>
+	
+	<!--插入关注记录 -->
+	<insert id="insertFollowNexus" parameterType="FollowNexus">
+		INSERT INTO `follow_nexus`
+		(`user_id_a`, `user_id_b`)
+		VALUES
+		(#{userIdA.id}, #{userIdB.id})
+	</insert>
+	
+	<!-- 删除一条记录（不建议使用） -->
+	<delete id="deleteOne">
+		DELETE FROM follow_nexus WHERE id = #{id};
+	</delete>
+	
+	<!-- 删除一条记录，根据UserId -->
+	<delete id="deleteOneByUserId">
+		DELETE FROM follow_nexus
+		WHERE user_id_a = #{userIdA}
+		AND user_id_b = #{userIdB}
+	</delete>
+	
+</mapper>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.qichong.dao.ToolsInfoDao">
+
+	<!-- 查询并筛选 -->
+	<select id="selectAllByFilter" parameterType="com.qichong.model.Filters" resultType="ToolsInfo">
+		SELECT * FROM (
+			SELECT
+				tools.id,
+				users.id AS 'user.id',
+				users.type_id AS 'user.type_id',
+				<!-- userInfo 信息 -->
+				uinfo.avatar AS 'user.userInfo.avatar',
+				uinfo.nick_name AS 'user.userInfo.nick_name',
+				uinfo.introduce AS 'user.userInfo.introduce',
+				uinfo.telephone AS 'user.userInfo.telephone',
+				<!-- enterpriseInfo 信息 -->
+				einfo.logo AS 'user.enterpriseInfo.logo',
+				einfo.enterprise_name AS 'user.enterpriseInfo.enterprise_name',
+				einfo.telephone AS 'user.enterpriseInfo.telephone',
+				tools.tool_name,
+				tools.tool_description,
+				tools.tool_rent,
+				stype.code AS 'sharedType.code',
+				stype.name AS 'sharedType.name',
+				tools.telephone,
+				tools.picture1,
+				tools.picture2,
+				tools.picture3,
+				tools.latitude,
+				tools.longitude,
+				tools.address,
+				tools.address_name,
+				tools.create_time,
+				tools.update_time,
+				<!-- 租赁人的信息 -->
+				userB.id AS 'userB.id',
+				userB.type_id AS 'userB.type_id',
+				uinfoB.avatar AS 'userB.userInfo.avatar',
+				uinfoB.nick_name AS 'userB.userInfo.nick_name',
+				uinfoB.introduce AS 'userB.userInfo.introduce',
+				uinfoB.telephone AS 'userB.userInfo.telephone',
+				einfoB.logo AS 'userB.enterpriseInfo.logo',
+				einfoB.enterprise_name AS 'userB.enterpriseInfo.enterprise_name',
+				einfoB.telephone AS 'userB.enterpriseInfo.telephone',
+				tools.expire_date,
+				state.id AS 'state.id',
+				state.state AS 'state.state'
+				<!-- 如果筛选了经纬度，则计算距离 -->
+				<if test="latitude != null &amp;&amp; longitude!=null">
+					<![CDATA[,
+	 				ROUND(
+				        6378.138 * 2 * ASIN(
+				            SQRT(
+				                POW(
+				                    SIN(
+				                        (
+				                            #{latitude} * PI() / 180 - tools.latitude * PI() / 180
+				                        ) / 2
+				                    ),
+				                    2
+				                ) + COS(#{latitude} * PI() / 180) * COS(tools.latitude * PI() / 180) * POW(
+				                    SIN(
+				                        (
+				                            #{longitude} * PI() / 180 - tools.longitude * PI() / 180
+				                        ) / 2
+				                    ),
+				                    2
+				                )
+				            )
+				        ) * 1000
+					) AS 'distance_number'
+					]]>
+				</if>
+			FROM tools_info AS tools
+			INNER JOIN users ON (users.id=tools.user_id)
+			LEFT JOIN user_info AS uinfo ON (uinfo.user_id = users.id)
+			LEFT JOIN enterprise_info AS einfo ON (einfo.user_id = users.id)
+			LEFT JOIN shared_types AS stype ON (stype.code=tools.shared_type_code)
+			LEFT JOIN state AS state ON (state.id=tools.state_id)
+			<!-- userB -->
+			INNER JOIN users AS userB ON (userB.id=tools.user_id)
+			LEFT JOIN user_info AS uinfoB ON (uinfoB.user_id = userB.id)
+			LEFT JOIN enterprise_info AS einfoB ON (einfoB.user_id = userB.id)
+			<where>
+				<!-- 根据id查询 -->
+				<if test="id!=null">AND tools.id=#{id}</if>
+				<if test="userId !=null">AND tools.user_id=#{userId}</if>
+				<if test="name !=null">AND tools.tool_name=#{name}</if>
+				<!-- 如果筛选了经纬度，则没有经纬度的需求将不会被搜索到 -->
+				<if test="latitude != null">AND tools.latitude IS NOT NULL</if>
+				<if test="longitude!=null">AND tools.longitude IS NOT NULL</if>
+				<!-- 关键字模糊搜索，搜索范围：工具名称，工具描述，工具地址，详细地址  -->
+				<if test="keyword != null">
+					<![CDATA[AND (
+						tools.tool_name LIKE '%${keyword}%' OR
+						tools.tool_description LIKE '%${keyword}%' OR
+						tools.address LIKE '%${keyword}%' OR
+						tools.address_name LIKE '%${keyword}%'
+					)]]>
+				</if>
+				<!-- 租金区间 -->
+				<if test="beginRent!=null&amp;&amp;endRent!=null">AND tools.tool_rent BETWEEN #{beginRent} AND #{endRent}</if>
+				<!-- 共享类型筛选 -->
+				<if test="sharedCode!=null">AND stype.code = #{sharedCode}</if>
+				<!-- 多个：共享类型筛选 -->
+				<if test="sharedCodes!=null">AND stype.code IN (${sharedCodes})</if>
+			</where>
+			<!-- 排序 -->
+			<trim prefix="ORDER BY" suffixOverrides=",">
+				<if test="orderCreateTime != null">tools.create_time ${orderCreateTime},</if>
+				<if test="orderRent != null">tools.tool_rent ${orderRent},</if>
+			</trim>
+		) AS s
+		<where>
+			<if test="distance != null"><![CDATA[s.distance_number < #{distance}]]></if>
+		</where>
+		<trim prefix="ORDER BY" suffixOverrides=",">
+			<if test="orderDistance != null">s.distance_number ${orderDistance},</if>
+		</trim>
+		<if test="pageNum!=null">LIMIT #{limit},#{offset}</if> 
+	</select>
+
+	<!-- 新增共享工具，返回自增id -->
+	<insert id="insertOne" parameterType="ToolsInfo" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tools_info (
+			user_id,
+			tool_name,
+			tool_description,
+			tool_rent,
+			shared_type_code,
+			picture1,
+			telephone,
+			latitude,
+			longitude,
+			address,
+			address_name,
+			create_time,
+			state_id
+		) VALUES (
+			#{user.id},
+			#{toolName},
+			#{toolDescription},
+			#{toolRent},
+			#{sharedType.code},
+			#{picture1},
+			#{telephone},
+			#{latitude},
+			#{longitude},
+			#{address},
+			#{addressName},
+			#{createTime},
+			#{state.id}
+		)
+	</insert>
+	
+	<!-- 更改工具共享信息 -->
+	<update id="updateOne" parameterType="ToolsInfo">
+		UPDATE tools_info
+		<set>
+			<if test="user!=null&amp;&amp;user.id">user_id=#{user.id},</if>
+			<if test="toolName!=null">tool_name=#{toolName},</if>
+			<if test="toolDescription!=null">tool_description=#{toolDescription},</if>
+			<if test="toolRent!=null">tool_rent=#{toolRent},</if>
+			<if test="sharedType!=null">shared_type_code=#{sharedType.code},</if>
+			<if test="picture1.name!=null">picture1=#{picture1},</if>
+			<if test="picture2.name!=null">picture2=#{picture2},</if>
+			<if test="picture3.name!=null">picture3=#{picture3},</if>
+			<if test="telephone!=null">telephone=#{telephone},</if>
+			<if test="latitude!=null">latitude=#{latitude},</if>
+			<if test="longitude!=null">longitude=#{longitude},</if>
+			<if test="address!=null">address=#{address},</if>
+			<if test="addressName!=null">address_name=#{addressName},</if>
+			<if test="updateTime!=null">update_time=#{updateTime},</if>
+			<if test="expireDate!=null">expire_date=#{expireDate},</if>
+			<if test="userB!=null&amp;&amp;userB.id!=null">user_id_b=#{userB.id},</if>
+			<if test="state !=null">state_id= #{state.id},</if>
+		</set>
+		WHERE id=#{id}
+	</update>
+	
+	<!-- 删除一个广告信息 -->
+	<delete id="deleteOne">
+		DELETE FROM tools_info
+		<where>
+			id = #{id}
+			<if test="userId!=null">AND user_id = #{userId}</if>
+		</where>
+	</delete>
+	
+</mapper>

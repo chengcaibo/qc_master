@@ -1,0 +1,20 @@
+.layui-form * {
+	box-sizing: content-box;
+}
+
+.layui-btn, .layui-input, .layui-select, .layui-textarea,
+	.layui-upload-button {
+	box-sizing: border-box;
+}
+
+.layui-form-label .red {
+	color: red;
+	font-weight: bold;
+	margin-right: 6px;
+}
+
+.avatar {
+	width: 100px;
+	height: 100px;
+	cursor: pointer;
+}

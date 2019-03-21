@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qichong.admin.dao.AdminCountDao">
+
+	<!-- 统计个人注册量 -->
+	<select id="countUserSign" resultType="com.qichong.admin.model.CountThreeDaysModel">
+		<![CDATA[
+			SELECT
+				(
+					SELECT
+						COUNT(1)
+					FROM
+						users
+					WHERE
+						type_id = #{typeId}
+				) AS 'total',
+				`z_days`.`days` AS 'yesterday',
+				`q_days`.`days` AS 'before_yesterday',
+				(
+					`z_days`.`days` - `q_days`.`days`
+				) AS 'diff'
+			FROM
+				(
+					SELECT
+						COUNT(1) AS 'days'
+					FROM
+						users
+					WHERE
+						(
+							TO_DAYS(NOW()) - TO_DAYS(create_time)
+						) = 1
+					AND type_id = #{typeId}
+				) AS `z_days`,
+				(
+					SELECT
+						COUNT(1) AS 'days'
+					FROM
+						users
+					WHERE
+						(
+							TO_DAYS(NOW()) - TO_DAYS(create_time)
+						) = 2
+					AND type_id = #{typeId}
+				) AS `q_days`
+			LIMIT 1;
+		]]>
+	</select>
+
+	<!-- 统计需求三天内的信息 -->
+	<select id="countDemandThreeDays" resultType="com.qichong.admin.model.CountThreeDaysModel">
+		<![CDATA[
+			SELECT
+				(
+					SELECT
+						COUNT(1)
+					FROM
+						demand_info
+				) AS 'total',
+				`z_days`.`days` AS 'yesterday',
+				`q_days`.`days` AS 'beforeYesterday',
+				(
+					`z_days`.`days` - `q_days`.`days`
+				) AS 'diff'
+			FROM
+				(
+					SELECT
+						COUNT(1) AS 'days'
+					FROM
+						demand_info
+					WHERE
+						(
+							TO_DAYS(NOW()) - TO_DAYS(release_time)
+						) = 1
+				) AS `z_days`,
+				(
+					SELECT
+						COUNT(1) AS 'days'
+					FROM
+						demand_info
+					WHERE
+						(
+							TO_DAYS(NOW()) - TO_DAYS(release_time)
+						) = 2
+				) AS `q_days`
+			LIMIT 1;
+		]]>
+	</select>
+
+</mapper>

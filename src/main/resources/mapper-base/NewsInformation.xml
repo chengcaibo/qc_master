@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qichong.dao.NewsInformationDao">
+	<!-- 模糊查询最新的前四条动态新闻 -->
+	<select id="queryNewsInformation" resultType="NewsInformation">
+		SELECT
+ 			n.id,
+			i.industry_name,
+			n.headings,
+			n.content,
+			n.source
+		FROM news_information n 
+		INNER JOIN industry_type i 
+		ON (i.industry_code = n.industry_type_code)
+		ORDER BY n.id DESC LIMIT 0,4
+	</select>
+	
+	<!-- 根据id查询内容 -->
+	<select id="queryNewsInformationById" resultType="NewsInformation">
+		SELECT * FROM news_information WHERE id = #{id}
+	</select>
+	
+</mapper>

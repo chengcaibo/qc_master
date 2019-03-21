@@ -1,0 +1,392 @@
+* {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	color: #333;
+	box-sizing: border-box;
+}
+
+body {
+	background: #f5f5f5;
+}
+
+/*侧边栏*/
+.select-button {
+	width: 234px;
+	height: 1080px;
+	background: #20acff;
+	float: left;
+}
+
+.select-button a {
+	text-align: center;
+	width: 100%;
+	height: 60px;
+	line-height: 60px;
+	text-decoration: none;
+	color: #fff;
+	display: block;
+	transition: background .3s;
+}
+/*版心内容*/
+@media screen and (max-width: 2000px) {
+	.mailbox-information-page-my {
+		width: 1200px;
+		height: auto;
+		margin: 0 auto;
+		margin-left: 300px;
+		background: #fff;
+	}
+}
+
+@media screen and (max-width: 1800px) {
+	.mailbox-information-page-my {
+		width: 1200px;
+		height: auto;
+		margin: 0 auto;
+		margin-left: 300px;
+		background: #fff;
+	}
+}
+
+@media screen and (max-width: 1700px) {
+	.mailbox-information-page-my {
+		width: 1200px;
+		height: auto;
+		margin: 0 auto;
+		margin-left: 300px;
+		background: #fff;
+	}
+}
+
+@media screen and (max-width: 1600px) {
+	.mailbox-information-page-my {
+		width: 1200px;
+		height: auto;
+		margin: 0 auto;
+		margin-left: 300px;
+		background: #fff;
+	}
+}
+
+@media screen and (max-width: 1500px) {
+	.mailbox-information-page-my {
+		width: 1000px;
+		height: auto;
+		margin: 0 auto;
+		margin-left: 300px;
+		background: #fff;
+	}
+}
+
+@media screen and (max-width: 1400px) {
+	.mailbox-information-page-my {
+		width: 1000px;
+		height: auto;
+		margin: 0 auto;
+		margin-left: 300px;
+		background: #fff;
+	}
+}
+
+@media screen and (max-width: 1300px) {
+	.mailbox-information-page-my {
+		width: 1000px;
+		height: auto;
+		margin: 0 auto;
+		margin-left: 300px;
+		background: #fff;
+	}
+}
+
+@media screen and (max-width: 1200px) {
+	.mailbox-information-page-my {
+		width: 900px;
+		height: auto;
+		margin: 0 auto;
+		background: #fff;
+		margin-left: 300px;
+	}
+}
+
+@media screen and (max-width: 1100px) {
+	.mailbox-information-page-my {
+		width: 900px;
+		height: auto;
+		margin: 0 auto;
+		margin-left: 300px;
+		background: #fff;
+	}
+}
+
+@media screen and (max-width: 1000px) {
+	.mailbox-information-page-my {
+		width: 900px;
+		height: auto;
+		margin: 0 auto;
+		margin-left: 300px;
+		background: #fff;
+	}
+}
+
+.add-fixedSidebar {
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+
+.add-fixedTop {
+	position: fixed;
+	animation: asd 1s;
+	top: 0px;
+}
+
+@
+keyframes asd {
+	to {top: 0px;
+}
+
+from {
+	top: -64px;
+}
+
+}
+-ms- @keyframes asd {
+	to {top: 0px;
+}
+
+from {
+	top: -64px;
+}
+
+}
+-moz- @keyframes asd {
+	to {top: 0px;
+}
+
+from {
+	top: -64px;
+}
+
+}
+-webkit- @keyframes asd {
+	to {top: 0px;
+}
+
+from {
+	top: -64px;
+}
+
+}
+-o- @keyframes asd {
+	to {top: 0px;
+}
+
+from {
+	top: -64px;
+}
+
+}
+.add-fixedBottom {
+	position: fixed;
+	top: 63px;
+}
+
+.mailbox-information-page-my .confirmed-button {
+	height: 64px;
+	width: 1000px;
+	border-bottom: 1px solid #999999;
+	overflow: hidden;
+	background: #fff;
+}
+
+.confirmed-button li {
+	float: left;
+	width: 160px;
+	height: 100%;
+	text-align: center;
+	line-height: 64px;
+	cursor: pointer;
+	margin-right: 30px;
+	font-size: 18px;
+}
+
+.confirmed-button li:first-child {
+	color: #0099ff;
+}
+
+.mailbox-information-page-my .same-style {
+	width: 100%;
+	height: 1186px;
+	padding: 77px 80px;
+	padding-top: 40px;
+}
+
+.same-style .same-style-label {
+	/*width: 100%;*/
+	height: 44px;
+	border-bottom: 1px solid #999;
+	margin-bottom: 47px;
+	background: #fff;
+	margin-top: 1px;
+}
+
+.same-style-label li {
+	float: left;
+	width: 16%;
+	padding-left: 28px;
+	text-align: left;
+	height: 43px;
+	line-height: 43px;
+	font-size: 16px;
+}
+
+/*内容*/
+.same-style .same-style-label-content {
+	width: 100%;
+	height: auto;
+	margin-top: 0px;
+}
+
+.same-style-label-content li {
+	/* width: 100%;
+	height: 62px; */
+	width: 100%;
+    height: 30px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 35px;
+    margin-left: -20px;
+}
+
+.same-style-label-content li p {
+	/* float: left;
+	width: 20%;
+	text-align: left;
+	height: 62px;
+	font-size: 15px;
+	padding-left: 20px;
+	color: #666; */
+       float: left;
+    width: 11%;
+    font-size: 15px;
+    color: #666;
+    margin-top: -13px;
+    text-align: left;
+    margin-left: 42px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+}
+
+.same-style-label-content li p a {
+	/* text-decoration: none;
+	display: inline-block;
+	width: 40%;
+	height: 30px;
+	border-radius: 3px;
+	text-align: center;
+	line-height: 30px;
+	color: #666;
+	margin-right: 5px;
+	margin-left: 5px;
+	cursor: pointer; */
+	text-decoration: none;
+    display: inline-block;
+    width: 55%;
+    height: 30px;
+    text-align: left;
+    color: #666;
+    margin-right: 5px;
+    margin-left: 5px;
+    cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.same-style-label-content li .choose-info a{
+	display: initial;
+	color: #09f;
+    font-size: 17px;
+    transition: 0.3s;
+}
+
+.same-style-label-content li .choose-info a:HOVER{
+	color: #1386d2;
+}
+
+.same-style-label-content li p .confirm-to-cancel {
+	width: 50%;
+}
+
+/* .same-style-label-content li p a:first-child {
+	background: #0099ff;
+	color: #666;
+} */
+
+/* .same-style-label-content li p a:first-child:hover {
+	background: #008be7;
+	color: #fff;
+} */
+
+.stay-cancel-content, .already-confirmed-content {
+	display: none;
+}
+/* 成功 */
+.return-icon {
+	width: 400px;
+	height: 260px;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	margin-left: -200px;
+	margin-top: -130px;
+	background: #fff;
+	z-index: 3;
+	/* left: 540px;
+	top: 350px; */
+	-moz-box-shadow: 0px 1px 5px #8c8c8c;
+	-webkit-box-shadow: 0px 1px 5px #8c8c8c;
+	box-shadow: 0px 1px 5px #8c8c8c;
+}
+
+.return-icon .return-success {
+	font-size: 110px;
+	margin: 145px;
+	position: relative;
+	top: 30px;
+	color: #2196F3;
+}
+
+.return-icon  h3 {
+	font-size: 25px;
+	text-align: center;
+	margin-top: 20px;
+	color: #5a5a5a;
+}
+
+.return-icon span {
+	float: right;
+	position: relative;
+	right: 15px;
+	top: 18px;
+}
+
+.return-icon span a {
+	text-decoration: none;
+}
+
+.return-icon .return-close {
+	float: right;
+	position: absolute;
+	right: 12px;
+	top: 10px;
+	cursor: pointer;
+	color: #797979;
+	transition: 1s;
+}
+
+.return-icon .return-close:HOVER {
+	color: #353535;
+}

@@ -1,0 +1,721 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qichong.dao.UserInfoDao">
+
+	<sql id="selectAllByFilter_innerJoin">
+		INNER JOIN users ON (users.id = ui.user_id)
+		LEFT JOIN gender ON (ui.gender_id = gender.id)
+		LEFT JOIN regions on (regions.region_code = ui.region_code)
+		LEFT JOIN job_info ON (job_info.job_code = ui.job_code)
+		LEFT JOIN job_type ON (job_type.id = ui.job_type_id)
+		LEFT JOIN skill_info ON (users.id = skill_info.user_id)
+		LEFT JOIN state as user_state ON (users.state_id = user_state.id)
+	</sql>
+
+	<sql id="selectAllByFilter_where">
+		<where>
+			<!-- 根据Id查询 -->
+			<if test="whereUserId!=null">AND users.id = #{whereUserId}</if>
+			<!-- 根据Ids查询 -->
+			<if test="ids!=null">
+				<trim prefix="AND users.id IN (" suffix=")" suffixOverrides="," >
+					${ids}
+				</trim>
+			</if>
+			<!-- 如果筛选了经纬度，则没有经纬度的用户将不会被搜索到 -->
+			<if test="latitude != null">AND users.latitude IS NOT NULL</if>
+			<if test="longitude!=null">AND users.longitude IS NOT NULL</if>
+			<!-- 如果用户希望搜索结果里不包含自己的话 -->
+			<if test="notId != null">AND users.id != #{notId}</if>
+			<!-- 用户地理位置最后一次的更新日期 -->
+			<if test="lastUpdateDatetime != null"><![CDATA[AND users.last_update_time >= #{lastUpdateDatetime}]]></if>
+			<!-- 筛选性别 -->
+			<if test="genderId != null">AND ui.gender_id = #{genderId}</if>
+			<!-- 筛选年龄、生日 -->
+			<if test="beginAge!=null &amp;&amp; endAge!=null">AND ui.birthday BETWEEN #{endAge} AND #{beginAge}</if>
+			<!-- 筛选职业、职位code -->
+			<if test="jobCode!=null">AND job_info.job_code = #{jobCode}</if>
+			<!-- 筛选工作类型 -->
+			<if test="jobTypeId!=null">AND job_type_id = #{jobTypeId} </if>
+			<!-- 工作年限筛选  -->
+			<if test="beginJobYears!=null&amp;&amp;endJobYears!=null">AND ui.job_begin_time BETWEEN #{endJobYears} AND #{beginJobYears}</if>
+			<if test="beginJobYears!=null"><![CDATA[AND ui.job_begin_time <= #{beginJobYears}]]></if>
+			<!-- 筛选地区code -->
+			<if test="regionCode!=null">AND regions.region_code = #{regionCode}</if>
+			<!-- 多个：筛选职业、职位code -->
+			<if test="jobCodes!=null">AND job_info.job_code IN (${jobCodes})</if>
+			<!-- 多个：筛选地区code -->
+			<if test="regionCodes!=null">AND regions.region_code IN (${regionCodes})</if>
+			<!-- 多个：筛选技能 -->
+			<if test="skillName!=null">AND skill_info.skill_name LIKE '%${skillName}%'</if>
+			<!-- 用户搜索的关键字 -->
+			<if test="keyword != null">
+				<![CDATA[AND (
+					ui.nick_name LIKE '%${keyword}%' OR
+					ui.introduce LIKE '%${keyword}%' OR
+					job_info.job_name LIKE '%${keyword}%' OR
+					ui.label LIKE '%${keyword}%' OR
+					regions.region_name LIKE '%${keyword}%' OR
+					skill_info.skill_name LIKE '%${keyword}%' OR
+					ui.address LIKE '%${keyword}%'
+				)]]>
+			</if>
+			<!-- 如果排序了时薪，则去除掉没有填写时薪的用户 -->
+			<if test="orderPay != null">AND ui.hourly_wage IS NOT NULL</if>
+			<!-- 按照手机号码查询 -->
+			<if test="phone!=null">AND ui.telephone = #{phone}</if>
+			<!-- 筛选用户状态 -->
+			<if test="userStatus!=null">AND users.state_id = #{userStatus}</if>
+		</where>
+		GROUP BY ui.id
+	</sql>
+	
+	<sql id="selectAllByFilter_orderBy">
+		<trim prefix="ORDER BY" suffixOverrides=",">
+			<if test="orderIntegrate">
+				(ui.score * 0.70) + 
+				(`order_count` * 0.28) + 
+				((0 - ui.hourly_wage) * 0.02) DESC,
+				ui.user_id,
+			</if>
+			<if test="orderCreateTime != null">users.create_time ${orderCreateTime},</if>
+			<if test="orderScore != null">
+				ui.score ${orderScore},
+				ui.user_id,
+			</if>
+			<if test="orderPay != null">ui.hourly_wage ${orderPay},</if>
+			<if test="orderLastUpdateTime != null">users.last_update_time ${orderLastUpdateTime},</if>
+		</trim>
+	</sql>
+
+	<!-- 查询用户信息并且根据经纬度计算出距离，没有经纬度的用户将不会被查询到 -->
+	<select id="selectAllByFilter" resultType="UserInfo" parameterType="com.qichong.model.Filters">
+		SELECT * FROM (
+			SELECT
+				ui.id,
+				ui.user_id as 'user.id',
+				users.username as 'user.username',
+				users.type_id as 'user.type_id',
+				users.wx_open_id as 'user.wx_open_id',
+				users.longitude as 'user.longitude',
+				users.latitude as 'user.latitude',
+				users.last_update_time as 'user.last_update_time',
+				users.create_time as 'user.create_time',
+				user_state.id as 'user.state.id',
+				user_state.state as 'user.state.state',
+				ui.nick_name,
+				ui.real_name,
+				ui.introduce,
+				ui.avatar,
+				ui.identity,
+				ui.telephone,
+				ui.gender_id as 'gender.id',
+				gender.`name` as 'gender.name',
+				ui.birthday,
+				ui.hourly_wage,
+				ui.score,
+				ui.balance,
+				ui.job_begin_time,
+				ui.email,
+				ui.label,
+				ui.region_code as 'region.regionCode',
+				regions.region_name as 'region.regionName',
+				job_info.job_code as 'job_info.jobCode',
+				job_info.job_name as 'job_info.jobName',
+				job_type.id as 'job_type.id',
+				job_type.type as 'job_type.type',
+				ui.address,
+				skill_info.skill_name
+				<if test="orderIntegrate">
+					,(
+						SELECT
+							COUNT(1)
+						FROM
+							order_info
+						WHERE
+							goods_id = ui.user_id
+						AND (order_status = 104 OR order_status = 105)
+					) AS `order_count`
+				</if>
+				<!-- 如果筛选了经纬度，则计算距离 -->
+				<if test="latitude != null &amp;&amp; longitude!=null">
+					<![CDATA[,
+	 				ROUND(
+				        6378.138 * 2 * ASIN(
+				            SQRT(
+				                POW(
+				                    SIN(
+				                        (
+				                            #{latitude} * PI() / 180 - users.latitude * PI() / 180
+				                        ) / 2
+				                    ),
+				                    2
+				                ) + COS(#{latitude} * PI() / 180) * COS(users.latitude * PI() / 180) * POW(
+				                    SIN(
+				                        (
+				                            #{longitude} * PI() / 180 - users.longitude * PI() / 180
+				                        ) / 2
+				                    ),
+				                    2
+				                )
+				            )
+				        ) * 1000
+					) AS `user.distance_number`
+					]]>
+				</if>
+			FROM user_info AS ui
+			<include refid="selectAllByFilter_innerJoin"></include>
+			<include refid="selectAllByFilter_where"></include>
+			<include refid="selectAllByFilter_orderBy"></include>
+		) AS s
+		<where>
+			<if test="distance != null"><![CDATA[s.`user.distance_number` < #{distance}]]></if>
+		</where>
+		<trim prefix="ORDER BY" suffixOverrides=",">
+			<if test="orderDistance != null">s.`user.distance_number` ${orderDistance},</if>
+		</trim>
+		<if test="pageNum!=null&amp;&amp;pageSize!=null">LIMIT #{limit},#{offset}</if>
+	</select>
+
+	<select id="selectAllCountByFilter" resultType="java.lang.Integer" parameterType="com.qichong.model.Filters" >
+		SELECT COUNT(1) FROM (
+			SELECT users.id FROM user_info AS ui
+			<include refid="selectAllByFilter_innerJoin"></include>
+			<include refid="selectAllByFilter_where"></include>
+		) AS us 
+	</select>
+	
+	<!-- 分页查询所有用户信息，包含过滤  total -->
+	<select id='personalFilters_total' resultType='java.lang.Integer'>
+		SELECT count(1) FROM user_info ui
+		LEFT JOIN users ON (ui.user_id = users.id)
+		LEFT JOIN gender ON (ui.gender_id = gender.id)
+		LEFT JOIN regions on (regions.region_code = ui.region_code)
+		LEFT JOIN job_info p ON(p.job_code = ui.job_code)
+		-- LEFT JOIN skill_info s ON (s.user_id = ui.user_id)
+		<where>
+			<if test="filters.regionCode != null">
+				AND regions.region_code LIKE '${filters.regionCode}'
+			</if>
+			<if test="filters.regionCode == null">
+				AND ui.address_all LIKE '%${city}%'
+			</if>
+			<if test="filters.jobCode != null">
+				AND p.job_code LIKE '${filters.jobCode}'
+			</if>
+			<if test="filters.endAge != null &amp;&amp; filters.beginAge != null">
+				AND ui.birthday BETWEEN #{filters.endAge} AND #{filters.beginAge}
+			</if>
+			<if test="filters.beginHourlyWage != null &amp;&amp; filters.endHourlyWage != null">
+				AND ui.hourly_wage BETWEEN #{filters.beginHourlyWage} AND #{filters.endHourlyWage}
+			</if>
+			<if test="filters.skillName != null">
+				AND ui.user_id IN (SELECT user_id FROM skill_info WHERE skill_name LIKE '%${filters.skillName}%')
+				--  s.skill_name LIKE '%${filters.skillName}%'
+			</if>
+			<if test="filters.name != null">
+				AND ui.real_name LIKE '%${filters.name}%'
+			</if>
+		</where>
+	</select>
+	
+	<!-- 分页查询所有用户信息，包含过滤  -->
+	<select id='selectAll' resultType='UserInfo'>
+		SELECT
+			ui.id,
+			ui.user_id as 'user.id',
+			users.username as 'user.username',
+			users.password as 'user.password',
+			users.type_id as 'user.type_id',
+			users.create_time as 'user.create_time',
+			ui.nick_name,
+			ui.real_name,
+			ui.introduce,
+			ui.avatar,
+			ui.identity,
+			ui.telephone,
+			ui.gender_id as 'gender.id',
+			gender.`name` as 'gender.name', -- 查询出性别详情
+			ui.birthday,
+			ui.hourly_wage,
+			ui.score,
+			ui.balance,
+			ui.job_begin_time,
+			ui.email,
+			-- s.skill_name,
+			regions.region_code as 'region.regionCode',
+			regions.region_name as 'region.regionName', -- 查询出地区详情
+			p.job_name as 'job_info.job_name',
+			ui.address,
+			ui.address_all
+		FROM user_info ui
+		LEFT JOIN users ON (ui.user_id = users.id)
+		LEFT JOIN gender ON (ui.gender_id = gender.id)
+		LEFT JOIN regions on (regions.region_code = ui.region_code)
+		LEFT JOIN job_info p ON(p.job_code = ui.job_code)
+		-- LEFT JOIN skill_info s ON (s.user_id = ui.user_id)
+		<where>
+			<if test="filters.regionCode != null">
+				AND regions.region_code LIKE '%${filters.regionCode}%'
+			</if>
+			<if test="filters.regionCode == null">
+				AND ui.address_all LIKE '%${city}%'
+			</if>
+			<if test="filters.jobCode != null">
+				AND p.job_code LIKE '%${filters.jobCode}%'
+			</if>
+			<if test="filters.endAge != null &amp;&amp; filters.beginAge != null">
+				AND ui.birthday BETWEEN #{filters.endAge} AND #{filters.beginAge}
+			</if>
+			<if test="filters.beginHourlyWage != null &amp;&amp; filters.endHourlyWage != null">
+				AND ui.hourly_wage BETWEEN #{filters.beginHourlyWage} AND #{filters.endHourlyWage}
+			</if>
+			<if test="filters.skillName != null">
+				-- AND s.skill_name LIKE '%${filters.skillName}%'
+				AND ui.user_id IN (SELECT user_id FROM skill_info WHERE skill_name LIKE '%${filters.skillName}%')
+			</if>
+			<if test="filters.name != null">
+				AND ui.real_name LIKE '%${filters.name}%'
+			</if>
+			<if test="filters.searchKeyword != null">
+				AND (
+					ui.industry_details LIKE '%${filters.searchKeyword}%' OR 
+					(ui.user_id IN (SELECT user_id FROM skill_info WHERE skill_name LIKE '%${filters.searchKeyword}%')) OR 
+					ui.address LIKE '%${filters.searchKeyword}%' OR 
+					regions.region_name LIKE '%${filters.searchKeyword}%'
+				)
+			</if>
+		</where>
+		GROUP BY ui.id
+		LIMIT #{filters.limit},#{filters.pageSize}
+	</select>
+
+	<!-- 查询优势 -->
+	<select id="selectStrongByUserId" resultType="java.lang.String">
+		SELECT ascendancy FROM user_info WHERE user_id = #{user.id};
+	</select>
+	
+	<!-- 修改优势 -->
+	<update id="modifyAscendancy" parameterType="UserInfo">
+		UPDATE user_info SET ascendancy = #{ascendancy} WHERE user_id = #{user.id}
+	</update>
+
+	<!-- 查询所有信息（新闻页面用） -->
+	<select id="queryAllInfo" resultType='UserInfo'>
+		SELECT
+			ui.id,
+			ui.user_id as 'user.id',
+			users.username as 'user.username',
+			users.password as 'user.password',
+			users.type_id as 'user.type_id',
+			users.create_time as 'user.create_time',
+			ui.nick_name,
+			ui.real_name,
+			ui.introduce,
+			ui.avatar,
+			ui.identity,
+			ui.telephone,
+			ui.gender_id as 'gender.id',
+			gender.`name` as 'gender.name', -- 查询出性别详情
+			ui.birthday,
+			ui.hourly_wage,
+			ui.score,
+			ui.balance,
+			ui.job_begin_time,
+			ui.email,
+			ui.region_code as 'region.regionCode',
+			regions.region_name as 'region.regionName', -- 查询出地区详情
+			ui.job_code as 'job_info.jobCode',
+			job_info.job_name as 'job_info.jobName',
+			ui.address,
+			(SELECT COUNT(1) FROM user_appintment_user WHERE user_id_b=ui.user_id) AS 'appintment_count'
+		FROM user_info ui
+		LEFT JOIN users ON (ui.user_id = users.id)
+		LEFT JOIN gender ON (ui.gender_id = gender.id)
+		LEFT JOIN regions on (regions.region_code = ui.region_code)
+		LEFT JOIN job_info ON (job_info.job_code = ui.job_code)
+		WHERE ui.user_id in(${ids})
+	</select>
+	
+	<!--根据职业查询五个，个人信息展示页面推送  -->
+	<select id="pushUser" resultType='UserInfo'>
+		SELECT
+			ui.id,
+			ui.user_id as 'user.id',
+			users.username as 'user.username',
+			users.password as 'user.password',
+			users.type_id as 'user.type_id',
+			users.create_time as 'user.create_time',
+			ui.nick_name,
+			ui.real_name,
+			ui.introduce,
+			ui.avatar,
+			ui.identity,
+			ui.telephone,
+			ui.gender_id as 'gender.id',
+			gender.`name` as 'gender.name', -- 查询出性别详情
+			ui.birthday,
+			ui.hourly_wage,
+			ui.score,
+			ui.balance,
+			ui.job_begin_time,
+			ui.email,
+			ui.region_code as 'region.regionCode',
+			regions.region_name as 'region.regionName', -- 查询出地区详情
+			ui.job_code as 'job_info.job_code',
+			job_info.job_name as 'job_info.job_name',
+			ui.address
+		FROM user_info ui
+		LEFT JOIN users ON (ui.user_id = users.id)
+		LEFT JOIN gender ON (ui.gender_id = gender.id)
+		LEFT JOIN regions on (regions.region_code = ui.region_code)
+		LEFT JOIN job_info ON (job_info.job_code = ui.job_code)
+		WHERE ui.job_code = #{jobCode}
+		ORDER BY ui.id DESC
+		LIMIT 0,5
+	</select>
+	
+	<!--查询最近的三个的个人信息 -->
+	<select id="queryPreferred" resultType="com.qichong.model.PersonalTopOneModel">
+		SELECT
+			ui.id,
+			ui.user_id,
+			ui.nick_name,
+			ui.real_name,
+			ui.avatar,
+			ui.introduce,
+			g.`name`,
+			ui.hourly_wage,
+			ui.score,
+			ui.hourly_wage,
+			ui.telephone,
+			ui.job_begin_time,
+			ui.email,
+			ui.birthday,
+			reg.region_code,
+			reg.region_name,
+			p.job_code as 'job_info.job_code',
+			p.job_name as 'job_info.job_name',
+			ui.address
+		FROM user_info AS ui
+		LEFT JOIN gender g ON g.id = ui.gender_id
+		LEFT JOIN regions AS reg ON (reg.region_code = ui.region_code)
+		LEFT JOIN job_info p ON (p.job_code = ui.job_code)
+		ORDER BY id DESC LIMIT 3
+	</select>
+
+	<!-- 查询手机号是否存在 -->
+	<select id='checkPhone' resultType="UserInfo">
+		SELECT telephone FROM user_info WHERE telephone = #{telephone}
+	</select>
+	
+	<!-- 查询手机号是否存在 -->
+	<select id='selectUserIdByTelephone' resultType="UserInfo">
+		SELECT
+			user_id as 'user.id',
+			telephone
+		FROM user_info
+		WHERE telephone = #{telephone}
+		LIMIT 1;
+	</select>
+
+	<!-- 修改绑定手机 -->
+	<update id="byIdModifyPhone" >
+		UPDATE user_info 
+		SET telephone = #{telephone} 
+		WHERE user_id = #{userId}
+	</update>
+
+	<!--查询前五的用户信息 -->
+	<select id='queryTopFive' resultType="com.qichong.model.PersonalTopOneModel">
+		SELECT
+			ui.id,
+			ui.user_id,
+			ui.nick_name,
+			ui.real_name,
+			ui.avatar,
+			ui.identity,
+			ui.telephone,
+			ui.gender_id,
+			gender.`name` as 'gender_name', -- 查询出性别详情
+			ui.birthday,
+			ui.hourly_wage,
+			ui.score,
+			ui.balance,
+			ui.job_begin_time,
+			ui.email,
+			ui.region_code,
+			regions.region_name, -- 查询出地区详情
+			p.job_code as 'job_info.job_code',
+			p.job_name as 'job_info.job_name',
+			ui.address
+		FROM user_info ui
+		LEFT JOIN gender ON (ui.gender_id = gender.id)
+		LEFT JOIN regions on (regions.region_code = ui.region_code)
+		LEFT JOIN job_info p ON (p.job_code = ui.job_code)
+		ORDER BY ui.score DESC
+		LIMIT 0,5;
+	</select>
+	
+	<!--查询用户信息总数 为做随机展示信息 -->
+	<select id='infoCount' resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM user_info
+	</select>
+	
+	<!-- 每隔5秒查询最大Id的十位用户 -->
+	<select id="oderByMaxIdUserInfo" resultType="com.qichong.model.PersonalTopOneModel">
+		SELECT
+			ui.id,
+			ui.user_id,
+			ui.nick_name,
+			ui.real_name,
+			ui.avatar,
+			ui.introduce,
+			ui.identity,
+			ui.telephone,
+			ui.gender_id,
+			gender.`name` as 'gender_name',
+			ui.birthday,
+			ui.hourly_wage,
+			ui.score,
+			ui.balance,
+			ui.job_begin_time,
+			ui.email,
+			ui.region_code,
+			regions.region_name,
+			p.job_code as 'job_info.job_code',
+			p.job_name as 'job_info.job_name',
+			ui.address,
+			ui.address_all
+		FROM user_info ui
+		LEFT JOIN gender ON (ui.gender_id = gender.id)
+		LEFT JOIN regions on (regions.region_code = ui.region_code)
+		LEFT JOIN job_info p ON (p.job_code = ui.job_code)
+		WHERE ui.address_all LIKE '%${city}%'
+		ORDER BY ui.id DESC
+		LIMIT 0,10;
+	</select>
+	
+	<!-- 随机用户 -->
+	<select id="randomUser" resultType="UserInfo">
+		SELECT
+			ui.id,
+			ui.user_id as 'user.id',
+			ui.nick_name,
+			ui.real_name,
+			ui.introduce,
+			ui.avatar,
+			ui.identity,
+			ui.telephone,
+			ui.gender_id as 'gender.id',
+			gender.`name` as 'gender.name', 
+			ui.birthday,
+			ui.hourly_wage,
+			ui.score,
+			ui.balance,
+			ui.job_begin_time,
+			ui.email,
+			ui.region_code as 'region.regionCode',
+			regions.region_name as 'region.regionName',
+			ui.address
+		FROM user_info ui
+		INNER JOIN gender ON (ui.gender_id = gender.id)
+		INNER JOIN regions on (regions.region_code = ui.region_code)
+		WHERE ui.score>=6
+		LIMIT #{limit},#{offset};
+	</select>
+	
+	<!--查询个人信息 -->
+	<select id="queryUserInfo" resultType="UserInfo">
+		SELECT
+			ui.id,
+			ui.user_id as 'user.id',
+			users.username as 'user.username',
+			users.password as 'user.password',
+			users.type_id as 'user.type_id',
+			users.create_time as 'user.create_time',
+			users.wx_open_id as 'user.wx_open_id',
+			users.wx_union_id as 'user.wx_union_id',
+			users.longitude as 'user.longitude',
+			users.latitude as 'user.latitude',
+			ui.nick_name,
+			ui.real_name,
+			ui.introduce,
+			ui.ascendancy,
+			ui.avatar,
+			ui.identity,
+			ui.telephone,
+			ui.gender_id as 'gender.id',
+			gender.`name` as 'gender.name',
+			ui.birthday,
+			ui.hourly_wage,
+			ui.score,
+			ui.balance,
+			ui.job_begin_time,
+			ui.email,
+			ui.region_code as 'region.regionCode',
+			regions.region_name as 'region.regionName',
+			ui.address,
+			ui.job_code as 'job_info.jobCode',
+			job_type.id as 'job_type.id',
+			job_type.type as 'job_type.type',
+			job_info.job_name as 'job_info.jobName'
+		FROM user_info ui
+		LEFT JOIN users ON (ui.user_id = users.id)
+		LEFT JOIN gender ON (ui.gender_id = gender.id)
+		LEFT JOIN regions on (regions.region_code = ui.region_code)
+		LEFT JOIN job_info ON (job_info.job_code = ui.job_code)
+		LEFT JOIN job_type ON (job_type.id = ui.job_type_id)
+		WHERE ui.user_id = #{userId}
+	</select>
+	
+	<!--  -->
+	<select id="queryUserInfoProfile" resultType="com.qichong.model.PersonalTopOneModel">
+		SELECT
+			ui.id,
+			ui.user_id as 'user.id',
+			ui.nick_name,
+			ui.real_name,
+			ui.introduce,
+			ui.ascendancy,
+			ui.avatar,
+			ui.identity,
+			ui.telephone,
+			ui.gender_id as 'gender.id',
+			gender.`name` as 'gender.name',
+			ui.birthday,
+			ui.hourly_wage,
+			ui.score,
+			ui.balance,
+			ui.job_begin_time,
+			ui.email,
+			ui.region_code,
+			regions.region_name,
+			ui.address,
+			p.job_code as 'job_info.job_code',
+			p.job_name as 'job_info.job_name'
+		FROM user_info ui
+		LEFT JOIN gender ON (ui.gender_id = gender.id)
+		LEFT JOIN regions on (regions.region_code = ui.region_code)
+		LEFT JOIN job_info p ON (p.job_code = ui.job_code)
+		WHERE ui.user_id = #{userId}
+	</select>
+	
+	<!-- 根据行业模糊查询个人信息 -->
+	<select id="queryBlurUser" resultType="com.qichong.model.PersonalTopOneModel">
+		SELECT
+			ui.id,
+			ui.user_id,
+			ui.nick_name,
+			ui.real_name,
+			ui.avatar,
+			ui.introduce,
+			g.`name`,
+			ui.hourly_wage,
+			ui.score,
+			ui.hourly_wage,
+			ui.telephone,
+			ui.email,
+			ui.job_begin_time,
+			ui.birthday,
+			p.job_code as 'job_info.job_code',
+			p.job_name as 'job_info.job_name',
+			reg.region_code,
+			reg.region_name,
+			ui.address,
+			ui.address_all,
+			ui.industry_details,
+			si.skill_name,
+			min(si.id)
+		FROM user_info AS ui
+		LEFT JOIN gender g ON g.id = ui.gender_id
+		LEFT JOIN regions AS reg ON (reg.region_code = ui.region_code)
+		LEFT JOIN job_info p ON (p.job_code = ui.job_code)
+		LEFT JOIN skill_info si ON (ui.user_id  = si.user_id) 
+		WHERE ui.industry_details LIKE '%${name}%' AND ui.address_all LIKE '%${regionCity}%' OR si.skill_name LIKE '%${name}%'
+		group by ui.nick_name
+		LIMIT #{limit},#{offset};
+	</select>
+	
+	<!-- 插入一条用户信息，这条sql语句用于初次注册 -->
+	<insert id="inserOneUserInfo" parameterType="UserInfo">
+		<trim prefix="INSERT INTO user_info (" suffix="	)" suffixOverrides="," >
+			user_id,
+			nick_name,
+			avatar,
+			telephone,
+			gender_id,
+			<if test="introduce!=null">introduce,</if>
+			<if test="ascendancy!=null">ascendancy,</if>
+			<if test="email!=null">email,</if>
+			<if test="birthday!=null">birthday,</if>
+			<if test="hourlyWage!=null">hourly_wage,</if>
+			<if test="region!=null&amp;&amp;region.regionCode!=null">region_code,</if>
+			<if test="jobInfo!=null&amp;&amp;jobInfo.jobCode!=null">job_code,</if>
+			<if test="jobType!=null&amp;&amp;jobType.id!=null">job_type_id,</if>
+			<if test="balance!=null">balance,</if>
+		</trim>
+	 	VALUES
+	 	<trim prefix="(" suffix=");" suffixOverrides="," >
+			#{user.id}, 
+			#{nickName},
+			#{avatar},
+			#{telephone},
+			#{gender.id},
+			<if test="introduce!=null">#{introduce},</if>
+			<if test="ascendancy!=null">#{ascendancy},</if>
+			<if test="email!=null">#{email},</if>
+			<if test="birthday!=null">#{birthday},</if>
+			<if test="hourlyWage!=null">#{hourlyWage},</if>
+			<if test="region!=null&amp;&amp;region.regionCode!=null">#{region.regionCode},</if>
+			<if test="jobInfo!=null&amp;&amp;jobInfo.jobCode!=null">#{jobInfo.jobCode},</if>
+			<if test="jobType!=null&amp;&amp;jobType.id!=null">#{jobType.id},</if>
+			<if test="balance!=null">#{balance},</if>
+		</trim>
+		insert into share (userid) values (#{user.id});
+	</insert>
+	
+	<!-- 修改用户信息 -->
+	<update id="updateUserInfo" parameterType="UserInfo">
+		UPDATE user_info
+		<set>
+			<if test="nickName != null">nick_name = #{nickName},</if>
+			<if test="realName != null">real_name = #{realName},</if>
+			<if test="introduce != null">introduce = #{introduce},</if>
+			<if test="avatar.name != null">avatar = #{avatar},</if>
+			<if test="identity != null">identity = #{identity},</if>
+			<if test="telephone != null">telephone = #{telephone},</if>
+			<if test="(gender != null)&amp;&amp;(gender.id != null)">gender_id = #{gender.id},</if>
+			<if test="birthday != null">birthday = #{birthday},</if>
+			<if test="hourlyWage != null">hourly_wage = #{hourlyWage},</if>
+			<if test="score != null">score = #{score},</if>
+			<if test="balance != null">balance = balance+#{balance},</if>
+			<if test="jobBeginTime != null">job_begin_time = #{jobBeginTime},</if>
+			<if test="email != null">email = #{email},</if>
+			<if test="(region != null)&amp;&amp;(region.regionCode != null)">region_code = #{region.regionCode},</if>
+			<if test="(jobInfo != null)&amp;&amp;(jobInfo.jobCode != null)">job_code = #{jobInfo.jobCode},</if>
+			<if test="(jobType != null)&amp;&amp;(jobType.id != null)">job_type_id = #{jobType.id},</if>
+			<if test="address != null">address = #{address},</if>
+			<if test="addressAll != null">address_all = #{addressAll},</if>
+			<if test="industryDetails != null">industry_details = #{industryDetails},</if>
+			<if test="label != null">label = #{label},</if>
+		</set>
+		WHERE user_id = #{user.id}
+	</update>
+	
+	<!-- 根据查询某个字段，必须等于传入 的值 -->
+	<select id="selectEqualsKey" resultType="UserInfo">
+		SELECT * FROM user_info
+		WHERE `${key}` = #{value}
+	</select>
+	
+	<!-- 根据查询某个字段，必须包含传入 的值 -->
+	<select id="selectLikeKey" resultType="UserInfo">
+		SELECT * FROM user_info
+		WHERE `${key}` LIKE '%${value}%'
+	</select>
+	
+</mapper>

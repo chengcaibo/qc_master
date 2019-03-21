@@ -1,0 +1,77 @@
+/*---- begin icon-number ----*/
+
+.icon-number-box {
+    /* width: 400px; */
+    flex: 1;
+    min-width: 300px;
+    /* max-width: 600px; */
+    height: 150px;
+    color: white;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid transparent;
+    display: inline-block;
+    margin: 0 10px 10px 0;
+}
+
+.icon-number-content {
+    height: 110px;
+    line-height: 110px;
+    font-size: 0;
+    padding: 0 20px;
+}
+
+.icon-number-content i, .icon-number-content span {
+    display: inline-block;
+}
+
+.icon-number-content i {
+    width: 30%;
+    font-size: 64px;
+}
+
+.icon-number-content span {
+    width: 70%;
+    font-size: 64px;
+    text-align: right;
+}
+
+.icon-number-detail {
+    height: 40px;
+    line-height: 40px;
+    color: #333333;
+    font-size: initial;
+    padding: 0 10px;
+    background-color: #f5f5f5;
+}
+
+.icon-number-detail.clickable {
+    font-size: 0;
+    user-select: none;
+    cursor: pointer;
+}
+
+.icon-number-detail.clickable div {
+    font-size: initial;
+    display: inline-block;
+}
+
+.icon-number-detail.clickable div.text {
+    width: 90%;
+}
+
+.icon-number-detail.clickable div.qc-icon {
+    width: 10%;
+    text-align: right;
+    font-weight: bold;
+}
+
+.icon-number-detail.clickable:hover {
+    background-color: #e5e5e5;
+}
+
+.icon-number-detail.clickable:active {
+    background-color: #d0d0d0;
+}
+
+/*---- end icon-number ----*/

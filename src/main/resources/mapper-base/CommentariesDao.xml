@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qichong.dao.CommentariesDao">
+	<!-- 新增评论 -->
+	<insert id="insertCommentaries" parameterType="com.qichong.entity.Commentaries">
+		INSERT INTO `commentaries` 
+		(
+			`reviewers_id`,
+			`b_reviewers_id`,
+			`score`,
+			`evaluation_content`,
+			`comment_time`,
+			`start_time`,
+			`end_time`
+		)
+		VALUES
+		(
+			#{commentaries.user.id},
+			#{commentaries.BUsers.id},
+			#{commentaries.score},
+			#{commentaries.evluationContent},
+			#{commentaries.commmentTime},
+			#{commentaries.startTime},
+			#{commentaries.endTime}
+		)
+	</insert>
+	<!-- 修改评论信息 -->
+	<update id="updateIdCommentaries" parameterType="com.qichong.entity.Commentaries">
+		UPDATE `commentaries`
+		SET 
+			`reviewers_id` = #{commentaries.reviewersId.id},
+			`b_reviewers_id` = #{commentaries.BreviewersId.id},
+			`evaluation_content` = #{commentaries.evluationContent},
+			`Comment_time` = #{commentaries.commmentTime},
+			`state_id` = #{commentaries.state.id}
+		WHERE (`id` =#{commentaries.id} )
+	</update>
+	<!-- 查询单个用户的评论 -->
+	<select id="queryUserCommentaries" resultType="Commentaries">
+		SELECT
+			c.id,
+			u.nick_name as 'reviewers.nickName',
+			b.nick_name as 'Breviewers.nickName',
+			c.evaluation_content as 'evluationContent',
+			c.Comment_time as 'commmentTime'
+		FROM
+		commentaries c
+		INNER JOIN user_info u ON (c.reviewers_id = u.user_id)
+		INNER JOIN user_info b ON (c.b_reviewers_id = b.user_id)
+		WHERE c.b_reviewers_id=#{reviewersBId}
+	</select>
+	<!-- 删除评论 -->
+	<delete id="deleteCommentaries">
+		DELETE FROM `commentaries` WHERE (`id`=#{commentariesId})
+	</delete>
+	
+	<select id="avgScore" resultType="java.lang.Double">
+		SELECT AVG(score) FROM commentaries WHERE b_reviewers_id = #{reviewrsId}
+	</select>
+	<select id="countCommentaries" resultType="java.lang.Integer"> 
+		SELECT COUNT(1) from commentaries where start_time = #{startTime} AND end_time = #{endTime}
+		 and reviewers_id = #{userAId} and b_reviewers_id = #{userBId}
+	</select>
+	
+</mapper>

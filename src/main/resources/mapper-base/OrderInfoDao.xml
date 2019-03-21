@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qichong.dao.OrderInfoDao">
+
+	<sql id="selectFieid">
+		oinfo.order_id,
+		oinfo.user_id,
+		oinfo.goods_id,
+		oinfo.payment,
+		oinfo.payment_status,
+		oinfo.remarks,
+		oinfo.mark_begin_time,
+		oinfo.mark_end_time,
+		oinfo.create_time,
+		oinfo.complete_time,
+		oinfo.confirm_time,
+		oinfo.close_time,
+		oinfo.reason,
+		oinfo.order_type,
+		state.id AS 'order_status.id',
+		state.state AS 'order_status.state',
+		oinfo.form_id,
+		oinfo.prepay_id,
+		oinfo.latitude,
+		oinfo.longitude,
+		oinfo.address
+	</sql>
+
+	<!-- 查询所有的订单并筛选 -->
+	<select id="selectAllByFilter" parameterType="com.qichong.model.Filters" resultType="OrderInfo">
+		SELECT
+			<include refid="selectFieid"></include>,
+			<!-- 订单评论链表查询 -->
+			oc.comment_id AS 'order_comment.comment_id',
+			oc.order_id AS 'order_comment.order_id',
+			oc.score AS 'order_comment.score',
+			oc.comment_content AS 'order_comment.comment_content',
+			oc.state_id AS 'order_comment.state_id'
+		FROM order_info AS oinfo
+		LEFT JOIN state ON state.id = oinfo.order_status
+		LEFT JOIN order_comment AS oc ON oc.order_id = oinfo.order_id
+		<where>
+			<if test="orderId != null">AND oinfo.order_id = #{orderId}</if>
+			<if test="userId != null">AND oinfo.user_id = #{userId}</if>
+			<if test="goodsId != null">AND oinfo.goods_id = #{goodsId}</if>
+			<if test="stateId != null">AND state.id = #{stateId}</if>
+			<if test="orderType != null">AND oinfo.order_type = #{orderType}</if>
+			<if test="paymentStatus != null">AND oinfo.payment_status = #{paymentStatus}</if>
+		</where>
+		<!-- 排序 -->
+		<trim prefix="ORDER BY" suffixOverrides=",">
+			<if test="orderCreateTime != null">oinfo.create_time ${orderCreateTime},</if>
+		</trim>
+		<if test="pageNum!=null">LIMIT #{limit},#{offset}</if> 
+	</select>
+	
+	<!-- 查询出用户的评分 -->
+	<select id="selectAvgScore" parameterType="java.lang.Integer" resultType="java.lang.Double">
+		SELECT
+			AVG(oc.score) AS 'avg_score'
+		FROM order_info AS oi
+		INNER JOIN order_comment AS oc ON oc.order_id = oi.order_id
+		WHERE
+			goods_id = #{userId}
+		LIMIT 1
+	</select>
+	
+	<!-- 查询formId和prepayId -->
+	<select id="selectTemplateId">
+		SELECT
+			oinfo.order_id,
+			oinfo.form_id,
+			oinfo.prepay_id
+		FROM order_info AS oinfo
+		WHERE oinfo.order_id = #{orderId}
+	</select>
+	
+	<!-- 查询所有没有在24小时内确认的订单 -->
+	<select id="selectAllNotConfirmOrderId" resultType="OrderInfo" >
+		SELECT
+			oinfo.order_id,
+			oinfo.user_id,
+			oinfo.goods_id,
+			oinfo.payment,
+			oinfo.payment_status,
+			oinfo.remarks,
+			oinfo.mark_begin_time,
+			oinfo.mark_end_time,
+			oinfo.create_time,
+			oinfo.complete_time,
+			oinfo.confirm_time,
+			oinfo.close_time,
+			oinfo.reason,
+			oinfo.order_type,
+			oinfo.form_id,
+			oinfo.prepay_id,
+			oinfo.order_status
+		FROM
+			order_info AS oinfo
+		WHERE
+			oinfo.order_status = 102
+		AND NOW() >= DATE_ADD(oinfo.create_time, INTERVAL 24 HOUR)
+	</select>
+	
+	<!-- 查询订单状态数量 -->
+	<select id="selectStatusCount" parameterType="com.qichong.model.Filters" resultType="com.qichong.model.OrderStatusCount" >
+		<trim prefix="SELECT " suffix=";" suffixOverrides=",">
+			( SELECT COUNT(1) FROM order_info WHERE ${field} = #{id} ) AS 'count',
+			<if test="s101 == true">
+				( SELECT COUNT(1) FROM order_info WHERE ${field} = #{id} AND order_status = 101 ) AS 's101',
+			</if>
+			<if test="s102 == true">
+				( SELECT COUNT(1) FROM order_info WHERE ${field} = #{id} AND order_status = 102 ) AS 's102',
+			</if>
+			<if test="s103 == true">
+				( SELECT COUNT(1) FROM order_info WHERE ${field} = #{id} AND order_status = 103 ) AS 's103',
+			</if>
+			<if test="s104 == true">
+				( SELECT COUNT(1) FROM order_info WHERE ${field} = #{id} AND order_status = 104 ) AS 's104',
+			</if>
+			<if test="s105 == true">
+				( SELECT COUNT(1) FROM order_info WHERE ${field} = #{id} AND order_status = 105 ) AS 's105',
+			</if>
+			<if test="s106 == true">
+				( SELECT COUNT(1) FROM order_info WHERE ${field} = #{id} AND order_status = 106 ) AS 's106',
+			</if>
+		</trim>
+	</select>
+	
+	<!-- 插入一条信息 -->
+	<insert id="insertOne" parameterType="OrderInfo">
+		INSERT INTO order_info (
+			order_id,
+			user_id,
+			goods_id,
+			payment,
+			payment_status,
+			remarks,
+			mark_begin_time,
+			mark_end_time,
+			create_time,
+			reason,
+			order_type,
+			order_status,
+			form_id,
+			prepay_id,
+			latitude,
+			longitude,
+			address
+		) VALUES (
+			#{orderId},
+			#{userId},
+			#{goodsId},
+			#{payment},
+			#{paymentStatus},
+			#{remarks},
+			#{markBeginTime},
+			#{markEndTime},
+			#{createTime},
+			#{reason},
+			#{orderType},
+			#{orderStatus.id},
+			#{formId},
+			#{prepayId},
+			#{latitude},
+			#{longitude},
+			#{address}
+		)
+	</insert>
+	
+	<!-- 修改一条信息 -->
+	<update id="updateOne" parameterType="OrderInfo">
+		UPDATE order_info
+		<set>
+			<if test="userId != null">user_id = #{userId},</if>
+			<if test="goodsId != null">goods_id = #{goodsId},</if>
+			<if test="payment != null">payment = #{payment},</if>
+			<if test="paymentStatus != null">payment_status = #{paymentStatus},</if>
+			<if test="remarks != null">remarks = #{remarks},</if>
+			<if test="markBeginTime != null">mark_begin_time = #{markBeginTime},</if>
+			<if test="markEndTime != null">mark_end_time = #{markEndTime},</if>
+			<if test="createTime != null">create_time = #{createTime},</if>
+			<if test="completeTime != null">complete_time = #{completeTime},</if>
+			<if test="confirmTime != null">confirm_time = #{confirmTime},</if>
+			<if test="closeTime != null">close_time = #{closeTime},</if>
+			<if test="reason != null">reason = #{reason},</if>
+			<if test="orderType != null">order_type = #{orderType},</if>
+			<if test="orderStatus != null">order_status = #{orderStatus.id},</if>
+			<if test="formId != null">form_id = #{formId},</if>
+			<if test="prepayId != null">prepay_id = #{prepayId},</if>
+			<if test="latitude != null">latitude = #{latitude},</if>
+			<if test="longitude != null">longitude = #{longitude},</if>
+			<if test="address != null">address = #{address},</if>
+		</set>
+		<where>
+			 order_id = #{orderId}
+			 <if test="userId != null">AND user_id = #{userId}</if>
+		</where>
+	</update>
+
+</mapper>

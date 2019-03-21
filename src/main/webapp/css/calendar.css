@@ -1,0 +1,44 @@
+﻿*{margin:0; padding:0;}
+
+/*重要代码,日历*/
+body{font-family:'microsoft yahei';}
+	em{font-style:normal;font-size:14px;}
+	.form-group {position: relative;width:140px;}
+	.form-group-txt{height:32px;line-height:32px;padding:0 10px;}
+	.form-group-select {/*padding-left: 1px;*/}
+	.form-control,
+	.simulation-input {
+		width: 100%;
+		line-height: 16px;
+		font-size: 12px;
+		color: #4b555b;
+		background: none;
+		outline: none;
+		border: 1px solid #d3dcdd;
+		background-color: #fff;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		-ms-box-sizing: border-box;
+		box-sizing: border-box;
+		margin: 0 -1px;
+		padding: 7px 8px;
+		*padding-left: 0;
+		*padding-right: 0;
+		*text-indent: 8px;
+		*float: left;
+		transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+	}
+	.float-left{float:left;}
+	.table-cell{
+		margin-left:calc(36% - 88px);
+		margin-top:34px;
+	}
+
+
+input,img{ border:0; vertical-align: top;}
+ul{ list-style-type:none;}
+a{ text-decoration:none; color:#333;}/*a标签样式*/
+a:hover{ color:red;}/*a标签鼠标经过样式*/
+body{ font-size:12px; font-family:Arial;  color:#333;} 
+.clear{ clear:both;}  /*清除浮动*/
+

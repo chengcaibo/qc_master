@@ -1,0 +1,85 @@
+/*预约记录*/
+.personal-page .reservation-record {
+	width: 100%;
+	display: none;
+	padding: 0 66px;
+	min-height: 1072px;
+	background: url("../images/Reservation-record.png") no-repeat bottom
+		right;
+	background-size: 600px;
+}
+
+.reservation-record .reservation-record-top {
+	width: 100%;
+	text-align: center;
+	height: 60px;
+}
+
+.reservation-record-top p {
+	display: inline-block;
+	font-size: 17px;
+	height: 30px;
+	border-bottom: 2px solid #4192ff;
+	background: none;
+	margin-right: 36px;
+	cursor: pointer;
+}
+
+.reservation-record-top p:last-child {
+	border: 0;
+}
+/*我的预约*/
+.reservation-record .reservation-record-content {
+	width: 100%;
+	height: auto;
+}
+
+#myAbout {
+	display: block;
+}
+
+#aboutMy {
+	display: none;
+}
+
+.reservation-record-content li:first-child {
+	height: 35px;
+	border-bottom: 1px solid #a0a0a0;
+	display: flex;
+	justify-content: space-between;
+	margin-top: 0;
+}
+
+.reservation-record-content li {
+	width: 100%;
+	height: 50px;
+	    display: flex;
+    justify-content: space-between;
+    margin-top: 18px;
+}
+
+.reservation-record-content li:first-child p {
+	line-height: 15px;
+	color: #333;
+}
+
+.reservation-record-content li p a{
+	text-decoration: none;
+	color: red;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

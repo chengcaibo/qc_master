@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qichong.dao.SharedTypesDao">
+
+	<!-- 根据关键字模糊选择所有的项，可进行分页 -->
+	<select id="selectLikeAll" resultType="com.qichong.model.ChildParentModel">
+		SELECT
+			shared.code,
+			shared.name AS 'child',
+			(
+				SELECT name FROM shared_types WHERE code = shared.parent_code
+			) AS 'parent'
+		FROM shared_types AS shared
+		WHERE shared.name LIKE '%${name}%'
+		<if test="pageSize != null &amp;&amp; pageNum != null">
+			LIMIT #{limit},#{offset}
+		</if>
+	</select>
+
+	<!-- 根据传入的code选择单个项 -->
+	<select id="selectOne" resultType="SharedTypes">
+		SELECT * FROM shared_types WHERE code = #{code}
+	</select>
+	
+	<!-- 根据父级Code查询所有子级 -->
+	<select id="selectChildByParentCode" resultType="SharedTypes">
+		SELECT * FROM shared_types
+		<where>
+			<if test="parentCodes==null">parent_code = #{parentCode}</if>
+			<if test="parentCodes!=null">
+				<trim prefix="parent_code IN ( " suffix=")" suffixOverrides="," >
+					<foreach collection="parentCodes" item="code">${code},</foreach>
+				</trim>
+			</if>
+		</where>
+	</select>
+
+</mapper>

@@ -1,0 +1,310 @@
+* {
+	border: 0;
+	outline: none;
+}
+/*敏感词css*/
+#sensitive-words {
+	position: absolute;
+	top: 0;
+	right: 0px;
+	color: red;
+	font-size: 12px;
+	display: none;
+}
+
+#advantage-sensitive {
+	position: absolute;
+	top: 90px;
+	right: 40px;
+	color: red;
+	font-size: 12px;
+	display: none;
+}
+
+#case-sensitive-word {
+	position: absolute;
+	top: 25px;
+	right: 0;
+	color: red;
+	font-size: 12px;
+	display: none;
+}
+
+#sensitive {
+	position: absolute;
+	top: 16px;
+	right: 0;
+	color: red;
+	font-size: 12px;
+	display: none;
+}
+
+/* 成功 */
+.return-icon {
+	width: 400px;
+	height: 260px;
+	position: absolute;
+	background: #fff;
+	z-index: 3;
+	/* left: 540px;
+	top: 350px; */
+	margin: 180px 366px;
+	-moz-box-shadow: 0px 1px 5px #8c8c8c;
+	-webkit-box-shadow: 0px 1px 5px #8c8c8c;
+	box-shadow: 0px 1px 5px #8c8c8c;
+}
+
+.return-icon .return-success {
+	font-size: 110px;
+	margin: 145px;
+	position: relative;
+	top: 30px;
+	color: #2196F3;
+}
+
+.return-icon  h3 {
+	font-size: 25px;
+	text-align: center;
+	margin-top: 20px;
+	color: #5a5a5a;
+}
+
+.return-icon span {
+	float: right;
+	position: relative;
+	right: 15px;
+	top: 18px;
+}
+
+.return-icon span a {
+	text-decoration: none;
+}
+
+.return-icon .return-close {
+	float: right;
+	position: absolute;
+	right: 12px;
+	top: 10px;
+	cursor: pointer;
+	color: #797979;
+	transition: 1s;
+}
+
+.return-icon .return-close:HOVER {
+	color: #353535;
+}
+
+/* 失败 */
+.return-icon-error {
+	width: 400px;
+	height: 260px;
+	position: absolute;
+	background: #fff;
+	z-index: 3;
+	left: 540px;
+	top: 350px;
+	-moz-box-shadow: 0px 1px 5px #8c8c8c;
+	-webkit-box-shadow: 0px 1px 5px #8c8c8c;
+	box-shadow: 0px 1px 5px #8c8c8c;
+}
+
+.return-icon-error .return-error {
+	font-size: 110px;
+	margin: 145px;
+	position: relative;
+	top: 30px;
+	color: #ff0202;
+}
+
+.return-icon-error  h3 {
+	font-size: 25px;
+	text-align: center;
+	margin-top: 18px;
+	color: #5a5a5a;
+}
+
+.return-icon-error span {
+	float: right;
+	position: relative;
+	right: 15px;
+	top: 18px;
+}
+
+.return-icon-error span a {
+	text-decoration: none;
+}
+
+.return-icon-error .return-close-error {
+	float: right;
+	position: absolute;
+	right: 12px;
+	top: 10px;
+	cursor: pointer;
+	color: #797979;
+	transition: 1s;
+}
+
+.return-icon-error .return-close:HOVER {
+	color: #353535;
+}
+
+/*个人中心左板块*/
+.personal .personal-button {
+	width: 214px;
+	/* height: 1158px; */
+	background: #fff;
+	float: left;
+	margin-right: 19px;
+	border-radius: 10px;
+}
+
+.personal-button li {
+	width: 100%;
+	height: 60px;
+	text-align: center;
+	line-height: 60px;
+	font-size: 16px;
+	margin-bottom: 8px;
+}
+
+.personal-button li a {
+	text-decoration: none !important;
+	color: #757575;
+}
+
+.personal-button li i:hover {
+	color: #2f2f2f;
+}
+
+.i-button-bgcolor {
+	color: #007ded !important;
+}
+
+.personal-button li i {
+	padding-right: 20px;
+}
+
+.personal-button li .icon-anli {
+	padding-right: 23px;
+}
+
+/*个人中心右板块*/
+.personal .personal-page {
+	width: 800px;
+	background: #fff;
+	float: left;
+	min-height: 740px;
+	padding-top: 86px;
+	/*overflow: hidden;*/
+}
+
+.basic-information .textarea-introduce {
+	width: 350px;
+	height: 124px;
+	border: 1px solid #ccc;
+	padding: 10px;
+	margin: 0 89px;
+}
+
+.iDcard-box {
+	    width: 260px;
+	    display: inline;
+}
+
+.iDcard-box .iDcard-info {
+	position: absolute;
+	left: 115px;
+}
+
+.iDcard-box .IDcard-just-info {
+	width: 230px;
+	height: 150px;
+}
+
+.headPortrait-img{
+	
+}
+
+.img-mask .imgback{
+	position: absolute;
+    /* z-index: 1; */
+    top: 0px;
+    left: 116px;
+    border-left: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+
+
+#file-headPortrait-parent .iDcard-imges1{
+	
+	
+	width: 230px;
+	height:150px;
+	text-align: center;
+	line-height: 150px;
+	position: relative;
+	cursor: pointer;
+	color: #888;
+	background: #fafafa;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	overflow: hidden;
+	display: inline-block;
+	text-decoration: none;
+}
+#file-headPortrait-parent2 .iDcard-imges2 {
+	width: 230px;
+	height:150px;
+	text-align: center;
+	line-height: 150px;
+	position: relative;
+	cursor: pointer;
+	color: #888;
+	background: #fafafa;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	overflow: hidden;
+	display: inline-block;
+	text-decoration: none;
+}
+#file-headPortrait-parent3 .iDcard-imges3 {
+	width: 230px;
+	height:150px;
+	text-align: center;
+	line-height: 150px;
+	position: relative;
+	cursor: pointer;
+	color: #888;
+	background: #fafafa;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	overflow: hidden;
+	display: inline-block;
+	text-decoration: none;
+}
+
+.icon-gerenrenzheng{
+	    color: #1abb1a;
+    font-size: 100px;
+    text-align: center;
+}
+
+.examine-h1 , .qcicon-h1{
+	text-align: center;
+}
+
+.icon-success{
+	color: #1abb1a;
+    font-size: 100px;
+    text-align: center;
+}
+
+.time-item{
+	text-align: center;
+    margin-top: 10px;
+    font-size: 25px;
+}
+
+

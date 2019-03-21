@@ -1,0 +1,205 @@
+* {
+	margin: 0 auto;
+}
+
+.help-center-box {
+	width: 1200px;
+	margin: 0 auto;
+}
+
+.help-center-box .use-guide h3, .common-problem h3, .contact h3 {
+	position: relative;
+	font-size: 35px;
+	color: #222222;
+	line-height: 60px;
+	font-weight: 600;
+	margin-bottom: 20px;
+	margin-top: 30px;
+}
+
+.contact-content p {
+	font-size: 25px;
+}
+
+.contact-content {
+	font-family: 'Microsoft Yahei', Helvetica, Arial, sans-serif;
+	font-size: 25px;
+	line-height: 55px;
+	margin: 0 auto;
+}
+
+.contact-content img {
+	width: 600px;
+	background: #fff;
+}
+
+.contact-content ul {
+	margin-top: 20px;
+}
+
+.contact {
+	padding-bottom: 50px;
+}
+
+.contact-mode {
+	float: right;
+	width: 565px;
+}
+
+.contact-content ul li h4 {
+	position: relative;
+	font-size: 30px;
+	color: #222222;
+	line-height: 40px;
+	font-weight: 600;
+}
+
+.use-guide .choose-ul {
+	display: flex;
+	font-size: 30px;
+	justify-content: space-around;
+	background: #007ded;
+	line-height: 60px;
+	font-weight: 600;
+	color: #fff;
+}
+
+.use-guide .choose-ul li {
+	width: 600px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.use-guide .small-program-use {
+	background: #007ded;
+	color: #fff;
+}
+
+.use-guide .computer-use {
+	background: #dedede;
+	color: #000;
+}
+
+.computer-box {
+	display: none;
+}
+
+.small-program-box .small-p {
+	font-size: 30px;
+	margin-top: 20px;
+	font-weight: bold;
+}
+
+.small-program-box .small-p span {
+	padding: 10px;
+	font-weight: bold;
+	font-size: 60px;
+	position: relative;
+	top: 5px;
+	color: #007ded;
+}
+
+.small-program-box img {
+	width: 370px;
+	margin: 30px 0;
+}
+
+.small-program-box ul {
+	float: right;
+	width: 745px;
+	margin-top: 120px;
+}
+
+.small-program-box ul li {
+	width: 700px;
+	border: 1px solid #000;
+	padding: 12px;
+	text-align: center;
+	letter-spacing: 2px;
+	font-size: 25px;
+	margin-top: 25px;
+}
+
+.small-program-box ul .info-title {
+	border: 0;
+	font-size: 50px;
+	font-weight: bold;
+	color: #000;
+}
+
+.small-program-box ul .process-info {
+	border: 0;
+	margin-top: 0;
+	padding: 0;
+}
+
+.small-program-box ul .process-info .small-p {
+	font-size: 40px;
+	font-weight: 600;
+	color: #000;
+}
+
+.small-program-box ul .process-info .small-p span {
+	font-size: 80px;
+	position: relative;
+	top: 7px;
+}
+
+.qc-service h3{
+	position: relative;
+	font-size: 35px;
+	color: #222222;
+	line-height: 60px;
+	font-weight: 600;
+	margin-bottom: 20px;
+	margin-top: 30px;
+}
+
+.computer-box .computer-p {
+	font-size: 30px;
+	margin-top: 20px;
+	font-weight: bold;
+	color: #000;
+}
+
+.computer-box .computer-p span{
+	padding: 10px;
+	font-weight: bold;
+	font-size: 60px;
+	position: relative;
+	top: 5px;
+	color: #007ded;
+}
+.computer-box .computer-p a{	
+    color: #ca0c0c;
+}
+.computer-box img{
+	width: 1200px;
+    margin-top: 20px;
+}
+
+.computer-box .register-img{
+	border-top: 1px solid #000;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,98 @@
+* {
+	margin: 0 auto;
+}
+
+.novice-box {
+	width: 1200px;
+	margin: 30px auto;
+}
+
+.novice-box h3 {
+	position: relative;
+	font-size: 40px;
+	color: #222222;
+	line-height: 60px;
+	font-weight: 600;
+	margin-bottom: 20px;
+	margin-top: 30px;
+}
+
+.how-register ul {
+	display: flex;
+	font-size: 30px;
+	justify-content: space-around;
+	background: #007ded;
+	line-height: 60px;
+	font-weight: 600;
+	color: #fff;
+}
+
+.how-register ul li {
+	width: 600px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.how-register .personal-li{
+	background: #007ded;
+	color: #fff;
+}
+
+.how-register .enterprise-li{
+	background: #dedede;
+	color: #000;
+}
+
+.enterprise-box {
+	display: none;
+}
+
+/* 个人 */
+.personal-box li {
+	font-size: 20px;
+	margin-top: 30px;
+}
+
+.personal-box li p{
+	color: #000;
+    font-weight: 600;
+}
+
+.personal-box li img {
+	margin-top: 20px;
+	width: 1200px;
+	cursor: pointer;
+	border: 1px solid #828282;
+}
+
+.personal-box li .indicia {
+	text-align: center;
+	margin-top: 10px;
+	color: #000;
+}
+
+
+/* 企业 */
+.enterprise-box li {
+	font-size: 20px;
+	margin-top: 30px;
+}
+
+.enterprise-box li p{
+	color: #000;
+    font-weight: 600;
+}
+
+.enterprise-box li img {
+	margin-top: 20px;
+	width: 1200px;
+	cursor: pointer;
+	border: 1px solid #828282;
+}
+
+.enterprise-box li .indicia {
+	text-align: center;
+	margin-top: 10px;
+	color: #000;
+}
+

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qichong.dao.OrderCommentDao">
+
+	<!-- 插入一条信息 -->
+	<insert id="insertOne" parameterType="OrderComment">
+		INSERT INTO order_comment (
+			order_id,
+			user_id,
+			score,
+			comment_content,
+			state_id
+		) VALUES (
+			#{orderId},
+			#{userId},
+			#{score},
+			#{commentContent},
+			1
+		)
+	</insert>
+	
+	<!-- 修改一条信息 -->
+	<update id="updateOne" parameterType="OrderComment">
+		UPDATE order_comment
+		<set>
+			<if test="score != null">score = #{score},</if>
+			<if test="commentContent != null">comment_content = #{commentContent},</if>
+			<if test="stateId != null">state_id = #{stateId},</if>
+		</set>
+		<where>
+			 order_id = #{orderId}
+			 <if test="userId != null">AND user_id = #{userId}</if>
+		</where>
+	</update>
+
+</mapper>

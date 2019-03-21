@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>标题</title>
+    <!--jQuery 百度CDN库-->
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+        // jQuery代码
+        $(document).ready(function () {
+            $("#b1").click(function () {
+                $("#tab_1").show();// 显示
+                $("#tab_2").hide();// 隐藏
+            });
+            $("#b2").click(function () {
+                $("#tab_1").hide();
+                $("#tab_2").show();
+            });
+        });
+    </script>
+</head>
+<body>
+<div>
+    <h1>标题一</h1>
+</div>
+<div>
+    <div>
+        <ul>
+            <li><button id="b1">菜单1</button></li>
+            <li><button id="b2">菜单2</button></li>
+        </ul>
+    </div>
+    <div>
+        <div id="tab_1">
+            子页面1
+        </div>
+        <div id="tab_2">
+            子页面2
+        </div>
+    </div>
+</div>
+</body>
+</html>

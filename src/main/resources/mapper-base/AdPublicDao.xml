@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.qichong.dao.AdPublicDao">
+
+	<!-- 查询所有【广告】信息并且筛选 -->
+	<select id="selectAllByFilter" resultType="AdPublic" parameterType="com.qichong.model.Filters">
+		SELECT * FROM (
+			SELECT
+				adinfo.id,
+				-- users 信息
+				users.id AS 'user.id',
+				users.username AS 'user.username',
+				users.type_id AS 'user.type_id',
+				-- userInfo 信息
+				uinfo.id AS 'userInfo.id',
+				uinfo.avatar AS 'userInfo.avatar',
+				uinfo.nick_name AS 'userInfo.nick_name',
+				uinfo.real_name AS 'userInfo.real_name',
+				uinfo.introduce AS 'userInfo.introduce',
+				uinfo.telephone AS 'userInfo.telephone',
+				uinfo.address AS 'userInfo.address',
+				-- enterpriseInfo 信息
+				einfo.id AS 'enterpriseInfo.id',
+				einfo.logo AS 'enterpriseInfo.logo',
+				einfo.enterprise_name AS 'enterpriseInfo.enterprise_name',
+				einfo.telephone AS 'enterpriseInfo.telephone',
+				adinfo.content,
+				adinfo.phone,
+				adinfo.latitude,
+				adinfo.longitude,
+				adinfo.address,
+				'adinfo.addressName',
+				adinfo.address_name,
+				adinfo.picture,
+				adinfo.time,
+				adinfo.state_id as 'state.id',
+				stype.code as 'sharedType.code',
+				stype.name as 'sharedType.name'
+				<!-- 如果筛选了经纬度，则计算距离 -->
+				<if test="latitude != null &amp;&amp; longitude!=null">
+					<![CDATA[,
+	 				ROUND(
+				        6378.138 * 2 * ASIN(
+				            SQRT(
+				                POW(
+				                    SIN(
+				                        (
+				                            #{latitude} * PI() / 180 - adinfo.latitude * PI() / 180
+				                        ) / 2
+				                    ),
+				                    2
+				                ) + COS(#{latitude} * PI() / 180) * COS(adinfo.latitude * PI() / 180) * POW(
+				                    SIN(
+				                        (
+				                            #{longitude} * PI() / 180 - adinfo.longitude * PI() / 180
+				                        ) / 2
+				                    ),
+				                    2
+				                )
+				            )
+				        ) * 1000
+					) AS 'distance_number'
+					]]>
+				</if>
+			FROM ad_public AS adinfo
+			INNER JOIN users ON (users.id = adinfo.user_id)
+			LEFT JOIN user_info AS uinfo ON (uinfo.user_id = users.id)
+			LEFT JOIN enterprise_info AS einfo ON (einfo.user_id = users.id)
+			LEFT JOIN shared_types AS stype ON (stype.code = adinfo.shared_type_code)
+			LEFT JOIN state ON (state.id = adinfo.state_id)
+			<where>
+				<!-- 如果筛选了经纬度，则没有经纬度的需求将不会被搜索到 -->
+				<if test="latitude != null">AND adinfo.latitude IS NOT NULL</if>
+				<if test="longitude!=null">AND adinfo.longitude IS NOT NULL</if>
+				<!-- 根据Id查询 -->
+				<if test="adId != null">AND adinfo.id = #{adId}</if>
+				<if test="userId != null">AND users.id = #{userId}</if>
+				<!-- 关键字模糊搜索，搜索范围：广告内容，详细地址 -->
+				<if test="keyword != null">
+					<![CDATA[AND (
+						adinfo.content LIKE '%${keyword}%' OR
+						adinfo.address LIKE '%${keyword}%'
+					)]]>
+				</if>
+				<!-- 共享类型筛选 -->
+				<if test="sharedCode!=null">AND stype.code = #{sharedCode}</if>
+				<if test="stateId != null">AND state.id = #{stateId}</if>
+			</where>
+			<!-- 排序 -->
+			<trim prefix="ORDER BY" suffixOverrides=",">
+				<if test="orderCreateTime != null">adinfo.time ${orderCreateTime},</if>
+			</trim>
+		) AS s
+		<where>
+			<if test="distance != null"><![CDATA[s.distance_number < #{distance}]]></if>
+		</where>
+		<trim prefix="ORDER BY" suffixOverrides=",">
+			<if test="orderDistance != null">s.distance_number ${orderDistance},</if>
+		</trim>
+		<if test="pageNum!=null">LIMIT #{limit},#{offset}</if>
+	</select>
+
+	<!-- 查询个人发布的广告 用于更多页面 -->
+	<select id="selAdpublicAll" resultType='com.qichong.model.AdpublicInfoModel'>
+		SELECT
+			ai.id as 'ai.id',
+			ai.user_id as 'ai.user.id',
+			ai.content as 'ai.content',
+			ai.picture as 'ai.picture',
+			ai.time as 'ai.time',
+			ai.phone as 'ai.phone',
+			ai.address as 'ai.address',
+			ai.state_id as 'ai.state.id'
+		FROM ad_public ai
+		INNER JOIN 
+		users u ON(ai.user_id = u.id)
+		WHERE u.type_id = 1
+		LIMIT #{filters.limit},#{filters.offset}
+		<!-- LIMIT #{filters.pageNum},#{filters.pageSize} -->
+	</select>
+
+	<!-- 查询个人发布的广告    用于更多页面 -->
+	<select id="queryUserInfoAdpublicMore" resultType='AdPublic'>
+		SELECT
+			ai.id,
+			ai.content,
+			ai.picture,
+			ai.time,
+			ai.phone,
+			ai.address,
+			ai.state_id
+		FROM ad_public ai
+		INNER JOIN 
+		users u ON(ai.user_id = u.id)
+		WHERE u.type_id = 1
+	</select>
+
+	<!-- 查询企业发布的广告记录    用于更多页面  -->
+	<select id="queryEnterpriseAdpublicMore" resultType='AdPublic'>
+		SELECT
+			a.id,
+			a.content,
+			a.picture,
+			a.time,
+			a.phone,
+			a.address,
+			a.state_id
+		FROM ad_public a 
+		INNER JOIN 
+		users u ON(a.user_id = u.id)
+		WHERE u.type_id = 2
+	</select>
+	
+	<!-- 查询全部并筛选 -->
+	<select id="selectAllAndFilter" resultType="AdPublic">
+		SELECT
+			id,
+			user_id as 'user.id',
+			content,
+			phone,
+			address,
+			picture,
+			time,
+			state_id as 'state.id'
+		FROM ad_public
+		<where>
+			<if test="stateId!=null">AND state_id = #{stateId}</if>
+			<if test="name!=null">AND content LIKE '%${name}%'</if>
+			<if test="address!=null">AND address LIKE '%${address}%'</if>
+			<if test="beginTime!=null &amp;&amp; endTime!=null">AND time BETWEEN #{beginTime} AND #{endTime} </if>
+		</where>
+		ORDER BY time DESC
+		LIMIT #{limit},#{offset}
+	</select>
+	
+	<!-- 根据UserId查询广告信息 -->
+	<select id="selectByUserId" resultType="AdPublic">
+		SELECT	id,
+				user_id as 'user.id',
+				content,
+				phone,
+				address,
+				picture,
+				time,
+				state_id as 'state.id'
+		FROM ad_public
+		WHERE user_id = #{userId}
+	</select>
+	
+	<!-- 根据UserId查询广告信息 -->
+	<select id="selAdpublic" resultType="AdPublic">
+		SELECT	id,
+				a.user_id as 'user.id',
+				a.content,
+				a.phone,
+				a.address,
+				a.picture,
+				a.time,
+				a.state_id as 'state.id',
+				s.`code` as 'sharedType.code',
+				s.`name` as 'sharedType.name'
+		FROM ad_public a
+		INNER JOIN shared_types s ON (a.shared_type_code = s.`code`)
+		WHERE a.user_id = #{userId}
+	</select>
+
+	<!-- 根据id查询广告 -->
+	<select id="adPublicById" parameterType="java.lang.Integer" resultType="AdPublic">
+		SELECT * FROM ad_public WHERE id=#{id}
+	</select>
+	
+	<!-- 新增广告信息 -->
+	<insert id="insertOne" parameterType="AdPublic" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO ad_public (
+			user_id,
+			content,
+			phone,
+			picture,
+			time,
+			latitude,
+			longitude,
+			address,
+			address_name,
+			state_id,
+			shared_type_code
+		) VALUES (
+			#{user.id},
+			#{content},
+			#{phone},
+			#{picture},
+			#{time},
+			#{latitude},
+			#{longitude},
+			#{address},
+			#{addressName},
+			#{state.id},
+			#{sharedType.code}
+		)
+	</insert>
+	
+	<!-- 根据id删除广告 -->
+	<delete id="deleteOne" >
+		DELETE FROM ad_public WHERE id = #{id}
+	</delete>
+
+	<!-- 修改广告方法 -->
+	<update id="updateOne" parameterType="AdPublic">
+		UPDATE ad_public
+		<set>
+			<if test="content != null">content = #{content},</if>
+			<if test="phone != null">phone = #{phone},</if>
+			<if test="latitude != null">latitude = #{latitude},</if>
+			<if test="longitude != null">longitude = #{longitude},</if>
+			<if test="address != null">address = #{address},</if>
+			<if test="addressName != null">address_name = #{addressName},</if>
+			<if test="picture.name != null">picture = #{picture},</if>
+			<if test="time != null">time = #{time},</if>
+			<if test="state != null">state_id = #{state.id},</if>
+			<if test="(sharedType != null)&amp;&amp;(sharedType.code != null)">shared_type_code = #{sharedType.code},</if>
+		</set>
+		<where>
+			<if test="id!=null">AND id = #{id}</if>
+			<if test="user!=null &amp;&amp; user.id!=null">AND user_id = #{user.id}</if>
+		</where>
+	</update>
+	
+	<!-- 查询个人发布的广告 -->
+	<select id="queryAdPublicUserMaxFive" resultType='AdPublic'>
+		SELECT
+			a.id,
+			a.content,
+			a.picture,
+			a.time,
+			a.phone,
+			a.address,
+			a.state_id
+		FROM
+			ad_public a INNER JOIN users u ON(a.user_id = u.id)
+		WHERE u.type_id = 1 AND a.address LIKE '%${city}%'
+		ORDER BY a.time DESC
+		LIMIT #{limit},#{offset}
+	</select>
+	
+	<!-- 查询企业发布的广告记录 -->
+	<select id="queryAdPublicEnterpriseMaxFive" resultType='AdPublic'>
+		SELECT
+			a.id,
+			e.enterprise_name as 'enterpriseInfo.enterpriseName',
+			a.user_id as 'user.id',
+			a.content,
+			a.picture,
+			a.time,
+			a.phone,
+			a.address,
+			a.state_id
+		FROM ad_public a
+		INNER JOIN users u ON(a.user_id = u.id)
+		INNER JOIN enterprise_info e ON(a.user_id = e.user_id)
+		WHERE	u.type_id = 2 AND a.address LIKE '%${city}%'
+		ORDER BY a.time DESC
+		LIMIT #{limit},#{offset}
+	</select>
+	
+	
+	<!--查询Id最大的5条  -->
+	<select id="queryAdPublicMaxFive" resultType='AdPublic'>
+		SELECT
+			a.id,
+			a.content,
+			a.picture,
+			a.time,
+			a.phone,
+			a.address,
+			a.state_id
+		FROM ad_public a 
+		INNER JOIN users u ON(a.user_id = u.id)
+		ORDER BY a.time DESC
+		LIMIT #{limit},#{offset}
+	</select>
+	
+	<!--分页查询所有广告信息 -->
+	<select id="queryAllAdpublic" resultType='com.qichong.model.AdpublicInfoModel'>
+		SELECT
+			ai.id as 'ai.id',
+			ai.user_id as 'ai.user.id',
+			ai.content as 'ai.content',
+			ai.picture as 'ai.picture',
+			ai.time as 'ai.time',
+			ai.phone as 'ai.phone',
+			ai.address as 'ai.address',
+			ai.state_id as 'ai.state.id'
+		FROM ad_public ai
+		INNER JOIN users u ON(ai.user_id = u.id)
+		ORDER BY ai.time DESC
+		LIMIT #{limit},#{offset}
+	</select>
+	
+	
+	<select id="queryAdPublic" resultType='AdPublic'>
+		SELECT
+			a.id,
+			a.content,
+			a.picture,
+			a.time,
+			a.phone,
+			a.address,
+			state_id
+		FROM
+			ad_public a
+	</select>
+
+	<!-- 根据用户Id查询所发布的广告 -->
+	<select id="byUserIdAdPublic" parameterType="java.lang.Integer" resultType="AdPublic">
+	    SELECT
+			id,
+			user_id as 'user.id',
+			content,
+			phone,
+			picture,
+			time,
+			address,
+			state_id as 'state.id'
+		FROM ad_public
+		WHERE user_id = #{userId}
+		ORDER BY time DESC
+		LIMIT 0,10
+	</select>
+	
+	<select id="queryOneAdpublic" resultType="AdPublic">
+	 	SELECT
+			ad.id,
+			users.id as 'user.id',
+			ad.content,
+			ad.picture,
+			ad.time,
+			ad.address,
+			ad.phone,
+			ad.state_id
+		FROM ad_public ad
+		INNER JOIN users ON (users.id = ad.user_id)
+		WHERE ad.id = #{adPublicId}
+	</select>
+	
+	<!-- 查询详情 -->
+	<select id="queryAdpublicInfo" resultType="AdPublic">
+	 	SELECT
+			a.id,
+			a.content,
+			a.picture,
+			a.time,
+			a.address,
+			a.phone,
+			a.state_id,
+			u.nick_name,
+			u.avatar,
+			u.real_name,
+			u.telephone,
+			u.address,
+			a.user_id as 'user.id'
+		FROM
+		ad_public a
+		INNER JOIN user_info AS u ON(a.user_id = u.user_id)
+		WHERE a.user_id=#{user.id}
+	</select>
+	
+	<select id="queryLike" resultType="AdPublic">
+		SELECT
+			a.id,
+			a.content,
+			a.picture,
+			a.time,
+			a.address,
+			a.phone,
+			a.state_id
+		FROM ad_public a
+		WHERE a.content like'%${content}%' AND a.id != #{ruleOutId}
+		ORDER BY a.time DESC
+	</select>
+</mapper>

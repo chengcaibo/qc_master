@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qichong.dao.LatestReleaseDao">
+
+	<!-- 查询新发布的个人 -->
+	<select id="selectLatestUserInfo" resultType="UserInfo">
+		SELECT
+			users.id AS 'user.id',
+			uinfo.nick_name,
+			users.create_time AS 'user.create_time'
+		FROM
+			users
+		LEFT JOIN user_info AS uinfo ON users.id = uinfo.user_id
+		WHERE
+			users.type_id = 1
+		AND users.state_id = 10
+		ORDER BY
+			users.create_time DESC
+		LIMIT 0, 10;
+	</select>
+
+	<!-- 查询新发布的企业 -->
+	<select id="selectLatestEnterpriseInfo" resultType="EnterpriseInfo">
+		SELECT
+			users.id AS 'user.id',
+			einfo.enterprise_name,
+			users.create_time AS 'user.create_time'
+		FROM
+			users
+		LEFT JOIN enterprise_info AS einfo ON users.id = einfo.user_id
+		WHERE
+			users.type_id = 2
+		AND users.state_id = 10
+		ORDER BY
+			users.create_time DESC
+		LIMIT 0, 10;
+	</select>
+
+	<!-- 查询新发布的需求 -->
+	<select id="selectLatestDemandInfo" resultType="DemandInfo">
+		SELECT
+			dinfo.id,
+			dinfo.content,
+			dinfo.release_time,
+			users.type_id AS 'user.type_id',
+			uinfo.nick_name AS 'userInfo.nick_name',
+			einfo.enterprise_name AS 'enterpriseInfo.enterprise_name'
+		FROM
+			demand_info AS dinfo
+		INNER JOIN users ON users.id = dinfo.user_id
+		LEFT JOIN user_info AS uinfo ON users.id = uinfo.user_id
+		LEFT JOIN enterprise_info AS einfo ON users.id = einfo.user_id
+		ORDER BY
+			dinfo.release_time DESC
+		LIMIT 0, 10;
+	</select>
+
+	<!-- 查询新发布的团体 -->
+	<select id="selectLatestGroupInfo" resultType="GroupInfo">
+		SELECT
+			ginfo.id,
+			ginfo.group_name,
+			ginfo.create_time,
+			users.type_id AS 'user.type_id',
+			uinfo.nick_name AS 'userInfo.nick_name',
+			einfo.enterprise_name AS 'enterpriseInfo.enterprise_name'
+		FROM
+			group_info AS ginfo
+		INNER JOIN users ON users.id = ginfo.user_id
+		LEFT JOIN user_info AS uinfo ON users.id = uinfo.user_id
+		LEFT JOIN enterprise_info AS einfo ON users.id = einfo.user_id
+		ORDER BY
+			ginfo.create_time DESC
+		LIMIT 0, 10;
+	</select>
+
+</mapper>

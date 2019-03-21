@@ -1,0 +1,160 @@
+/*我的优势*/
+.personal-page .my-advantage {
+	width: 650px;
+	display: none;
+	/* padding-left: 30px; */
+	position: relative;
+	margin: 0 auto;
+	min-height: 884px;
+	background: url("../../../beautify/my-advantage.png") no-repeat bottom right;
+	background-size: 600px;
+}
+.my-advantage .my-advantage-top {
+	height: auto;
+	position: relative;
+	display: none;
+}
+
+.my-advantage .my-advantage-bottom {
+	display: block;
+}
+
+.my-advantage-top h1 {
+	height: 30px;
+	position: relative;
+	top: -32px;
+	font-size: 20px;
+	color: #2196F3;
+}
+
+.my-advantage-top textarea, .my-advantage-middle p {
+	width: 650px;
+	height: 168px;
+	resize: none;
+	/* border: 1px solid #ccc; */
+	padding: 0px 20px;
+	font-size: 14px;
+	color: #656565;
+	line-height: 30px;
+	/* margin-top: -30px; */
+	margin: 30px -19px;
+}
+
+.my-advantage-top p {
+	font-size: 16px;
+	color: #bdbdbd;
+	position: absolute;
+	top: 195px;
+	right: 40px;
+}
+
+.my-advantage-top .my-advantage-top-button {
+	width: 650px;
+	margin: 0 auto;
+	margin-top: -10px;
+}
+
+.my-advantage-top-button .sub-ascendancy {
+	
+}
+
+.my-advantage-top-button button {
+	height: 40px;
+	width: 150px;
+	/* border: 1px solid #fff; */
+	background: #0099ff;
+	color: #fff;
+	/* border-radius: 5px; */
+	font-size: 20px;
+	position: relative;
+	left: 326px;
+}
+
+.my-advantage-top-button button:nth-child(2) {
+	background: #09f;
+	color: #fff;
+	margin-right: 0;
+}
+
+.my-advantage-top .my-advantage-middle {
+	height: auto;
+	width: auto;
+	margin-bottom: 25px;
+}
+
+.my-advantage-middle h1 {
+	height: 10px;
+	font-size: 20px;
+	color: #616161;
+	margin: 0;
+}
+
+.my-advantage-middle .my-advantage-middle-content {
+	height: 277px;
+	width: 804px;
+	border: 1px solid #ccc;
+	padding: 17px;
+}
+
+.my-advantage-middle-content li {
+	height: 33px;
+}
+
+.my-advantage-top .my-advantage-bottom {
+	height: auto;
+	width: auto;
+	padding: 20px;
+	position: relative;
+}
+
+.my-advantage-bottom textarea {
+	width: 650px;
+	height: 220px;
+	resize: none;
+	border: 1px solid #ccc;
+	padding: 20px;
+	font-size: 16px;
+	background: #fbfafa;
+	margin: 30px -20px;
+}
+
+.my-advantage-bottom button {
+	border: 0;
+	background: transparent;
+	position: absolute;
+	right: 7%;
+	bottom: 43px;
+	color: #868686;
+	font-size: 16px;
+}
+
+.my-advantage-bottom h3 {
+	font-size: 30px;
+	width: 650px;
+	margin: 7px -20px;
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 19px;
+	color: #404040;
+}
+
+.my-advantage-top h3 {
+	font-size: 30px;
+	width: 650px;
+	margin: 7px -20px;
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 19px;
+	color: #404040;
+}
+
+.my-attention h3 {
+	font-size: 30px;
+	width: 650px;
+	margin: 7px -20px;
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 19px;
+	color: #404040;
+}
+
+.my-advantage li {
+	
+}

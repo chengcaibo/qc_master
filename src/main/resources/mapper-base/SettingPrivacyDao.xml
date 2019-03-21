@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qichong.dao.SettingPrivacyDao">
+
+	<!-- 根据userId查询隐私设置 -->
+	<select id="selectByUserId" resultType="SettingPrivacy">
+		<![CDATA[ 
+			SELECT
+				*
+			FROM
+				setting_privacy
+			WHERE
+				user_id = #{userId}
+			LIMIT 1;
+		]]>
+	</select>
+
+	<!-- 根据userId初始化一个隐私设置 -->
+	<insert id="initialByUserId">
+		<![CDATA[
+			INSERT INTO setting_privacy (
+				user_id
+			) VALUE (
+				#{userId}
+			);
+		]]>
+	</insert>
+
+	<!-- 修改一条数据 -->
+	<update id="updateOne" parameterType="SettingPrivacy">
+		UPDATE setting_privacy
+		<set>
+			<!-- 防止都为null的情况出现报错 -->
+			user_id = #{userId},
+			<if test="publicPhone != null">public_phone = #{publicPhone},</if>
+			<if test="publicEmail != null">public_email = #{publicEmail},</if>
+		</set>
+		WHERE user_id = #{userId}
+	</update>
+
+</mapper>

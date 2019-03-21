@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qichong.dao.CertificationEnterpriseDao">
+	<select id="selectAll" resultType="CertificationEnterprise" parameterType="com.qichong.model.Filters">
+			SELECT
+				cert.id,
+				cert.user_id AS `user.id`,
+				users.username AS `user.username`,
+				users.create_time AS `user.create_time`,
+				users.type_id AS `user.type_id`,
+				users.wx_open_id AS `user.wx_open_id`,
+				cert.enterprise_name,
+				cert.person_name,
+				cert.business_license,
+				cert.create_time,
+				cert.edit_time,
+				cert.reason,
+				cert.form_id,
+				cert.state_id AS `state.id`,
+				state.state AS `state.state`,
+				cert.isAgree
+			FROM certification_enterprise AS cert
+			INNER JOIN users ON (users.id = cert.user_id)
+			INNER JOIN state ON (state.id = cert.state_id)
+		<where>
+			<if test="id != null">AND cert.id = #{id}</if>
+			<if test="userId != null &amp;&amp; userId != 0">AND cert.user_id = #{userId}</if>
+			<if test="notId != null">AND cert.id != #{notId}</if>
+			<if test="stateId != null &amp;&amp; stateId != 1">AND cert.state_id = #{stateId}</if>
+		</where>
+		<if test="stateId != null &amp;&amp; stateId != 4">ORDER BY cert.edit_time DESC</if>
+		<if test="stateId != null &amp;&amp; stateId == 4">ORDER BY cert.create_time DESC</if>
+		LIMIT #{limit},#{offset}
+	</select>
+	
+	<!-- 查询出所有的信息 -->
+	<select id="selectAllCount" resultType="java.lang.Integer" parameterType="com.qichong.model.Filters">
+		SELECT count(1) FROM certification_enterprise AS cert
+		INNER JOIN users ON (users.id = cert.user_id)
+		INNER JOIN state ON (state.id = cert.state_id)
+		<where>
+			<if test="userId != null &amp;&amp; userId != 0">AND cert.user_id = #{userId}</if>
+			<if test="stateId != null &amp;&amp; stateId != 1">AND cert.state_id = #{stateId}</if>
+		</where>
+	</select>
+
+	<!-- 插入一条信息 -->
+	<insert id="insertOne" parameterType="CertificationEnterprise"  useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO `certification_enterprise` (
+				`user_id`,
+				`enterprise_name`,
+				`person_name`,
+				`business_license`,
+				`create_time`,
+				`state_id`,
+				`isAgree`
+		)
+		VALUES
+			(
+				#{user.id},
+				#{enterpriseName},
+				#{personName},
+				#{businessLicense},
+				#{createTime},
+				#{state.id},
+				0
+			)
+	</insert>
+
+	<!-- 更新一条信息 -->
+	<update id="updateOne" parameterType="CertificationEnterprise" >
+		UPDATE certification_enterprise
+		 <set>
+		 	<if test="enterpriseName != null">enterprise_name = #{enterpriseName},</if>
+		 	<if test="personName != null">person_name = #{personName},</if>
+		 	<if test="businessLicense.name != null">business_license= #{businessLicense},</if>
+		 	<if test="createTime != null">create_time = #{createTime},</if>
+		 	<if test="editTime != null">edit_time = #{editTime},</if>
+		 	<if test="reason != null">reason = #{reason},</if>
+		 	<if test="formId != null">form_id = #{formId},</if>
+		 	<if test="state != null &amp;&amp; state.id != null">state_id = #{state.id},</if>
+		 </set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="byUserIdUpdateOne" parameterType="CertificationEnterprise" >
+			UPDATE certification_enterprise
+			 <set>
+			 	<if test="enterpriseName != null">enterprise_name = #{enterpriseName},</if>
+			 	<if test="personName != null">person_name = #{personName},</if>
+			 	<if test="businessLicense.name != null">business_license= #{businessLicense},</if>
+			 	<if test="createTime != null">create_time = #{createTime},</if>
+			 	<if test="editTime != null">edit_time = #{editTime},</if>
+			 	<if test="reason != null">reason = #{reason},</if>
+			 	<if test="formId != null">form_id = #{formId},</if>
+			 	<if test="state != null &amp;&amp; state.id != null">state_id = #{state.id},</if>
+			 </set>
+			WHERE user_id = #{user.id}
+		</update>
+	<!-- 删除一条信息 -->
+	<delete id="deleteOne">
+		DELETE FROM certification_enterprise WHERE id = #{id}
+	</delete>
+	
+</mapper>

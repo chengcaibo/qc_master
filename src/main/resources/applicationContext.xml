@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-4.3.xsd 
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/websocket
+	http://www.springframework.org/schema/websocket/spring-websocket.xsd">
+
+	<bean id="gson" class="com.google.gson.Gson" />
+
+	<!-- 扫描Service层 -->
+	<!-- <context:component-scan base-package="com.qichong.service" /> -->
+	<!--扫描Controller -->
+	<!-- <context:component-scan base-package="com.qichong.controller" /> -->
+
+	<context:component-scan base-package="com.qichong" />
+
+
+	<!-- Spring dao 层 层配置 -->
+	<context:property-placeholder location="classpath:db.properties" />
+	<!--redis连接池配置-->
+	<!--<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig" >
+		&lt;!&ndash;最大空闲数&ndash;&gt;
+		<property name="maxIdle" value="${redis.maxIdle}" />
+		&lt;!&ndash;连接池的最大数据库连接数  &ndash;&gt;
+		<property name="maxTotal" value="${redis.maxTotal}" />
+		&lt;!&ndash;最大建立连接等待时间&ndash;&gt;
+		<property name="maxWaitMillis" value="${redis.maxWaitMillis}" />
+		&lt;!&ndash;逐出连接的最小空闲时间 默认1800000毫秒(30分钟)&ndash;&gt;
+		<property name="minEvictableIdleTimeMillis" value="${redis.minEvictableIdleTimeMillis}" />
+		&lt;!&ndash;每次逐出检查时 逐出的最大数目 如果为负数就是 : 1/abs(n), 默认3&ndash;&gt;
+		<property name="numTestsPerEvictionRun" value="${redis.numTestsPerEvictionRun}" />
+		&lt;!&ndash;逐出扫描的时间间隔(毫秒) 如果为负数,则不运行逐出线程, 默认-1&ndash;&gt;
+		<property name="timeBetweenEvictionRunsMillis" value="${redis.timeBetweenEvictionRunsMillis}" />
+		&lt;!&ndash;是否在从池中取出连接前进行检验,如果检验失败,则从池中去除连接并尝试取出另一个&ndash;&gt;
+		<property name="testOnBorrow" value="${redis.testOnBorrow}" />
+		&lt;!&ndash;在空闲时检查有效性, 默认false  &ndash;&gt;
+		<property name="testWhileIdle" value="${redis.testWhileIdle}" />
+	</bean>-->
+	<!--redis连接工厂-->
+	<!--<bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" destroy-method="destroy">
+		<property name="poolConfig" ref="jedisPoolConfig"></property>
+		&lt;!&ndash;IP地址 &ndash;&gt;
+		<property name="hostName" value="${redis.hostName}"></property>
+		&lt;!&ndash;端口号  &ndash;&gt;
+		<property name="port" value="${redis.port}"></property>
+		&lt;!&ndash;客户端超时时间单位是毫秒  &ndash;&gt;
+		<property name="timeout" value="${redis.timeout}"></property>
+	</bean>-->
+	<!--redis操作模版,使用该对象可以操作redis  -->
+	<!--<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate" >
+		<property name="connectionFactory" ref="jedisConnectionFactory" />
+		&lt;!&ndash;如果不配置Serializer，那么存储的时候缺省使用String，如果用User类型存储，那么会提示错误User can't cast to String！！  &ndash;&gt;
+		<property name="keySerializer" >
+			<bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+		</property>
+		<property name="valueSerializer" >
+			<bean class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer" />
+		</property>
+		<property name="hashKeySerializer">
+			<bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+		</property>
+		<property name="hashValueSerializer">
+			<bean class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer"/>
+		</property>
+		&lt;!&ndash;开启事务  &ndash;&gt;
+		<property name="enableTransactionSupport" value="true"></property>
+	</bean >-->
+	<!-- 配置数据源 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driver_class}" />
+		<property name="jdbcUrl" value="jdbc:mysql://${jdbc.address}:${jdbc.port}/${jdbc.db_name}?useUnicode=true&amp;characterEncoding=utf8&amp;allowMultiQueries=true" />
+		<property name="user" value="${jdbc.user}" />
+		<property name="password" value="${jdbc.password}" />
+
+		<!--c3p0优化配置 -->
+		<property name="maxPoolSize" value="23" />
+		<property name="minPoolSize" value="3" />
+		<!-- 获取不到连接时超时等待时间 -->
+		<property name="checkoutTimeout" value="3000" />
+		<!-- 失败时重试次数 -->
+		<property name="acquireRetryAttempts" value="3" />
+	</bean>
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+
+		<!--扫描Entity包用做别名 -->
+		<property name="typeAliasesPackage" value="com.qichong.entity" />
+
+		<!-- 扫描映射文件 -->
+		<property name="mapperLocations" value="classpath:mapper-*/*.xml" />
+
+		<!-- <property name="mapperLocations" value="classpath:mapper/*.xml" /> -->
+
+		<!-- <property name="mapperLocations"> <list> <value>classpath:mapper-base/*.xml</value> <value>classpath:mapper-admin/*.xml</value> </list> </property> -->
+
+		<!-- 类型转换器 -->
+		<property name="typeHandlers">
+			<list>
+				<bean class="com.qichong.handler.ImageHandler" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 动态代理Dao层接口 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!--注入SqlSessionFactory -->
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+		<!--给出要扫描的包 -->
+		<property name="basePackage" value="com.qichong" />
+	</bean>
+
+	<!-- 事务配置 -->
+	<bean id="appTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<tx:annotation-driven proxy-target-class="false" transaction-manager="appTransactionManager" />
+
+	<!--Spring MVC 相关配置 -->
+	<mvc:annotation-driven />
+
+
+	<!--静态资源处理 -->
+	<mvc:default-servlet-handler />
+
+	<!--配置ViewResolver -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<!-- 配置文件上传 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="utf-8" />
+	</bean>
+
+	<!-- 配置拦截器（Interceptor） -->
+	<mvc:interceptors>
+		<!-- 全局跨域请求拦截器 -->
+		<mvc:interceptor>
+			<!-- /** 表示所有的URL和子URL -->
+			<mvc:mapping path="/**" />
+			<bean class="com.qichong.interceptor.CrossDomainInterceptor" />
+		</mvc:interceptor>
+		<!-- 管理员登录拦截器 -->
+		<mvc:interceptor>
+			<!-- /** 表示所有的URL和子URL -->
+			<mvc:mapping path="/admin/**" />
+			<bean class="com.qichong.admin.interceptor.AdminLoginInterceptor">
+				<property name="ignoreURIs">
+					<list>
+						<value>/admin/login</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+
+
+	<!-- <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"> <property name="interceptors"> <list> <ref bean="CrossDomainHandler" /> </list> </property> </bean> <bean id="CrossDomainHandler" 
+		class="com.qichong.interceptor.CrossDomainInterceptor" /> -->
+
+	<!-- SpringMVC配置WebSocket -->
+	<!-- WebSocket：Echo -->
+	<!-- <bean id="EchoHandler" class="com.qichong.socket.handler.EchoHandler" /> <websocket:handlers allowed-origins="*"> <websocket:mapping path="/socket/echo" handler="EchoHandler" /> <websocket:handshake-interceptors> 
+		<bean class="com.qichong.socket.CommonHandshake" /> </websocket:handshake-interceptors> </websocket:handlers> -->
+
+	<!-- WebSocket：用户私信聊天 -->
+	<bean id="MessageHandler" class="com.qichong.socket.handler.MessageHandler" />
+	<websocket:handlers allowed-origins="*">
+		<websocket:mapping path="/socket/message" handler="MessageHandler" />
+		<websocket:handshake-interceptors>
+			<bean class="com.qichong.socket.CommonHandshake" />
+		</websocket:handshake-interceptors>
+	</websocket:handlers>
+
+
+	<!-- 配置枚举转换 -->
+	<!-- <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean"> <property name="converters"> <set> <bean class="com.qichong.converter.IntegerToOrderType" 
+		/> </set> </property> </bean> -->
+</beans>
